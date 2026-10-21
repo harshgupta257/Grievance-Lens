@@ -1,0 +1,53 @@
+ministry_id,canonical_name,threshold_days,appearances,median_over_threshold,reports_in_segment,share_of_segment
+1,Central Board of Direct Taxes (Income Tax),21,25,4663.0,25,1.0
+69,Ministry of Labour and Employment,21,25,3320.0,25,1.0
+78,Ministry of Railways (Railway Board),21,25,1060.0,25,1.0
+66,Ministry of Home Affairs,21,21,1146.0,25,0.84
+67,Ministry of Housing and Urban Affairs,21,20,676.0,25,0.8
+14,Department of Defence Finance,21,19,1227.0,25,0.76
+27,Department of Health & Family Welfare,21,18,799.0,25,0.72
+19,Department of Ex Servicemen Welfare,21,16,1289.0,25,0.64
+74,Ministry of Panchayati Raj,21,14,1130.5,25,0.56
+76,Ministry of Petroleum and Natural Gas,21,14,1346.0,25,0.56
+26,Department of Food and Public Distribution,21,13,1165.0,25,0.52
+22,Department of Financial Services (Banking Division),21,9,807.0,25,0.36
+63,Ministry of External Affairs,21,9,582.0,25,0.36
+29,Department of Higher Education,21,8,937.5,25,0.32
+41,Department of Rural Development,21,7,505.0,25,0.28
+92,Unique Identification Authority of India,21,4,607.5,25,0.16
+6,Department of Agriculture and Farmers Welfare,21,1,1281.0,25,0.04
+49,Department of Urban Development,21,1,408.0,25,0.04
+91,Staff Selection Commission,21,1,777.0,25,0.04
+1,Central Board of Direct Taxes (Income Tax),30,25,7814.0,25,1.0
+27,Department of Health & Family Welfare,30,25,1391.0,25,1.0
+66,Ministry of Home Affairs,30,25,778.0,25,1.0
+22,Department of Financial Services (Banking Division),30,22,900.5,25,0.88
+78,Ministry of Railways (Railway Board),30,21,804.0,25,0.84
+42,Department of School Education and Literacy,30,19,858.0,25,0.76
+63,Ministry of External Affairs,30,19,634.0,25,0.76
+41,Department of Rural Development,30,18,758.0,25,0.72
+19,Department of Ex Servicemen Welfare,30,16,1085.0,25,0.64
+13,Department of Defence,30,10,685.0,25,0.4
+14,Department of Defence Finance,30,10,809.5,25,0.4
+36,Department of Personnel and Training,30,9,1968.0,25,0.36
+40,Department of Revenue,30,9,1977.0,25,0.36
+29,Department of Higher Education,30,6,750.0,25,0.24
+17,Department of Economic Affairs ACC Division,30,5,515.0,25,0.2
+67,Ministry of Housing and Urban Affairs,30,4,1879.5,25,0.16
+4,Department of Administrative Reforms and Public Grievances PG Division,30,2,1056.5,25,0.08
+45,Department of Social Justice and Empowerment,30,2,2911.0,25,0.08
+6,Department of Agriculture and Farmers Welfare,30,1,1812.0,25,0.04
+55,Ministry of Cooperation,30,1,5198.0,25,0.04
+76,Ministry of Petroleum and Natural Gas,30,1,377.0,25,0.04
+79,Ministry of Road Transport and Highways,30,1,661.0,25,0.04
+1,Central Board of Direct Taxes (Income Tax),45,3,5978.0,3,1.0
+13,Department of Defence,45,3,1479.0,3,1.0
+27,Department of Health & Family Welfare,45,3,9768.0,3,1.0
+34,Department of Military Affairs,45,3,531.0,3,1.0
+36,Department of Personnel and Training,45,3,1653.0,3,1.0
+40,Department of Revenue,45,3,1840.0,3,1.0
+45,Department of Social Justice and Empowerment,45,3,2034.0,3,1.0
+55,Ministry of Cooperation,45,3,16053.0,3,1.0
+2,Central Board of Indirect Taxes and Customs,45,2,702.0,3,0.6666666666666666
+29,Department of Higher Education,45,2,524.0,3,0.6666666666666666
+66,Ministry of Home Affairs,45,2,633.5,3,0.6666666666666666

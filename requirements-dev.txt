@@ -1,0 +1,4 @@
+-r requirements.txt
+pytest==9.1.1  # test runner
+ruff==0.17.1   # linter + formatter
+httpx==0.28.1            # FastAPI test client

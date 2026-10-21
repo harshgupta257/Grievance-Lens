@@ -1,0 +1,7 @@
+list_code,list_name,value_measure,reports_with_list,first_report,last_report,reports_missing_in_span,caveat
+pending_over_1000,"Ministries with more than 1,000 pending grievances (at the report cut-off)",pending,53,1,53,,Absolute threshold: larger ministries are listed more often by construction; not a performance rating
+long_pending_45d,Top 10 by grievances pending more than 45 days,pending_over_threshold,3,1,3,,"Compare only within one threshold (45, 30 and 21 days were used in different periods)"
+long_pending_30d,Top 10 by grievances pending more than 30 days,pending_over_threshold,25,4,28,,"Compare only within one threshold (45, 30 and 21 days were used in different periods)"
+long_pending_21d,Top 10 by grievances pending more than 21 days,pending_over_threshold,25,29,53,,"Compare only within one threshold (45, 30 and 21 days were used in different periods)"
+closing_time_high,"Top 10 highest average closing time (days, year-to-date)",avg_closing_time_days,52,1,53,41,Only the listed ministries have a published value; from 2026 only ministries with more than 100 disposals are eligible; stale reprinted tables are excluded
+closing_time_low,"Top 10 lowest average closing time (days, year-to-date)",avg_closing_time_days,52,1,53,41,Only the listed ministries have a published value; from 2026 only ministries with more than 100 disposals are eligible; stale reprinted tables are excluded

@@ -1,0 +1,33 @@
+[project]
+name = "cpgrams-analytics"
+version = "0.1.0"
+description = "CPGRAMS grievance analytics and AI complaint routing assistant"
+requires-python = ">=3.11,<3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra -m 'not pdf'"
+markers = [
+    "integration: needs a live PostgreSQL server (set TEST_DATABASE_URL)",
+    "pdf: re-extracts values from the real source PDFs (slow; run with  python -m pytest -m pdf)",
+]
+
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# check definitions are SQL strings; breaking SQL lines at 110 columns hurts readability
+"src/validate/checks.py" = ["E501"]
+"tests/test_views.py" = ["E501"]  # SQL fixture statements
+"src/export/powerbi.py" = ["E501"]  # data-dictionary descriptions, one per line
+"src/routing/llm.py" = ["E501"]  # system prompt prose
+"src/routing/verify.py" = ["E501"]  # generated report prose
+"src/evaluation/run.py" = ["E501"]  # generated report prose
+"src/drafting/examples.py" = ["E501"]  # example inputs and report prose
+"src/app/demo.py" = ["E501"]  # demo inputs and report prose
+"src/drafting/drafter.py" = ["E501"]  # draft template text (English and Hindi), one sentence per line

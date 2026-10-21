@@ -1,0 +1,27 @@
+# Local PostgreSQL for development.
+#   Start:  docker compose up -d
+#   Status: docker compose ps        (STATUS should show "healthy")
+#   Stop:   docker compose down      (data is kept in the named volume)
+#   Reset:  docker compose down -v   (DELETES all data; then re-run migrations)
+services:
+  db:
+    image: postgres:16.4
+    container_name: cpgrams-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Set POSTGRES_USER in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Set POSTGRES_DB in .env}
+    ports:
+      # Bound to localhost only, so the database is not exposed on your network.
+      - "127.0.0.1:${POSTGRES_HOST_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  pgdata:

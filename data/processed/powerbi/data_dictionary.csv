@@ -1,0 +1,180 @@
+table,column,is_key,references,description
+dim_month,month,True,,First day of the calendar month (date); key for overall_trend and dim_report
+dim_month,month_index,False,,"Months since the first month (0, 1, 2, ...); use for previous-month/year DAX"
+dim_month,year,False,,Calendar year
+dim_month,month_number,False,,Calendar month 1-12
+dim_month,month_name,False,,Short month name (Jan-Dec); sort by month_number
+dim_month,month_label,False,,"Month as YYYY-MM text, for axis labels"
+dim_month,fiscal_year,False,,"Indian financial year (April-March), e.g. FY2024-25"
+dim_month,in_core_window,False,,"True from April 2023: month-end cut-offs, used for trend tests (D-006)"
+dim_report,report_number,True,,Report number as printed (1 = May 2022)
+dim_report,report_month,False,dim_month.month,Month the report covers (first day; dim_month)
+dim_report,data_cutoff_date,False,,Date up to which the report's data were drawn
+dim_report,cutoff_is_month_end,False,,False for reports cut off on the 25th (before April 2023) or early (#35)
+dim_report,in_core_window,False,,True from April 2023 (D-006)
+dim_report,filename,False,,Downloaded PDF file name (data/raw/; SHA-256 in data/manifest.csv)
+dim_report,source_url,False,,Official DARPG download URL
+dim_ministry,ministry_id,True,,Canonical ministry ID (stable within this project)
+dim_ministry,canonical_name,False,,"Canonical name (most recent printed form, cleaned)"
+dim_ministry,entity_type,False,,"ministry, department or other body, as recorded in Phase 3"
+dim_ministry,first_report_month,False,,Month of the first report that prints this entity
+dim_ministry,last_report_month,False,,Month of the latest report that prints this entity
+dim_ministry,grai_group_2026,False,,"GRAI volume group (A >= 500 grievances, B fewer) used by the scorecard; blank if not ranked in #46-#53"
+dim_ministry,reorganisation_note,False,,"Recorded reorganisation (D-025), e.g. split into a successor; blank if none"
+dim_list,list_code,True,,List type code (key for list_appearances and repeated_listings)
+dim_list,list_name,False,,What the list contains
+dim_list,value_measure,False,,Column of list_appearances holding the printed value for this list
+dim_list,reports_with_list,False,,Reports in which this list was published with at least one row
+dim_list,first_report,False,,First report with this list
+dim_list,last_report,False,,Latest report with this list
+dim_list,reports_missing_in_span,False,,Reports between first and last without this list (semicolon-separated)
+dim_list,caveat,False,,What the list cannot show
+overall_trend,month,True,dim_month.month,Calendar month (dim_month)
+overall_trend,receipts,False,,Grievances received in the month
+overall_trend,disposals,False,,Grievances disposed of in the month
+overall_trend,pending,False,,Grievances pending at month end (a stock: do not sum across months)
+overall_trend,disposal_to_receipt_ratio,False,,disposals / receipts; blank for partial months
+overall_trend,pending_change,False,,Change in pending from the previous month; blank next to a partial month
+overall_trend,pending_change_pct,False,,pending_change as % of the previous month (only if that month >= 100)
+overall_trend,receipts_roll3,False,,Mean receipts over this and the two previous months (complete months only)
+overall_trend,disposals_roll3,False,,Mean disposals over this and the two previous months (complete months only)
+overall_trend,pending_roll3,False,,Mean pending over this and the two previous months (complete months only)
+overall_trend,receipts_yoy_pct,False,,"Receipts vs the same month a year earlier, %"
+overall_trend,has_partial_value,False,,True if the only value available is from a report cut off before month end
+overall_trend,in_core_window,False,,True from April 2023 (D-006)
+overall_trend,source_report,False,,Report number the value was read from (dim_report) (the latest report that prints the month)
+overall_trend,max_revision_spread,False,,Largest difference between reports printing the same month (revisions)
+ministry_monthly,report_number,True,dim_report.report_number,Report number the value was read from (dim_report)
+ministry_monthly,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+ministry_monthly,grai_group,False,,GRAI volume group printed in that report
+ministry_monthly,period_start,False,,First day of the period the flows cover
+ministry_monthly,period_end,False,,Last day of the period the flows cover
+ministry_monthly,window_months,False,,Length of the flow period in months (2 for #28: July-August 2024)
+ministry_monthly,single_month_flows,False,,True if receipts/disposals cover one month; filter on it for monthly flows
+ministry_monthly,brought_forward,False,,Pending at the start of the period
+ministry_monthly,receipts,False,,Grievances received in the period
+ministry_monthly,disposals,False,,Grievances disposed of in the period
+ministry_monthly,pending,False,,Pending at the end of the period (a stock)
+ministry_monthly,pending_change,False,,Change in pending from the previous report (consecutive reports only)
+ministry_monthly,pdf_page,False,,"PDF page of the source table (1-based), for checking against the published report"
+ministry_monthly,has_warning,False,,True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)
+list_appearances,report_number,True,dim_report.report_number,Report number the value was read from (dim_report)
+list_appearances,list_code,True,dim_list.list_code,List type (dim_list)
+list_appearances,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+list_appearances,serial_printed,False,,Serial number as printed in the list
+list_appearances,pending,False,,Pending grievances as printed (pending and long-pending lists)
+list_appearances,pending_over_threshold,False,,Grievances pending longer than the list threshold (long-pending lists)
+list_appearances,cases_disposed,False,,"Cases disposed of, year-to-date (closing-time lists)"
+list_appearances,avg_closing_time_days,False,,"Published average closing time in days, year-to-date (closing-time lists)"
+list_appearances,pdf_page,False,,"PDF page of the source table (1-based), for checking against the published report"
+list_appearances,has_warning,False,,True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)
+repeated_listings,list_code,True,dim_list.list_code,List type (dim_list)
+repeated_listings,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+repeated_listings,appearances,False,,Reports in which the ministry is listed
+repeated_listings,reports_with_list,False,,Reports in which this list was published
+repeated_listings,share_of_reports,False,,appearances / reports_with_list
+repeated_listings,first_listed_report,False,,First report listing the ministry
+repeated_listings,last_listed_report,False,,Latest report listing the ministry
+repeated_listings,longest_consecutive_run,False,,Longest run of consecutive published lists that include the ministry
+repeated_listings,run_to_last_list,False,,Run of consecutive listings ending at the latest published list (0 if not in it)
+repeated_listings,median_value,False,,Median printed value when listed (see dim_list.value_measure)
+repeated_listings,max_value,False,,Largest printed value when listed
+repeated_listings,reorganisation_note,False,,Recorded reorganisation; a run can end because the body was reorganised
+backlog_growth,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+backlog_growth,months,False,,Reports in the panel for this ministry
+backlog_growth,complete_panel,False,,True if present in all 20 panel reports
+backlog_growth,start_month,False,,First panel month
+backlog_growth,end_month,False,,Last panel month
+backlog_growth,pending_start,False,,Pending at the end of the first panel month
+backlog_growth,pending_end,False,,Pending at the end of the last panel month
+backlog_growth,pending_change,False,,pending_end - pending_start
+backlog_growth,pending_change_pct,False,,pending_change as % of pending_start (only if pending_start >= 100)
+backlog_growth,months_pending_rose,False,,Months in which pending rose
+backlog_growth,months_pending_fell,False,,Months in which pending fell
+backlog_growth,pending_sen_slope,False,,Sen's slope of month-end pending (grievances per month)
+backlog_growth,pending_relative_slope_pct,False,,"Sen's slope as % of the median pending level, per month"
+backlog_growth,trend_p_modified,False,,Autocorrelation-corrected Mann-Kendall p-value
+backlog_growth,trend_q_value,False,,Benjamini-Hochberg q-value within family F3
+backlog_growth,trend_conclusion,False,,increasing / decreasing (q < 0.05) or no significant trend
+backlog_growth,backlog_months,False,,"Mean pending / mean monthly receipts, #29-#45 (months of intake waiting)"
+trend_tests,test_id,True,,Row identifier
+trend_tests,family,False,,Test family; q-values are adjusted within a family
+trend_tests,subject,False,,"Aggregate metric, or ministry name for ministry-level families"
+trend_tests,ministry_id,False,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry); blank for aggregate series
+trend_tests,span,False,,Months or reports covered
+trend_tests,n,False,,Number of points in the series
+trend_tests,tau,False,,Kendall's tau (direction and strength of the monotonic trend)
+trend_tests,sen_slope,False,,Sen's slope (units per month)
+trend_tests,relative_slope_pct,False,,"Sen's slope as % of the median level, per month"
+trend_tests,median_level,False,,Median of the series
+trend_tests,p_modified,False,,Autocorrelation-corrected p-value (method in p_method)
+trend_tests,p_method,False,,"hamed_rao, or tfpw (trend-free pre-whitening) where Hamed-Rao is undefined"
+trend_tests,p_original,False,,Uncorrected Mann-Kendall p-value (for comparison only; not used)
+trend_tests,q_value,False,,Benjamini-Hochberg q-value within the family
+trend_tests,conclusion,False,,increasing / decreasing (q < 0.05) or no significant trend
+grai_ranks,report_number,True,dim_report.report_number,Report number the value was read from (dim_report)
+grai_ranks,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+grai_ranks,grai_group,False,,Volume group of the ranking table (A or B)
+grai_ranks,grai_methodology,False,,Layout/method era; ranks are comparable only within one era and group
+grai_ranks,group_threshold,False,,Grievance-count threshold separating the groups in that report
+grai_ranks,period_start,False,,First day of the ranking's data window
+grai_ranks,period_end,False,,Last day of the ranking's data window
+grai_ranks,window_months,False,,Length of the data window in months
+grai_ranks,grai_rank,False,,Published rank within the group (1 = best)
+grai_ranks,group_size,False,,Ministries ranked in the group in that report
+grai_ranks,rank_percentile,False,,100 * (group_size - rank) / (group_size - 1): 100 = first in its group
+grai_ranks,grai_score,False,,Published GRAI score (eras that print one)
+grai_ranks,gri_percentage,False,,Published GRI percentage (#4-#12 era)
+grai_ranks,pdf_page,False,,"PDF page of the source table (1-based), for checking against the published report"
+grai_ranks,has_warning,False,,True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)
+scorecard,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+scorecard,grai_group,False,,Group the ministry is compared within (most frequent in #46-#53)
+scorecard,months_ranked,False,,Reports in #46-#53 that rank the ministry in that group
+scorecard,switched_group,False,,True if the ministry appeared in both groups during #46-#53
+scorecard,grai_percentile,False,,Component: mean within-group GRAI percentile (higher = better)
+scorecard,backlog_trend_pct,False,,"Component: relative Sen slope of pending, % per month (lower = better)"
+scorecard,backlog_months,False,,Component: mean pending / mean monthly receipts (lower = better)
+scorecard,slow_closing_share,False,,Component: share of #46-#53 on the high closing-time list (lower = better; Group A only)
+scorecard,over_1000_share,False,,Information only (weight 0): share of #46-#53 on the >1000-pending list
+scorecard,grai_percentile_pctl,False,,Within-group percentile of grai_percentile (100 = best in group)
+scorecard,backlog_trend_pct_pctl,False,,Within-group percentile of backlog_trend_pct (100 = best in group)
+scorecard,backlog_months_pctl,False,,Within-group percentile of backlog_months (100 = best in group)
+scorecard,slow_closing_share_pctl,False,,Within-group percentile of slow_closing_share (100 = best in group)
+scorecard,over_1000_share_pctl,False,,Within-group percentile of over_1000_share (information only)
+scorecard,components_used,False,,Applicable components with data
+scorecard,score,False,,Weighted mean of the available component percentiles (0-100); blank = not scored
+scorecard,rank_in_group,False,,Rank of score within the group (1 = highest)
+scorecard,rank_random_median,False,,"Median rank over 1,000 random weightings"
+scorecard,rank_random_p05,False,,5th percentile rank over random weightings (lower end of the 90% interval)
+scorecard,rank_random_p95,False,,95th percentile rank over random weightings (upper end of the 90% interval)
+scorecard,group_size,False,,Scored ministries in the group
+scorecard,not_scored_reason,False,,Why no score was given; blank if scored
+scorecard,label,False,,"Always 'project construct, not an official rating'"
+scorecard_sensitivity,variant,True,,Named weighting (src/analysis/config.py SCORECARD_VARIANTS)
+scorecard_sensitivity,group,True,,GRAI group
+scorecard_sensitivity,ministries,False,,Ministries scored under both the default and this variant
+scorecard_sensitivity,spearman_vs_default,False,,Spearman correlation of ranks with the default weighting
+scorecard_sensitivity,max_rank_shift,False,,Largest rank change of any ministry
+scorecard_sensitivity,median_rank_shift,False,,Median rank change
+scorecard_sensitivity,top_quartile_changes,False,,Ministries entering or leaving the top quarter of the group
+demand_backlog_quadrants,ministry_id,True,dim_ministry.ministry_id,Canonical ministry or department (dim_ministry)
+demand_backlog_quadrants,months,False,,Single-month flow reports used
+demand_backlog_quadrants,mean_monthly_receipts,False,,Mean receipts per month
+demand_backlog_quadrants,mean_pending,False,,Mean month-end pending
+demand_backlog_quadrants,status,False,,"classified, insufficient months or insufficient volume (< 100 receipts or < 50 pending)"
+demand_backlog_quadrants,demand_rel_slope_pct,False,,"Relative Sen slope of receipts, % of mean per month"
+demand_backlog_quadrants,demand_p_modified,False,,Corrected Mann-Kendall p-value for receipts
+demand_backlog_quadrants,backlog_rel_slope_pct,False,,"Relative Sen slope of pending, % of mean per month"
+demand_backlog_quadrants,backlog_p_modified,False,,Corrected Mann-Kendall p-value for pending
+demand_backlog_quadrants,demand_q,False,,Benjamini-Hochberg q-value for receipts (classified ministries)
+demand_backlog_quadrants,backlog_q,False,,Benjamini-Hochberg q-value for pending (classified ministries)
+demand_backlog_quadrants,demand_trend,False,,rising / stable / falling at +/-1.0% per month
+demand_backlog_quadrants,backlog_trend,False,,rising / stable / falling at +/-1.0% per month
+demand_backlog_quadrants,quadrant,False,,demand_trend / backlog_trend label; blank unless classified
+demand_backlog_sensitivity,stable_band_pct_per_month,True,,Band used to call a slope stable (% of mean per month)
+demand_backlog_sensitivity,is_default_band,False,,True for the band used in demand_backlog_quadrants
+demand_backlog_sensitivity,demand_trend,True,,rising / stable / falling
+demand_backlog_sensitivity,backlog_trend,True,,rising / stable / falling
+demand_backlog_sensitivity,ministries,False,,Classified ministries in this combination (0 = none)
+demand_backlog_sensitivity,classified_ministries,False,,Classified ministries in total
+demand_backlog_sensitivity,same_quadrant_as_default,False,,Ministries whose label equals the default band's label

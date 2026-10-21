@@ -1,0 +1,38 @@
+url,checked_on,method,http_status,final_url,result,note
+https://labour.gov.in/,2026-10-21,GET,200,https://www.labour.gov.in/,ok,
+https://financialservices.gov.in/,2026-10-21,GET,200,https://financialservices.gov.in/,ok,
+https://dot.gov.in/,2026-10-21,GET,200,https://www.dot.gov.in/,ok,
+https://indianrailways.gov.in/,2026-10-21,GET,200,https://indianrailways.gov.in/,ok,
+https://www.mha.gov.in/,2026-10-21,GET,200,https://www.mha.gov.in/,ok,
+https://www.indiapost.gov.in/,2026-10-21,GET,200,https://www.indiapost.gov.in/,ok,
+https://incometaxindia.gov.in/,2026-10-21,GET,403,,confirmed_by_official_link,Refuses automated clients (403). Linked as the Income Tax Department site from https://dor.gov.in/ (checked 200).
+https://www.incometax.gov.in/iec/foportal/,2026-10-21,official_link,,,confirmed_by_official_link,Income-tax e-filing portal; linked from https://dor.gov.in/ ('Income Tax Filings'). Not fetched.
+https://agriwelfare.gov.in/,2026-10-21,GET,200,https://agriwelfare.gov.in/,ok,
+https://mohfw.gov.in/,2026-10-21,GET,200,https://www.mohfw.gov.in/,ok,
+https://uidai.gov.in/,2026-10-21,GET,200,https://uidai.gov.in/hi,ok,Redirects to the Hindi home page.
+https://morth.gov.in/,2026-10-21,GET,200,http://morth.gov.in/,ok,Checked as https://morth.nic.in/ which redirected to http://morth.gov.in/ (page title: Ministry of Road Transport & Highways).
+https://desw.gov.in/,2026-10-21,GET,200,https://desw.gov.in/,ok,
+https://msme.gov.in/,2026-10-21,GET,200,https://www.msme.gov.in/,ok,
+https://cgda.nic.in/,2026-10-21,GET,200,https://cgda.nic.in/,ok,Controller General of Defence Accounts (head of the Defence Accounts Department).
+https://www.mod.gov.in/,2026-10-21,GET,200,https://www.mod.gov.in/,ok,
+https://mohua.gov.in/,2026-10-21,GET,200,https://www.mohua.gov.in/,ok,
+https://www.education.gov.in/,2026-10-21,GET,200,https://www.education.gov.in/,ok,
+https://consumeraffairs.gov.in/,2026-10-21,WebFetch,200,https://consumeraffairs.gov.in/,ok,consumeraffairs.nic.in timed out; the .gov.in site states it is owned by the Department of Consumer Affairs.
+https://mopng.gov.in/,2026-10-21,GET,200,https://mopng.gov.in/hi,ok,Redirects to the Hindi home page.
+https://dopt.gov.in/,2026-10-21,GET,200,https://dopt.gov.in/,ok,
+https://rural.gov.in/,2026-10-21,GET,200,https://www.rural.gov.in/,ok,
+https://www.mea.gov.in/,2026-10-21,GET,200,https://www.mea.gov.in/,ok,
+https://dsel.education.gov.in/,2026-10-21,GET,200,https://www.dsel-education.gov.in/,ok,Redirects to www.dsel-education.gov.in.
+https://dfpd.gov.in/,2026-10-21,GET,200,https://dfpd.gov.in/,ok,
+https://panchayat.gov.in/,2026-10-21,GET,200,https://panchayat.gov.in/,ok,
+https://www.mca.gov.in/,2026-10-21,GET,403,,confirmed_by_directory,Refuses automated clients (403). Listed as the Ministry's site by india.gov.in and igod.gov.in search results; not fetched successfully.
+https://msde.gov.in/,2026-10-21,GET,200,https://www.msde.gov.in/,ok,
+https://www.cbic.gov.in/,2026-10-21,GET,,,confirmed_by_official_link,TLS check failed (server does not send its intermediate certificate); verification was not bypassed. cbic.gov.in subdomains are linked from https://dor.gov.in/.
+https://www.meity.gov.in/,2026-10-21,GET,200,https://www.meity.gov.in/,ok,
+https://doj.gov.in/,2026-10-21,GET,200,https://www.doj.gov.in/,ok,
+https://jalshakti-ddws.gov.in/,2026-10-21,GET,200,https://www.jalshakti-ddws.gov.in/,ok,
+https://dor.gov.in/,2026-10-21,GET,200,https://dor.gov.in/,ok,
+https://socialjustice.gov.in/,2026-10-21,GET,200,https://socialjustice.gov.in/,ok,
+https://wcd.gov.in/,2026-10-21,GET,200,https://wcd.gov.in/,ok,
+https://ssc.gov.in/,2026-10-21,GET,200,https://ssc.gov.in/,ok,
+https://pgportal.gov.in/,2026-10-21,GET,200,https://pgportal.gov.in/,ok,CPGRAMS public portal (where citizens lodge grievances).

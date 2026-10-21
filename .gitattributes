@@ -1,0 +1,5 @@
+# Keep LF line endings in the repository and working tree (generated CSV/JSON/markdown stay byte-stable).
+* text=auto eol=lf
+*.png binary
+*.pdf binary
+*.npy binary

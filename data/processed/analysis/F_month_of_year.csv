@@ -1,0 +1,13 @@
+month_of_year,years_observed,mean_receipts,min_receipts,max_receipts,ratio_to_overall_mean,note
+1,3,139094.33333333334,121671.0,170170.0,0.8985395791417493,descriptive only: at most 4 observations per calendar month; no seasonality claim
+2,3,141726.66666666666,112389.0,163750.0,0.9155442667434065,descriptive only: at most 4 observations per calendar month; no seasonality claim
+3,3,260885.66666666666,116970.0,476498.0,1.68530299914529,descriptive only: at most 4 observations per calendar month; no seasonality claim
+4,4,141878.25,109209.0,188577.0,0.9165234843813519,descriptive only: at most 4 observations per calendar month; no seasonality claim
+5,4,129580.5,106382.0,176719.0,0.8370808870836633,descriptive only: at most 4 observations per calendar month; no seasonality claim
+6,4,142949.75,100724.0,196133.0,0.9234452987786581,descriptive only: at most 4 observations per calendar month; no seasonality claim
+7,4,176958.0,108237.0,227177.0,1.1431361942310063,descriptive only: at most 4 observations per calendar month; no seasonality claim
+8,4,191791.0,118294.0,251147.0,1.2389563276470061,descriptive only: at most 4 observations per calendar month; no seasonality claim
+9,4,152658.25,109098.0,227837.0,0.9861615237681569,descriptive only: at most 4 observations per calendar month; no seasonality claim
+10,3,122633.0,113323.0,138575.0,0.7922005272840504,descriptive only: at most 4 observations per calendar month; no seasonality claim
+11,3,118496.66666666667,103259.0,143449.0,0.7654801058013397,descriptive only: at most 4 observations per calendar month; no seasonality claim
+12,3,136615.66666666666,116684.0,176102.0,0.882527567364375,descriptive only: at most 4 observations per calendar month; no seasonality claim

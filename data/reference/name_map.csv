@@ -1,0 +1,122 @@
+printed_name,cleaned_name,name_key,ministry_key,match_method,evidence,rows
+Central Board of Direct Taxes (Income Tax),Central Board of Direct Taxes (Income Tax),central board of direct taxes (income tax),central_board_of_direct_taxes_income_tax,exact,identical after formatting-only cleaning,207
+Central Board of Excise and Customs,Central Board of Excise and Customs,central board of excise and customs,central_board_of_indirect_taxes_and_customs,approved_alias,identical year-to-date figures under both names in the same report; same report: 2022-05; figures identical: yes,1
+Central Board of Indirect Taxes & Customs,Central Board of Indirect Taxes & Customs,central board of indirect taxes and customs,central_board_of_indirect_taxes_and_customs,exact,identical after formatting-only cleaning,1
+Central Board of Indirect Taxes and Customs,Central Board of Indirect Taxes and Customs,central board of indirect taxes and customs,central_board_of_indirect_taxes_and_customs,exact,identical after formatting-only cleaning,52
+Department for Promotion of Industry and Internal Trade,Department for Promotion of Industry and Internal Trade,department for promotion of industry and internal trade,department_for_promotion_of_industry_and_internal_trade,exact,identical after formatting-only cleaning,51
+Department of Administrative Reforms and Public Grievances,Department of Administrative Reforms and Public Grievances,department of administrative reforms and public grievances,department_of_administrative_reforms_and_public_grievances_pg_division,fuzzy_reviewed,never printed in the same report; check whether this is a rename; same report: none; figures identical: n/a,1
+Department of Administrative Reforms and Public Grievances PG Division,Department of Administrative Reforms and Public Grievances PG Division,department of administrative reforms and public grievances pg division,department_of_administrative_reforms_and_public_grievances_pg_division,exact,identical after formatting-only cleaning,1
+Department of Agriculture and Farmers Welfare,Department of Agriculture and Farmers Welfare,department of agriculture and farmers welfare,department_of_agriculture_and_farmers_welfare,exact,identical after formatting-only cleaning,109
+Department of Agriculture Research and Education,Department of Agriculture Research and Education,department of agriculture research and education,department_of_agriculture_research_and_education,exact,identical after formatting-only cleaning,66
+"Department of Animal Husbandry, Dairying","Department of Animal Husbandry, Dairying",department of animal husbandry dairying,department_of_animal_husbandry_dairying,exact,identical after formatting-only cleaning,55
+Department of Atomic Energy,Department of Atomic Energy,department of atomic energy,department_of_atomic_energy,exact,identical after formatting-only cleaning,72
+Department of Bio Technology,Department of Bio Technology,department of bio technology,department_of_bio_technology,exact,identical after formatting-only cleaning,63
+Department of Biotechnology,Department of Biotechnology,department of biotechnology,department_of_bio_technology,fuzzy_reviewed,never printed in the same report; check whether this is a rename; same report: none; figures identical: n/a,1
+Department of Chemicals and Petrochemical s,Department of Chemicals and Petrochemicals,department of chemicals and petrochemicals,department_of_chemicals_and_petrochemicals,exact,identical after formatting-only cleaning,1
+Department of Chemicals and Petrochemicals,Department of Chemicals and Petrochemicals,department of chemicals and petrochemicals,department_of_chemicals_and_petrochemicals,exact,identical after formatting-only cleaning,63
+Department of Commerce,Department of Commerce,department of commerce,department_of_commerce,exact,identical after formatting-only cleaning,59
+Department of Consumer Affairs,Department of Consumer Affairs,department of consumer affairs,department_of_consumer_affairs,exact,identical after formatting-only cleaning,70
+Department of Defence,Department of Defence,department of defence,department_of_defence,exact,identical after formatting-only cleaning,78
+Department of Defence Finance,Department of Defence Finance,department of defence finance,department_of_defence_finance,exact,identical after formatting-only cleaning,133
+Department of Defence Production,Department of Defence Production,department of defence production,department_of_defence_production,exact,identical after formatting-only cleaning,64
+Department of Defence Research and Development,Department of Defence Research and Development,department of defence research and development,department_of_defence_research_and_development,exact,identical after formatting-only cleaning,67
+Department of Drinking Water and Sanitation,Department of Drinking Water and Sanitation,department of drinking water and sanitation,ministry_of_drinking_water_and_sanitation,fuzzy_reviewed,never printed in the same report; check whether this is a rename; same report: none; figures identical: n/a,17
+Department of Economic Affairs ACC Division,Department of Economic Affairs ACC Division,department of economic affairs acc division,department_of_economic_affairs_acc_division,exact,identical after formatting-only cleaning,95
+Department of Empowermen t of Persons with Disabilities,Department of Empowerment of Persons with Disabilities,department of empowerment of persons with disabilities,department_of_empowerment_of_persons_with_disabilities,exact,identical after formatting-only cleaning,1
+Department of Empowerment of Persons with Disabilities,Department of Empowerment of Persons with Disabilities,department of empowerment of persons with disabilities,department_of_empowerment_of_persons_with_disabilities,exact,identical after formatting-only cleaning,53
+Department of Ex Servicemen Welfare,Department of Ex Servicemen Welfare,department of ex servicemen welfare,department_of_ex_servicemen_welfare,exact,identical after formatting-only cleaning,144
+Department of Expenditure,Department of Expenditure,department of expenditure,department_of_expenditure,exact,identical after formatting-only cleaning,60
+Department of Fertilizers,Department of Fertilizers,department of fertilizers,department_of_fertilizers,exact,identical after formatting-only cleaning,63
+Department of Financial Services (Banking Division),Department of Financial Services (Banking Division),department of financial services (banking division),department_of_financial_services_banking_division,exact,identical after formatting-only cleaning,137
+Department of Financial Services (Insurance Division),Department of Financial Services (Insurance Division),department of financial services (insurance division),department_of_financial_services_insurance_division,exact,identical after formatting-only cleaning,65
+Department of Financial Services (Pension Reforms),Department of Financial Services (Pension Reforms),department of financial services (pension reforms),department_of_financial_services_pension_reforms,exact,identical after formatting-only cleaning,87
+Department of Fisheries,Department of Fisheries,department of fisheries,department_of_fisheries,exact,identical after formatting-only cleaning,51
+Department of Food and Public Distribution,Department of Food and Public Distribution,department of food and public distribution,department_of_food_and_public_distribution,exact,identical after formatting-only cleaning,118
+Department of Health & Family Welfare,Department of Health & Family Welfare,department of health and family welfare,department_of_health_and_family_welfare,exact,identical after formatting-only cleaning,154
+Department of Health and Family Welfare,Department of Health and Family Welfare,department of health and family welfare,department_of_health_and_family_welfare,exact,identical after formatting-only cleaning,3
+Department of Health Research,Department of Health Research,department of health research,department_of_health_research,exact,identical after formatting-only cleaning,51
+Department of Heavy Industries,Department of Heavy Industries,department of heavy industries,ministry_of_heavy_industries,fuzzy_reviewed,both names appear in the same report but in different tables; same report: 2025-04; figures identical: n/a,1
+Department of Heavy Industry,Department of Heavy Industry,department of heavy industry,ministry_of_heavy_industries,exact,identical after formatting-only cleaning,47
+Department of Higher Education,Department of Higher Education,department of higher education,department_of_higher_education,exact,identical after formatting-only cleaning,111
+Department of Investment & Public Asset Management,Department of Investment & Public Asset Management,department of investment and public asset management,department_of_investment_and_public_asset_management,exact,identical after formatting-only cleaning,60
+Department of Justice,Department of Justice,department of justice,department_of_justice,exact,identical after formatting-only cleaning,59
+Department of Land Resources,Department of Land Resources,department of land resources,department_of_land_resources,exact,identical after formatting-only cleaning,88
+Department of Legal Affairs,Department of Legal Affairs,department of legal affairs,department_of_legal_affairs,exact,identical after formatting-only cleaning,72
+Department of Military Affairs,Department of Military Affairs,department of military affairs,department_of_military_affairs,exact,identical after formatting-only cleaning,78
+Department of Military Affairs*,Department of Military Affairs,department of military affairs,department_of_military_affairs,exact,identical after formatting-only cleaning,1
+Department of Official Language,Department of Official Language,department of official language,department_of_official_language,exact,identical after formatting-only cleaning,69
+Department of Personnel and Training,Department of Personnel and Training,department of personnel and training,department_of_personnel_and_training,exact,identical after formatting-only cleaning,83
+Department of Pharmaceutic als,Department of Pharmaceuticals,department of pharmaceuticals,department_of_pharmaceuticals,exact,identical after formatting-only cleaning,1
+Department of Pharmaceutical,Department of Pharmaceutical,department of pharmaceutical,department_of_pharmaceuticals,fuzzy_reviewed,never printed in the same report; check whether this is a rename; same report: none; figures identical: n/a,15
+Department of Pharmaceuticals,Department of Pharmaceuticals,department of pharmaceuticals,department_of_pharmaceuticals,exact,identical after formatting-only cleaning,34
+Department of Posts,Department of Posts,department of posts,department_of_posts,exact,identical after formatting-only cleaning,97
+Department of Public Enterprises,Department of Public Enterprises,department of public enterprises,department_of_public_enterprises,exact,identical after formatting-only cleaning,73
+Department of Revenue,Department of Revenue,department of revenue,department_of_revenue,exact,identical after formatting-only cleaning,96
+Department of Revenue*,Department of Revenue,department of revenue,department_of_revenue,exact,identical after formatting-only cleaning,1
+Department of Rural Development,Department of Rural Development,department of rural development,department_of_rural_development,exact,identical after formatting-only cleaning,124
+Department of School Education and Literacy,Department of School Education and Literacy,department of school education and literacy,department_of_school_education_and_literacy,exact,identical after formatting-only cleaning,120
+Department of Science and Technology,Department of Science and Technology,department of science and technology,department_of_science_and_technology,exact,identical after formatting-only cleaning,59
+Department of Scientific & Industrial Research,Department of Scientific & Industrial Research,department of scientific and industrial research,department_of_scientific_and_industrial_research,exact,identical after formatting-only cleaning,53
+Department of Social Justice and Empowermen t,Department of Social Justice and Empowerment,department of social justice and empowerment,department_of_social_justice_and_empowerment,exact,identical after formatting-only cleaning,1
+Department of Social Justice and Empowerment,Department of Social Justice and Empowerment,department of social justice and empowerment,department_of_social_justice_and_empowerment,exact,identical after formatting-only cleaning,74
+Department of Space,Department of Space,department of space,department_of_space,exact,identical after formatting-only cleaning,59
+Department of Sports,Department of Sports,department of sports,department_of_sports,exact,identical after formatting-only cleaning,51
+Department of Telecommuni cations,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,1
+Department of Telecommunica tions,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,2
+Department of Telecommunicat ions,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,1
+Department of Telecommunicatio ns,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,3
+Department of Telecommunication,Department of Telecommunication,department of telecommunication,department_of_telecommunications,fuzzy_reviewed,both names appear in the same report but in different tables; same report: 2022-09; figures identical: n/a,1
+Department of Telecommunication s,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,1
+Department of Telecommunications,Department of Telecommunications,department of telecommunications,department_of_telecommunications,exact,identical after formatting-only cleaning,86
+Department of Urban Development,Department of Urban Development,department of urban development,department_of_urban_development,exact,identical after formatting-only cleaning,2
+Department of Urban Development*,Department of Urban Development,department of urban development,department_of_urban_development,exact,identical after formatting-only cleaning,1
+Department of Youth Affairs,Department of Youth Affairs,department of youth affairs,department_of_youth_affairs,exact,identical after formatting-only cleaning,80
+Legislative Department,Legislative Department,legislative department,legislative_department,exact,identical after formatting-only cleaning,64
+Ministry of Ayush,Ministry of Ayush,ministry of ayush,ministry_of_ayush,exact,identical after formatting-only cleaning,66
+Ministry of AYUSH,Ministry of AYUSH,ministry of ayush,ministry_of_ayush,exact,identical after formatting-only cleaning,5
+Ministry of Civil Aviation,Ministry of Civil Aviation,ministry of civil aviation,ministry_of_civil_aviation,exact,identical after formatting-only cleaning,50
+Ministry of Coal,Ministry of Coal,ministry of coal,ministry_of_coal,exact,identical after formatting-only cleaning,50
+Ministry of Cooperation,Ministry of Cooperation,ministry of cooperation,ministry_of_cooperation,exact,identical after formatting-only cleaning,90
+Ministry of Corporate Affairs,Ministry of Corporate Affairs,ministry of corporate affairs,ministry_of_corporate_affairs,exact,identical after formatting-only cleaning,58
+Ministry of Culture,Ministry of Culture,ministry of culture,ministry_of_culture,exact,identical after formatting-only cleaning,72
+Ministry of Development of North Eastern Region,Ministry of Development of North Eastern Region,ministry of development of north eastern region,ministry_of_development_of_north_eastern_region,exact,identical after formatting-only cleaning,64
+Ministry of Drinking Water and Sanitation,Ministry of Drinking Water and Sanitation,ministry of drinking water and sanitation,ministry_of_drinking_water_and_sanitation,exact,identical after formatting-only cleaning,46
+Ministry of Earth Sciences,Ministry of Earth Sciences,ministry of earth sciences,ministry_of_earth_sciences,exact,identical after formatting-only cleaning,51
+Ministry of Electronics & Information Technology,Ministry of Electronics & Information Technology,ministry of electronics and information technology,ministry_of_electronics_and_information_technology,exact,identical after formatting-only cleaning,51
+"Ministry of Environment, Forest and Climate Change","Ministry of Environment, Forest and Climate Change",ministry of environment forest and climate change,ministry_of_environment_forest_and_climate_change,exact,identical after formatting-only cleaning,51
+Ministry of External Affairs,Ministry of External Affairs,ministry of external affairs,ministry_of_external_affairs,exact,identical after formatting-only cleaning,116
+Ministry of Food Processing Industries,Ministry of Food Processing Industries,ministry of food processing industries,ministry_of_food_processing_industries,exact,identical after formatting-only cleaning,58
+Ministry of Heavy Industries,Ministry of Heavy Industries,ministry of heavy industries,ministry_of_heavy_industries,fuzzy_reviewed,never printed in the same report; check whether this is a rename; same report: none; figures identical: n/a,21
+Ministry of Home Affairs,Ministry of Home Affairs,ministry of home affairs,ministry_of_home_affairs,exact,identical after formatting-only cleaning,152
+Ministry of Housing and Urban Affairs,Ministry of Housing and Urban Affairs,ministry of housing and urban affairs,ministry_of_housing_and_urban_affairs,exact,identical after formatting-only cleaning,122
+Ministry of Information and Broadcasting,Ministry of Information and Broadcasting,ministry of information and broadcasting,ministry_of_information_and_broadcasting,exact,identical after formatting-only cleaning,53
+Ministry of Labor and Employment,Ministry of Labor and Employment,ministry of labor and employment,ministry_of_labour_and_employment,fuzzy_reviewed,both names appear in the same report but in different tables; same report: 2023-05;2023-06; figures identical: n/a,2
+Ministry of Labour and Employment,Ministry of Labour and Employment,ministry of labour and employment,ministry_of_labour_and_employment,exact,identical after formatting-only cleaning,128
+Ministry of Micro Small and Medium - Enterprises,Ministry of Micro Small and Medium Enterprises,ministry of micro small and medium enterprises,ministry_of_micro_small_and_medium_enterprises,exact,identical after formatting-only cleaning,1
+Ministry of Micro Small and Medium Enterprises,Ministry of Micro Small and Medium Enterprises,ministry of micro small and medium enterprises,ministry_of_micro_small_and_medium_enterprises,exact,identical after formatting-only cleaning,55
+Ministry of Mines,Ministry of Mines,ministry of mines,ministry_of_mines,exact,identical after formatting-only cleaning,56
+Ministry of Minority Affairs,Ministry of Minority Affairs,ministry of minority affairs,ministry_of_minority_affairs,exact,identical after formatting-only cleaning,59
+Ministry of New and Renewable Energy,Ministry of New and Renewable Energy,ministry of new and renewable energy,ministry_of_new_and_renewable_energy,exact,identical after formatting-only cleaning,51
+Ministry of Panchayati Raj,Ministry of Panchayati Raj,ministry of panchayati raj,ministry_of_panchayati_raj,exact,identical after formatting-only cleaning,85
+Ministry of Parliamentary Affairs,Ministry of Parliamentary Affairs,ministry of parliamentary affairs,ministry_of_parliamentary_affairs,exact,identical after formatting-only cleaning,91
+Ministry of Petroleum and Natural Gas,Ministry of Petroleum and Natural Gas,ministry of petroleum and natural gas,ministry_of_petroleum_and_natural_gas,exact,identical after formatting-only cleaning,129
+Ministry of Power,Ministry of Power,ministry of power,ministry_of_power,exact,identical after formatting-only cleaning,64
+Ministry of Railways ( Railway Board),Ministry of Railways (Railway Board),ministry of railways (railway board),ministry_of_railways_railway_board,exact,identical after formatting-only cleaning,38
+Ministry of Railways (Railway Board),Ministry of Railways (Railway Board),ministry of railways (railway board),ministry_of_railways_railway_board,exact,identical after formatting-only cleaning,111
+Ministry of Road Transport and Highways,Ministry of Road Transport and Highways,ministry of road transport and highways,ministry_of_road_transport_and_highways,exact,identical after formatting-only cleaning,82
+Ministry of Shipping,Ministry of Shipping,ministry of shipping,ministry_of_shipping,exact,identical after formatting-only cleaning,60
+Ministry of Skill Development and Entrepreneurs hip,Ministry of Skill Development and Entrepreneurship,ministry of skill development and entrepreneurship,ministry_of_skill_development_and_entrepreneurship,exact,identical after formatting-only cleaning,1
+Ministry of Skill Development and Entrepreneurshi p,Ministry of Skill Development and Entrepreneurship,ministry of skill development and entrepreneurship,ministry_of_skill_development_and_entrepreneurship,exact,identical after formatting-only cleaning,1
+Ministry of Skill Development and Entrepreneurship,Ministry of Skill Development and Entrepreneurship,ministry of skill development and entrepreneurship,ministry_of_skill_development_and_entrepreneurship,exact,identical after formatting-only cleaning,48
+Ministry of Statistics and Programme Implementati on,Ministry of Statistics and Programme Implementation,ministry of statistics and programme implementation,ministry_of_statistics_and_programme_implementation,exact,identical after formatting-only cleaning,1
+Ministry of Statistics and Programme Implementation,Ministry of Statistics and Programme Implementation,ministry of statistics and programme implementation,ministry_of_statistics_and_programme_implementation,exact,identical after formatting-only cleaning,53
+Ministry of Steel,Ministry of Steel,ministry of steel,ministry_of_steel,exact,identical after formatting-only cleaning,50
+Ministry of Textiles,Ministry of Textiles,ministry of textiles,ministry_of_textiles,exact,identical after formatting-only cleaning,60
+Ministry of Tourism,Ministry of Tourism,ministry of tourism,ministry_of_tourism,exact,identical after formatting-only cleaning,51
+Ministry of Tribal Affairs,Ministry of Tribal Affairs,ministry of tribal affairs,ministry_of_tribal_affairs,exact,identical after formatting-only cleaning,52
+"Ministry of Water Resources, River Development & Ganga Rejuvenation","Ministry of Water Resources, River Development & Ganga Rejuvenation",ministry of water resources river development and ganga rejuvenation,ministry_of_water_resources_river_development_and_ganga_rejuvenation,exact,identical after formatting-only cleaning,50
+Ministry of Women and Child Development,Ministry of Women and Child Development,ministry of women and child development,ministry_of_women_and_child_development,exact,identical after formatting-only cleaning,50
+NITI Aayog,NITI Aayog,niti aayog,niti_aayog,exact,identical after formatting-only cleaning,95
+O/o the Comptroller & Auditor General of India,O/o the Comptroller & Auditor General of India,o/o the comptroller and auditor general of india,o_o_the_comptroller_and_auditor_general_of_india,exact,identical after formatting-only cleaning,57
+Staff Selection Commission,Staff Selection Commission,staff selection commission,staff_selection_commission,exact,identical after formatting-only cleaning,70
+Unique Identification Authority of India,Unique Identification Authority of India,unique identification authority of india,unique_identification_authority_of_india,exact,identical after formatting-only cleaning,81

@@ -1,0 +1,37 @@
+{
+  "lexical": {
+    "thresholds": {
+      "min_top_score": 0.18448108182337136,
+      "min_relative_margin": 0.06,
+      "state_override_score": 0.4472194116453064
+    },
+    "utility": 0.8019,
+    "n_items": 361,
+    "abstention_rate": 0.1385,
+    "standard_top1_when_routed": 0.8609,
+    "data": "data/complaints/dev.jsonl (train + dev splits; synthetic)"
+  },
+  "baseline": {
+    "C": 100.0,
+    "threshold": 0.36,
+    "utility_on_dev_split": 0.3575,
+    "n_train": 281,
+    "n_dev": 80
+  },
+  "_meta": {
+    "tuned_on": "2026-10-22",
+    "objective": "mean utility, see module docstring"
+  },
+  "hybrid": {
+    "thresholds": {
+      "min_top_score": 0.032018442622950824,
+      "min_relative_margin": 0.0,
+      "state_override_score": 0.03278688524590164
+    },
+    "utility": 0.7416,
+    "n_items": 361,
+    "abstention_rate": 0.1413,
+    "standard_top1_when_routed": 0.7987,
+    "data": "data/complaints/dev.jsonl (train + dev splits; synthetic)"
+  }
+}

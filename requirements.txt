@@ -1,0 +1,16 @@
+# Runtime dependencies, pinned exactly. Added phase by phase as they become necessary (see DESIGN.md D-011).
+# Python 3.11.
+SQLAlchemy==2.1.5        # DB engine, connection pooling, transactions
+psycopg2-binary==2.9.13  # PostgreSQL driver (binary wheel: no compiler needed on Windows)
+pydantic==2.14.1         # validated configuration now, structured LLM outputs later
+python-dotenv==1.2.4     # loads .env into environment variables
+pdfplumber==0.11.9       # PDF text, word coordinates and table detection (Phase 2 extraction)
+RapidFuzz==3.14.6        # fuzzy name similarity, used only to propose ministry aliases for review (Phase 3)
+numpy==2.4.6             # numerical arrays (analysis)
+pandas==3.0.6            # analysis data frames (Phase 4)
+scipy==1.17.1            # Spearman rank correlation for ranking stability
+pymannkendall==1.4.3     # Mann-Kendall trend tests (Hamed-Rao autocorrelation correction) and Sen's slope
+scikit-learn==1.9.1      # TF-IDF lexical retrieval over the mandate knowledge base (Phase 7); baseline classifier later
+anthropic==2.0.0         # optional LLM selection in the router (Phase 9); only used when LLM_PROVIDER=anthropic
+fastapi==0.158.1         # web API (Phase 12)
+uvicorn==0.54.0          # ASGI server for the app

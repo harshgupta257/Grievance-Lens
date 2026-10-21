@@ -1,0 +1,16 @@
+table,file,rows,columns,grain,primary_key,source,sha256
+dim_month,dim_month.csv,57,8,one row per calendar month from the first printed month to the latest report month,month,generated calendar,62acc7538027290147d0a2db9465fca2e673254ae9d659157ee8b5dca74932f0
+dim_report,dim_report.csv,53,7,one row per English monthly report,report_number,reports table (Phase 2 manifest),7aa177f5149a6243a72d2b45de6ee472d8e3a577a1c7ae0d6e5cfca2ec8d50fc
+dim_ministry,dim_ministry.csv,92,7,one row per canonical ministry or department,ministry_id,ministries table (Phase 3 name resolution),2be9d66dd9636d99013c98c95122553b21c2658c9277ad493f637264558ce1fc
+dim_list,dim_list.csv,6,8,one row per published ministry list type,list_code,derived from list_appearances,1f80ccfeb81a8f74de8ba61fd0a06a490d5112e0ab339b5dc605933cec3c556a
+overall_trend,overall_trend.csv,57,15,one row per calendar month (Central Secretariat aggregate),month,"analysis A (v_monthly_overall: latest published value per month, D-026)",97a32ae0c0585e924203843a5a986105c24fba0287af0dc7640c1ff251625375
+ministry_monthly,ministry_monthly.csv,1800,14,"one row per ministry per report in the T6 monthly panel (#26-#45, Jun 2024 - Jan 2026)",report_number+ministry_id,"v_ministry_monthly_flows (GRAI 'flows' tables, D-017)",24a92547b0c8b9ef330e5ae95b7d1fe51a8b7bfe10e6cad2f99c3d9a51c1f74c
+list_appearances,list_appearances.csv,2481,10,one row per ministry per published list per report,report_number+list_code+ministry_id,"v_pendency_list, v_long_pending_list, v_closing_time_list",6361bd6527a559c1d03c62754215d366e5d2867d86b6dc56f0375898d06fac6f
+repeated_listings,repeated_listings.csv,181,12,one row per ministry per list type (ministries listed at least once),list_code+ministry_id,derived from list_appearances (same rules as analysis B),cb0dcd6b77fb420d23e0b18bb5b2bfdf656dd73ed5fb8ac3815348576dc213d4
+backlog_growth,backlog_growth.csv,90,17,one row per ministry in the T6 panel,ministry_id,analysis C (panel summary) + analysis E family F3 (trend test) + backlog-to-demand ratio,96a35c2bd7364cac8f08d4e10152e31ba2ae96b4d3a5a8c48e70b08f6c0b2c00
+trend_tests,trend_tests.csv,99,15,one row per trend test,test_id,analysis E,fec888d1cf8f733bc7f080fd7a5f9e6ae6769d188a4f5ae59eeec8bcb8ba6b3b
+grai_ranks,grai_ranks.csv,4490,15,one row per ministry per GRI/GRAI ranking table (#4-#53),report_number+ministry_id,v_grai,e65077cbd5a1003c0cc5d8163088fa24d8f30c5a420a4024c87104a47fd149f8
+scorecard,scorecard.csv,91,23,one row per ministry ranked in GRAI #46-#53,ministry_id,"Phase 5 scorecard (project construct, not an official rating; docs/scorecard.md)",1d292171e18df072ddbb8fad847a9434e8a0e04734185fe33d8785b3fc54d975
+scorecard_sensitivity,scorecard_sensitivity.csv,10,7,one row per weight variant per group,variant+group,Phase 5 scorecard sensitivity,852899e9437bca0f62b1bd1331bcb124ac8b3f09867e0b9a1ba3586e7dccb16c
+demand_backlog_quadrants,demand_backlog_quadrants.csv,90,14,one row per ministry in the T6 panel,ministry_id,"analysis G (#29-#45, Sep 2024 - Jan 2026)",81a8ba2314d5319b5cdb8aeef13819b46e9f35ba10f2bb642259211dd12c17ea
+demand_backlog_sensitivity,demand_backlog_sensitivity.csv,27,7,one row per stable band per demand/backlog combination,stable_band_pct_per_month+demand_trend+backlog_trend,analysis G sensitivity,7cdf1112d346ba664bf365d61df98bd783966b211ba7bc957cab55d1b4529d11

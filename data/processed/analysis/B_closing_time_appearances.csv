@@ -1,0 +1,95 @@
+ministry_id,canonical_name,list,appearances,median_days,max_days,first,last,reports_with_list
+1,Central Board of Direct Taxes (Income Tax),high,50,59.5,69.0,2022-07-01,2026-09-01,52
+17,Department of Economic Affairs ACC Division,high,39,54.0,91.0,2023-01-01,2026-09-01,52
+50,Department of Youth Affairs,high,29,37.0,55.0,2023-02-01,2026-06-01,52
+91,Staff Selection Commission,high,24,30.0,44.0,2023-05-01,2026-09-01,52
+8,Department of Atomic Energy,high,22,61.5,95.0,2022-05-01,2024-05-01,52
+57,Ministry of Culture,high,22,39.0,45.0,2023-04-01,2025-06-01,52
+76,Ministry of Petroleum and Natural Gas,high,21,30.0,35.0,2024-01-01,2026-09-01,52
+40,Department of Revenue,high,19,74.0,132.0,2022-05-01,2023-12-01,52
+34,Department of Military Affairs,high,18,39.0,112.0,2022-05-01,2024-11-01,52
+19,Department of Ex Servicemen Welfare,high,16,28.5,30.0,2024-02-01,2026-09-01,52
+5,Department of Agriculture Research and Education,high,15,36.0,60.0,2024-08-01,2025-12-01,52
+15,Department of Defence Production,high,14,36.0,39.0,2024-04-01,2025-05-01,52
+16,Department of Defence Research and Development,high,14,25.0,32.0,2025-03-01,2026-09-01,52
+35,Department of Official Language,high,14,41.5,44.0,2023-08-01,2024-10-01,52
+51,Legislative Department,high,14,79.5,114.0,2022-05-01,2025-05-01,52
+21,Department of Fertilizers,high,13,60.0,68.0,2024-01-01,2025-02-01,52
+9,Department of Bio Technology,high,11,84.0,120.0,2025-01-01,2025-12-01,52
+42,Department of School Education and Literacy,high,11,48.0,60.0,2024-02-01,2024-12-01,52
+45,Department of Social Justice and Empowerment,high,10,81.5,163.0,2022-05-01,2023-02-01,52
+80,Ministry of Shipping,high,10,47.0,65.0,2023-03-01,2023-12-01,52
+84,Ministry of Textiles,high,10,39.5,45.0,2024-01-01,2024-10-01,52
+11,Department of Commerce,high,9,29.0,40.0,2026-01-01,2026-09-01,52
+46,Department of Space,high,9,76.0,99.0,2022-05-01,2025-01-01,52
+14,Department of Defence Finance,high,8,26.0,37.0,2025-01-01,2026-09-01,52
+27,Department of Health & Family Welfare,high,8,117.0,123.0,2022-05-01,2022-12-01,52
+33,Department of Legal Affairs,high,8,155.5,243.0,2022-05-01,2022-12-01,52
+55,Ministry of Cooperation,high,8,107.0,183.0,2022-05-01,2022-12-01,52
+72,Ministry of Minority Affairs,high,8,29.5,37.0,2025-07-01,2026-03-01,52
+26,Department of Food and Public Distribution,high,7,28.0,35.0,2026-03-01,2026-09-01,52
+74,Ministry of Panchayati Raj,high,7,29.0,31.0,2026-03-01,2026-09-01,52
+36,Department of Personnel and Training,high,6,46.5,51.0,2023-06-01,2023-12-01,52
+59,Ministry of Drinking Water and Sanitation,high,6,48.0,69.0,2023-01-01,2023-06-01,52
+7,"Department of Animal Husbandry, Dairying",high,5,37.0,62.0,2023-01-01,2024-12-01,52
+79,Ministry of Road Transport and Highways,high,4,44.0,63.0,2023-02-01,2023-05-01,52
+82,Ministry of Statistics and Programme Implementation,high,4,44.0,60.0,2022-11-01,2023-07-01,52
+44,Department of Scientific & Industrial Research,high,3,37.0,37.0,2023-06-01,2023-12-01,52
+52,Ministry of Ayush,high,3,45.0,48.0,2023-01-01,2023-03-01,52
+68,Ministry of Information and Broadcasting,high,3,30.0,33.0,2024-01-01,2024-03-01,52
+77,Ministry of Power,high,3,52.0,74.0,2023-02-01,2023-04-01,52
+20,Department of Expenditure,high,2,28.0,31.0,2025-01-01,2026-04-01,52
+66,Ministry of Home Affairs,high,2,30.5,34.0,2026-01-01,2026-02-01,52
+86,Ministry of Tribal Affairs,high,2,32.0,34.0,2024-01-01,2024-02-01,52
+13,Department of Defence,high,1,61.0,61.0,2022-11-01,2022-11-01,52
+25,Department of Fisheries,high,1,69.0,69.0,2022-06-01,2022-06-01,52
+28,Department of Health Research,high,1,69.0,69.0,2022-05-01,2022-05-01,52
+43,Department of Science and Technology,high,1,28.0,28.0,2026-02-01,2026-02-01,52
+47,Department of Sports,high,1,34.0,34.0,2024-12-01,2024-12-01,52
+60,Ministry of Earth Sciences,high,1,28.0,28.0,2025-02-01,2025-02-01,52
+62,"Ministry of Environment, Forest and Climate Change",high,1,47.0,47.0,2023-01-01,2023-01-01,52
+67,Ministry of Housing and Urban Affairs,high,1,24.0,24.0,2026-01-01,2026-01-01,52
+73,Ministry of New and Renewable Energy,high,1,82.0,82.0,2023-01-01,2023-01-01,52
+89,NITI Aayog,low,44,2.0,4.0,2023-01-01,2026-09-01,52
+75,Ministry of Parliamentary Affairs,low,40,2.0,8.0,2022-07-01,2026-09-01,52
+32,Department of Land Resources,low,37,3.0,6.0,2023-05-01,2026-09-01,52
+24,Department of Financial Services (Pension Reforms),low,36,5.0,7.0,2022-07-01,2026-05-01,52
+48,Department of Telecommunications,low,36,6.0,13.0,2022-05-01,2026-02-01,52
+26,Department of Food and Public Distribution,low,33,5.0,10.0,2022-05-01,2025-08-01,52
+6,Department of Agriculture and Farmers Welfare,low,28,7.0,12.0,2022-05-01,2025-12-01,52
+55,Ministry of Cooperation,low,24,2.0,6.0,2023-01-01,2024-12-01,52
+39,Department of Public Enterprises,low,22,4.0,6.0,2023-01-01,2026-03-01,52
+65,Ministry of Heavy Industries,low,18,4.0,5.0,2025-01-01,2026-07-01,52
+52,Ministry of Ayush,low,17,6.0,6.0,2024-04-01,2026-04-01,52
+10,Department of Chemicals and Petrochemicals,low,14,4.0,8.0,2022-07-01,2026-09-01,52
+33,Department of Legal Affairs,low,14,3.0,5.0,2023-02-01,2024-03-01,52
+23,Department of Financial Services (Insurance Division),low,13,5.0,7.0,2023-01-01,2026-08-01,52
+58,Ministry of Development of North Eastern Region,low,13,4.0,5.0,2024-01-01,2026-09-01,52
+77,Ministry of Power,low,11,3.0,6.0,2025-11-01,2026-09-01,52
+30,Department of Investment & Public Asset Management,low,10,5.0,6.0,2023-01-01,2023-12-01,52
+31,Department of Justice,low,9,5.0,9.0,2022-11-01,2023-07-01,52
+41,Department of Rural Development,low,9,5.0,5.0,2024-03-01,2024-12-01,52
+20,Department of Expenditure,low,8,7.0,12.0,2022-05-01,2022-12-01,52
+43,Department of Science and Technology,low,8,8.0,13.0,2022-05-01,2023-03-01,52
+56,Ministry of Corporate Affairs,low,8,9.0,13.0,2022-05-01,2022-12-01,52
+64,Ministry of Food Processing Industries,low,8,5.0,6.0,2022-07-01,2023-02-01,52
+59,Ministry of Drinking Water and Sanitation,low,6,4.0,7.0,2024-01-01,2024-08-01,52
+71,Ministry of Mines,low,6,8.5,15.0,2022-05-01,2022-11-01,52
+90,O/o the Comptroller & Auditor General of India,low,6,4.5,6.0,2023-01-01,2023-06-01,52
+35,Department of Official Language,low,5,3.0,3.0,2026-05-01,2026-09-01,52
+12,Department of Consumer Affairs,low,4,4.0,5.0,2026-06-01,2026-09-01,52
+18,Department of Empowerment of Persons with Disabilities,low,4,6.5,7.0,2023-07-01,2023-10-01,52
+40,Department of Revenue,low,4,6.0,6.0,2025-02-01,2026-01-01,52
+13,Department of Defence,low,3,5.0,5.0,2026-05-01,2026-07-01,52
+22,Department of Financial Services (Banking Division),low,3,5.0,5.0,2026-06-01,2026-09-01,52
+45,Department of Social Justice and Empowerment,low,3,6.0,6.0,2026-01-01,2026-04-01,52
+9,Department of Bio Technology,low,2,4.0,4.0,2024-01-01,2024-02-01,52
+16,Department of Defence Research and Development,low,2,10.0,11.0,2022-05-01,2022-06-01,52
+67,Ministry of Housing and Urban Affairs,low,2,14.0,14.0,2022-05-01,2022-06-01,52
+69,Ministry of Labour and Employment,low,2,6.0,6.0,2023-02-01,2023-03-01,52
+70,Ministry of Micro Small and Medium Enterprises,low,2,4.5,5.0,2025-01-01,2025-02-01,52
+92,Unique Identification Authority of India,low,2,15.0,15.0,2022-05-01,2022-06-01,52
+3,Department for Promotion of Industry and Internal Trade,low,1,9.0,9.0,2022-12-01,2022-12-01,52
+38,Department of Posts,low,1,5.0,5.0,2026-09-01,2026-09-01,52
+61,Ministry of Electronics & Information Technology,low,1,6.0,6.0,2025-01-01,2025-01-01,52
+85,Ministry of Tourism,low,1,6.0,6.0,2025-01-01,2025-01-01,52

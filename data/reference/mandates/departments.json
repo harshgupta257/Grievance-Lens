@@ -1,0 +1,959 @@
+{
+  "about": {
+    "purpose": "Mandate knowledge base for routing grievances among the CPGRAMS Central Ministries/Departments in scope (Phase 7).",
+    "scope_rule": "The 35 entities with the highest mean monthly receipts in the T6 monthly panel (#29-#45, about 91% of panel receipts), plus the Staff Selection Commission (rank 36) and the Department of Urban Development (successor of MoHUA in CPGRAMS from Sep 2026).",
+    "official_text": "The official mandate of each entry is the verbatim text of the Allocation of Business Rules items listed in aob_refs (source aob_rules in sources.csv). The build step copies that text; it is never paraphrased here.",
+    "project_authored_fields": "grievance_responsibilities (a plain-language paraphrase that cites AoB items), common_grievance_categories, keywords, overlaps and notes are written by this project from the AoB items and general knowledge. They are not an official CPGRAMS category list and a keyword match never proves jurisdiction.",
+    "verified_on": "2026-10-21",
+    "reviewed_by": null
+  },
+  "departments": [
+    {
+      "ministry_key": "ministry_of_labour_and_employment",
+      "official_name": "Ministry of Labour and Employment",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF LABOUR AND EMPLOYMENT"}],
+      "official_urls": ["https://labour.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Employees' Provident Fund, employees' pension and Employees' State Insurance under the laws the Ministry administers", "aob_items": ["MINISTRY OF LABOUR AND EMPLOYMENT:24", "MINISTRY OF LABOUR AND EMPLOYMENT:5"]},
+        {"text": "Minimum wages, gratuity and labour laws in central-sphere undertakings", "aob_items": ["MINISTRY OF LABOUR AND EMPLOYMENT:23", "MINISTRY OF LABOUR AND EMPLOYMENT:24", "MINISTRY OF LABOUR AND EMPLOYMENT:25"]},
+        {"text": "Industrial disputes, Chief Labour Commissioner and central industrial tribunals/labour courts", "aob_items": ["MINISTRY OF LABOUR AND EMPLOYMENT:7", "MINISTRY OF LABOUR AND EMPLOYMENT:13", "MINISTRY OF LABOUR AND EMPLOYMENT:27"]},
+        {"text": "Building and other construction workers' welfare law", "aob_items": ["MINISTRY OF LABOUR AND EMPLOYMENT:40"]},
+        {"text": "Employment exchanges and employment policy", "aob_items": ["MINISTRY OF LABOUR AND EMPLOYMENT:9", "MINISTRY OF LABOUR AND EMPLOYMENT:14"]}
+      ],
+      "common_grievance_categories": ["EPF claim, withdrawal or transfer delayed", "EPF member details or KYC correction", "EPS pension not started or wrongly calculated", "ESIC medical or cash benefit", "wages or gratuity not paid by an employer", "construction worker welfare benefits"],
+      "keywords": {
+        "en": ["EPF", "PF", "provident fund", "EPFO", "UAN", "EPS pension", "ESIC", "ESI", "gratuity", "minimum wages", "labour commissioner", "salary not paid", "employer"],
+        "hi": ["भविष्य निधि", "पीएफ", "ईपीएफओ", "कर्मचारी पेंशन", "ईएसआईसी", "ग्रेच्युटी", "न्यूनतम मजदूरी", "वेतन नहीं मिला", "श्रम विभाग", "मालिक"],
+        "hinglish": ["pf nahi mila", "pf withdrawal pending", "pf ka paisa", "uan kyc", "pension eps nahi mili", "salary nahi mili", "gratuity nahi mili", "esic card"]
+      },
+      "overlaps": [
+        {"with": "Central Government pension (DoPPW, outside this KB)", "topic": "pensions", "note": "EPS pensions are EPFO matters; pensions of Central Government civil employees are not."},
+        {"with": "State Governments", "topic": "labour laws", "note": "Labour welfare is a concurrent subject (AoB Part II heading); establishments in the State sphere are usually handled by State labour departments."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_financial_services_banking_division",
+      "official_name": "Department of Financial Services (Banking)",
+      "parent_ministry": "Ministry of Finance",
+      "kb_role": "aob_division",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF FINANCIAL SERVICES", "part": "II. BANKING"}],
+      "official_urls": ["https://financialservices.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Indian banks (public and private) and other matters relating to banking in India", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:5", "DEPARTMENT OF FINANCIAL SERVICES:15"]},
+        {"text": "Cooperative banking and regional rural banks", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:8", "DEPARTMENT OF FINANCIAL SERVICES:17"]},
+        {"text": "Promotion of digital payments", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:8A"]},
+        {"text": "Deposit insurance, recovery of debts, securitisation and the Negotiable Instruments Act", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:30", "DEPARTMENT OF FINANCIAL SERVICES:18", "DEPARTMENT OF FINANCIAL SERVICES:23", "DEPARTMENT OF FINANCIAL SERVICES:31"]},
+        {"text": "Chit funds and non-banking companies accepting deposits", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:14"]}
+      ],
+      "common_grievance_categories": ["bank account opening, freezing or KYC", "loan or credit card dispute", "failed UPI, ATM or card transaction", "cooperative bank deposit not returned", "recovery agents or loan recovery", "pension or subsidy not credited by the bank"],
+      "keywords": {
+        "en": ["bank", "bank account", "loan", "ATM", "UPI", "credit card", "KYC", "cheque", "branch manager", "interest rate", "cooperative bank", "recovery agent"],
+        "hi": ["बैंक", "बैंक खाता", "ऋण", "लोन", "एटीएम", "यूपीआई", "केवाईसी", "चेक", "शाखा प्रबंधक", "सहकारी बैंक"],
+        "hinglish": ["bank account band", "khata freeze", "paisa kat gaya", "upi fail", "loan nahi mil raha", "atm se paise nahi nikle", "recovery wale pareshan"]
+      },
+      "overlaps": [
+        {"with": "department_of_posts", "topic": "payments bank", "note": "India Post Payments Bank is allocated to the Department of Posts (AoB Posts item 2A)."},
+        {"with": "ministry_of_electronics_and_information_technology", "topic": "digital transactions", "note": "DFS promotes digital payments (8A); MeitY promotes digital transactions excluding digital payments (MeitY item 2A)."},
+        {"with": "Reserve Bank of India ombudsman (outside this KB)", "topic": "bank customer complaints", "note": "Complaints against a bank can also be taken up through the bank and the RBI's complaint system, which is not a CPGRAMS ministry."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_financial_services_insurance_division",
+      "official_name": "Department of Financial Services (Insurance)",
+      "parent_ministry": "Ministry of Finance",
+      "kb_role": "aob_division",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF FINANCIAL SERVICES", "part": "I. INSURANCE"}],
+      "official_urls": ["https://financialservices.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "General insurance policy and public-sector general insurance companies", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:1"]},
+        {"text": "Life insurance and the Life Insurance Corporation of India", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:2"]},
+        {"text": "The Insurance Regulatory and Development Authority Act", "aob_items": ["DEPARTMENT OF FINANCIAL SERVICES:3"]}
+      ],
+      "common_grievance_categories": ["LIC claim or maturity payment delayed", "insurance claim rejected", "policy surrender or loan", "health insurance claim with a public-sector insurer"],
+      "keywords": {
+        "en": ["insurance", "LIC", "policy", "claim", "maturity", "premium", "surrender", "health insurance claim", "insurer"],
+        "hi": ["बीमा", "पॉलिसी", "दावा", "एलआईसी", "प्रीमियम", "बीमा क्लेम"],
+        "hinglish": ["lic claim nahi mila", "policy maturity ka paisa", "insurance claim reject", "bima ka paisa"]
+      },
+      "overlaps": [
+        {"with": "department_of_agriculture_and_farmers_welfare", "topic": "crop insurance", "note": "Crop insurance is allocated to the Department of Agriculture and Farmers Welfare (AoB item 58)."},
+        {"with": "ministry_of_road_transport_and_highways", "topic": "motor insurance", "note": "Compulsory insurance of motor vehicles is a MoRTH subject (MoRTH item 1)."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_telecommunications",
+      "official_name": "Department of Telecommunications",
+      "parent_ministry": "Ministry of Communications",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF TELECOMMUNICATIONS"}],
+      "official_urls": ["https://dot.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Policy and licensing of telephone, wireless, data and other telecom services", "aob_items": ["DEPARTMENT OF TELECOMMUNICATIONS:1"]},
+        {"text": "Security of telecom networks", "aob_items": ["DEPARTMENT OF TELECOMMUNICATIONS:1A"]},
+        {"text": "Telecom Regulatory Authority of India and the telecom laws", "aob_items": ["DEPARTMENT OF TELECOMMUNICATIONS:8", "DEPARTMENT OF TELECOMMUNICATIONS:10"]},
+        {"text": "BSNL and MTNL", "aob_items": ["DEPARTMENT OF TELECOMMUNICATIONS:13", "DEPARTMENT OF TELECOMMUNICATIONS:14"]}
+      ],
+      "common_grievance_categories": ["mobile network or call drops", "BSNL/MTNL landline or broadband service", "telecom billing dispute", "SIM issued without consent or blocked", "mobile tower"],
+      "keywords": {
+        "en": ["mobile", "SIM", "network", "call drop", "BSNL", "MTNL", "broadband", "landline", "telephone bill", "tower", "telecom operator", "internet speed"],
+        "hi": ["मोबाइल", "सिम", "नेटवर्क", "बीएसएनएल", "टावर", "टेलीफोन", "ब्रॉडबैंड", "कॉल ड्रॉप"],
+        "hinglish": ["network nahi aata", "sim band ho gaya", "bsnl bill galat", "call drop", "broadband nahi chal raha", "mobile tower"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_electronics_and_information_technology", "topic": "internet", "note": "MeitY handles internet policy except licensing of internet service providers, which stays with DoT (MeitY item 1)."},
+        {"with": "ministry_of_home_affairs", "topic": "fraud calls and cyber crime", "note": "Cyber crime is an MHA subject (Department of Internal Security item 36A)."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_railways_railway_board",
+      "official_name": "Ministry of Railways (Railway Board)",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "RAILWAY BOARD"}],
+      "official_urls": ["https://indianrailways.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "All matters of the Government railways", "aob_items": ["RAILWAY BOARD:1"]},
+        {"text": "Pension rules of railway employees", "aob_items": ["RAILWAY BOARD:4"]}
+      ],
+      "common_grievance_categories": ["ticket refund or reservation", "train punctuality, cleanliness or catering", "railway staff conduct", "railway recruitment", "railway pension"],
+      "keywords": {
+        "en": ["train", "railway", "ticket", "refund", "PNR", "reservation", "coach", "station", "TTE", "catering", "railway recruitment", "railway pension"],
+        "hi": ["रेल", "ट्रेन", "टिकट", "रिफंड", "स्टेशन", "डिब्बा", "रेलवे", "आरक्षण"],
+        "hinglish": ["train late", "ticket refund nahi aaya", "coach ganda", "tte ne paise liye", "railway pension", "train me khana kharab"]
+      },
+      "overlaps": [
+        {"with": "Central Government pension (DoPPW, outside this KB)", "topic": "pensions", "note": "Railway pension rules are administered by the Railway Board (item 4); overall pension policy coordination lies with DoPPW."},
+        {"with": "department_of_urban_development", "topic": "metro rail", "note": "Urban rail-based transport planning is an Urban Development subject; Delhi Metro is under Capital Development."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_home_affairs",
+      "official_name": "Ministry of Home Affairs",
+      "parent_ministry": null,
+      "kb_role": "ministry_with_departments",
+      "mapping_status": "direct",
+      "aob_refs": [
+        {"section": "DEPARTMENT OF INTERNAL SECURITY"},
+        {"section": "DEPARTMENT OF STATES"},
+        {"section": "DEPARTMENT OF OFFICIAL LANGUAGE"},
+        {"section": "DEPARTMENT OF HOME"},
+        {"section": "DEPARTMENT OF JAMMU, KASHMIR AND LADAKH AFFAIRS"},
+        {"section": "DEPARTMENT OF BORDER MANAGEMENT"}
+      ],
+      "official_urls": ["https://www.mha.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Central Armed Police Forces such as BSF, CRPF, CISF, ITBP and Assam Rifles", "aob_items": ["DEPARTMENT OF INTERNAL SECURITY:1", "DEPARTMENT OF INTERNAL SECURITY:2", "DEPARTMENT OF INTERNAL SECURITY:3", "DEPARTMENT OF INTERNAL SECURITY:9", "DEPARTMENT OF INTERNAL SECURITY:10"]},
+        {"text": "Citizenship by registration and naturalisation, immigration and visas for foreigners", "aob_items": ["DEPARTMENT OF INTERNAL SECURITY:22", "DEPARTMENT OF INTERNAL SECURITY:23", "DEPARTMENT OF INTERNAL SECURITY:24"]},
+        {"text": "Foreign contribution (FCRA) regulation", "aob_items": ["DEPARTMENT OF INTERNAL SECURITY:28"]},
+        {"text": "Cyber crime and criminal offences against women, children, SCs and STs (central policy)", "aob_items": ["DEPARTMENT OF INTERNAL SECURITY:36A", "DEPARTMENT OF INTERNAL SECURITY:37"]},
+        {"text": "Coordination of relief for natural and man-made disasters", "aob_items": ["DEPARTMENT OF INTERNAL SECURITY:52", "DEPARTMENT OF INTERNAL SECURITY:53"]},
+        {"text": "Pension to freedom fighters; human rights policy; Union Territories", "aob_items": ["DEPARTMENT OF STATES:10", "DEPARTMENT OF STATES:11", "DEPARTMENT OF STATES:9"]},
+        {"text": "Census and registration of births and deaths", "aob_items": ["DEPARTMENT OF HOME:20", "DEPARTMENT OF HOME:36"]}
+      ],
+      "common_grievance_categories": ["CAPF personnel service or pension matters", "visa or foreigner registration", "citizenship application", "FCRA registration", "cyber fraud (policy level)", "freedom fighter pension", "birth or death registration policy"],
+      "keywords": {
+        "en": ["CRPF", "BSF", "CISF", "ITBP", "Assam Rifles", "paramilitary", "visa", "foreigner", "citizenship", "FCRA", "cyber fraud", "freedom fighter pension", "census", "disaster relief"],
+        "hi": ["गृह मंत्रालय", "सीआरपीएफ", "बीएसएफ", "अर्धसैनिक बल", "वीजा", "नागरिकता", "साइबर अपराध", "स्वतंत्रता सेनानी पेंशन", "जनगणना"],
+        "hinglish": ["crpf jawan pension", "bsf posting", "visa extension", "citizenship application", "cyber fraud hua", "fcra registration", "freedom fighter pension"]
+      },
+      "overlaps": [
+        {"with": "State Governments", "topic": "police and law and order", "note": "Police and public order are State subjects under the Constitution; most complaints about local police belong with the State Government, not MHA."},
+        {"with": "ministry_of_external_affairs", "topic": "visas and passports", "note": "Passports and visas for Indians travelling abroad are MEA subjects; visas for entry into India are excluded from MEA item 5 and handled by MHA (item 24)."},
+        {"with": "department_of_social_justice_and_empowerment", "topic": "atrocities against SCs", "note": "DoSJE administers the SC/ST (Prevention of Atrocities) Act as regards SCs (DoSJE item 13); criminal-law policy lies with MHA (item 37)."}
+      ],
+      "notes": "CPGRAMS lists MHA as one entity; the AoB divides its business among six departments, all included here."
+    },
+    {
+      "ministry_key": "department_of_posts",
+      "official_name": "Department of Posts",
+      "parent_ministry": "Ministry of Communications",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF POSTS"}],
+      "official_urls": ["https://www.indiapost.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Postal services, Post Office Savings Bank and certificates, and Postal Life Insurance", "aob_items": ["DEPARTMENT OF POSTS:2"]},
+        {"text": "India Post Payments Bank", "aob_items": ["DEPARTMENT OF POSTS:2A"]},
+        {"text": "Administration of the postal law", "aob_items": ["DEPARTMENT OF POSTS:6"]}
+      ],
+      "common_grievance_categories": ["speed post or parcel not delivered", "money order", "post office savings account or deposit", "Postal Life Insurance claim", "India Post Payments Bank account"],
+      "keywords": {
+        "en": ["post office", "speed post", "parcel", "registered post", "money order", "postman", "post office savings", "PLI", "India Post", "IPPB", "letter not delivered"],
+        "hi": ["डाक", "डाकघर", "स्पीड पोस्ट", "पार्सल", "मनी ऑर्डर", "डाकिया", "पत्र", "डाक जीवन बीमा"],
+        "hinglish": ["speed post nahi pahuncha", "parcel missing", "post office rd", "dakiya", "chitthi nahi aayi", "post office ka khata"]
+      },
+      "overlaps": [
+        {"with": "department_of_financial_services_banking_division", "topic": "banking", "note": "Banks in general are DFS subjects; IPPB and Post Office Savings Bank administration are Posts subjects."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "central_board_of_direct_taxes_income_tax",
+      "official_name": "Central Board of Direct Taxes (Income Tax Department)",
+      "parent_ministry": "Ministry of Finance (Department of Revenue)",
+      "kb_role": "board_under_aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF REVENUE", "items": ["1", "4", "14"]}],
+      "official_urls": ["https://incometaxindia.gov.in/", "https://www.incometax.gov.in/iec/foportal/"],
+      "grievance_responsibilities": [
+        {"text": "The Central Board of Direct Taxes and the Income Tax Department", "aob_items": ["DEPARTMENT OF REVENUE:1", "DEPARTMENT OF REVENUE:14"]},
+        {"text": "Income tax and other direct taxes (except the Income-tax Appellate Tribunal)", "aob_items": ["DEPARTMENT OF REVENUE:4"]}
+      ],
+      "common_grievance_categories": ["income tax refund delayed", "PAN application or correction", "TDS credit mismatch", "tax demand or notice", "e-filing portal problem"],
+      "keywords": {
+        "en": ["income tax", "ITR", "refund", "PAN", "TDS", "Form 16", "tax notice", "tax demand", "assessment", "e-filing"],
+        "hi": ["आयकर", "इनकम टैक्स", "रिफंड", "पैन कार्ड", "टीडीएस", "कर नोटिस"],
+        "hinglish": ["income tax refund nahi aaya", "pan card galat", "tds kata par credit nahi", "itr process nahi hua", "tax notice aaya"]
+      },
+      "overlaps": [
+        {"with": "central_board_of_indirect_taxes_and_customs", "topic": "taxes", "note": "GST, customs and central excise are CBIC matters."},
+        {"with": "unique_identification_authority_of_india", "topic": "PAN-Aadhaar", "note": "Problems with Aadhaar data itself are UIDAI matters."}
+      ],
+      "notes": "Official domains confirmed from links on https://dor.gov.in/ (incometaxindia.gov.in refuses automated checks)."
+    },
+    {
+      "ministry_key": "central_board_of_indirect_taxes_and_customs",
+      "official_name": "Central Board of Indirect Taxes and Customs",
+      "parent_ministry": "Ministry of Finance (Department of Revenue)",
+      "kb_role": "board_under_aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF REVENUE", "items": ["1", "11", "12", "14", "21"]}],
+      "official_urls": ["https://www.cbic.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The Board (named in the AoB by its former name, Central Board of Excise and Customs), and the customs, central excise and GST administrations", "aob_items": ["DEPARTMENT OF REVENUE:1", "DEPARTMENT OF REVENUE:14"]},
+        {"text": "Customs duties on imports and exports, and central excise", "aob_items": ["DEPARTMENT OF REVENUE:11", "DEPARTMENT OF REVENUE:12"]},
+        {"text": "The GST Acts", "aob_items": ["DEPARTMENT OF REVENUE:21"]}
+      ],
+      "common_grievance_categories": ["GST registration or cancellation", "GST refund delayed", "customs clearance or detention of goods", "baggage at airport customs", "central excise"],
+      "keywords": {
+        "en": ["GST", "GST refund", "GSTIN", "GST registration", "customs", "customs duty", "baggage", "import", "export", "excise"],
+        "hi": ["जीएसटी", "जीएसटी रिफंड", "सीमा शुल्क", "कस्टम", "आयात", "निर्यात"],
+        "hinglish": ["gst refund atka", "gst registration cancel", "customs ne saman roka", "airport pe custom duty"]
+      },
+      "overlaps": [
+        {"with": "central_board_of_direct_taxes_income_tax", "topic": "taxes", "note": "Income tax is a CBDT matter."},
+        {"with": "State Governments", "topic": "State GST", "note": "GST is administered jointly; State GST officers handle taxpayers assigned to States."}
+      ],
+      "notes": "cbic.gov.in failed an automated TLS check (incomplete certificate chain); the domain is linked from https://dor.gov.in/."
+    },
+    {
+      "ministry_key": "department_of_revenue",
+      "official_name": "Department of Revenue",
+      "parent_ministry": "Ministry of Finance",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF REVENUE"}],
+      "official_urls": ["https://dor.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The two tax boards (CBDT and CBIC) and the tax departments under them", "aob_items": ["DEPARTMENT OF REVENUE:1", "DEPARTMENT OF REVENUE:14"]},
+        {"text": "Narcotic drugs law and opium", "aob_items": ["DEPARTMENT OF REVENUE:8", "DEPARTMENT OF REVENUE:9"]},
+        {"text": "Enforcement under FEMA, the Directorate of Enforcement and prevention of money laundering", "aob_items": ["DEPARTMENT OF REVENUE:16", "DEPARTMENT OF REVENUE:20"]},
+        {"text": "Stamp duties on financial instruments and the Benami Transactions Act", "aob_items": ["DEPARTMENT OF REVENUE:3", "DEPARTMENT OF REVENUE:5"]}
+      ],
+      "common_grievance_categories": ["tax administration policy", "Enforcement Directorate matters", "benami property", "narcotics (revenue side)"],
+      "keywords": {
+        "en": ["revenue department", "Enforcement Directorate", "money laundering", "benami", "narcotics", "stamp duty", "GST council", "tax policy"],
+        "hi": ["राजस्व विभाग", "प्रवर्तन निदेशालय", "बेनामी", "मादक पदार्थ"],
+        "hinglish": ["ed ki jaanch", "benami property", "revenue department"]
+      },
+      "overlaps": [
+        {"with": "central_board_of_direct_taxes_income_tax", "topic": "income tax", "note": "Individual income-tax grievances are normally handled by CBDT."},
+        {"with": "central_board_of_indirect_taxes_and_customs", "topic": "GST and customs", "note": "Individual GST and customs grievances are normally handled by CBIC."},
+        {"with": "ministry_of_home_affairs", "topic": "narcotics", "note": "The Narcotics Control Bureau is an MHA subject (Internal Security item 54)."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_agriculture_and_farmers_welfare",
+      "official_name": "Department of Agriculture and Farmers Welfare",
+      "parent_ministry": "Ministry of Agriculture and Farmers Welfare",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE"}],
+      "official_urls": ["https://agriwelfare.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Schemes for the welfare of farmers", "aob_items": ["DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:63"]},
+        {"text": "Crop insurance, agricultural credit and relief for crop damage from drought, hailstorm and pests", "aob_items": ["DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:58", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:57", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:55"]},
+        {"text": "Quality control of fertilizers and insecticides; seeds and agricultural machinery", "aob_items": ["DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:53", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:42", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:43"]},
+        {"text": "Agricultural markets, warehousing and farmer producer organisations", "aob_items": ["DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:61", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:62", "DEPARTMENT OF AGRICULTURE AND FARMERS WELFARE:59"]}
+      ],
+      "common_grievance_categories": ["farmer income-support instalment not received", "crop insurance claim", "seed, fertilizer or pesticide quality", "agricultural credit", "crop damage relief"],
+      "keywords": {
+        "en": ["farmer", "kisan", "PM Kisan", "instalment", "crop insurance", "crop loss", "seeds", "fertilizer", "pesticide", "kisan credit card", "mandi"],
+        "hi": ["किसान", "पीएम किसान", "किस्त", "फसल बीमा", "फसल नुकसान", "खाद", "बीज", "कीटनाशक", "किसान क्रेडिट कार्ड", "मंडी"],
+        "hinglish": ["pm kisan ki kist nahi aayi", "fasal bima claim", "khad nahi mila", "beej kharab", "fasal kharab ho gayi", "kisan samman nidhi"]
+      },
+      "overlaps": [
+        {"with": "Department of Fertilizers (outside this KB)", "topic": "fertilizer supply", "note": "Fertilizer quality control is listed here (item 53); fertilizer production and subsidy belong to the Department of Fertilizers."},
+        {"with": "department_of_financial_services_insurance_division", "topic": "insurance", "note": "Crop insurance is allocated here (item 58), not to DFS."},
+        {"with": "State Governments", "topic": "agriculture", "note": "Agriculture is a State subject under the Constitution; many schemes are implemented by State departments."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_health_and_family_welfare",
+      "official_name": "Department of Health and Family Welfare",
+      "parent_ministry": "Ministry of Health and Family Welfare",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF HEALTH AND FAMILY WELFARE"}],
+      "official_urls": ["https://mohfw.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Medical attendance and treatment of Central Government servants", "aob_items": ["DEPARTMENT OF HEALTH AND FAMILY WELFARE:14"]},
+        {"text": "Central institutions such as AIIMS, and national health programmes", "aob_items": ["DEPARTMENT OF HEALTH AND FAMILY WELFARE:16", "DEPARTMENT OF HEALTH AND FAMILY WELFARE:6"]},
+        {"text": "Medical profession and education, drug standards and the professional councils", "aob_items": ["DEPARTMENT OF HEALTH AND FAMILY WELFARE:12", "DEPARTMENT OF HEALTH AND FAMILY WELFARE:13"]},
+        {"text": "National Health Mission and family welfare; Rashtriya Swasthya Bima Yojana", "aob_items": ["DEPARTMENT OF HEALTH AND FAMILY WELFARE:18", "DEPARTMENT OF HEALTH AND FAMILY WELFARE:15A"]}
+      ],
+      "common_grievance_categories": ["CGHS card or reimbursement", "treatment at a central government hospital", "government health insurance card", "medicine availability or quality", "medical education regulation"],
+      "keywords": {
+        "en": ["hospital", "AIIMS", "CGHS", "doctor", "treatment", "medicine", "health card", "Ayushman", "medical reimbursement", "medical college", "drug quality"],
+        "hi": ["अस्पताल", "इलाज", "डॉक्टर", "दवा", "सीजीएचएस", "आयुष्मान कार्ड", "एम्स", "चिकित्सा"],
+        "hinglish": ["hospital me ilaj nahi", "cghs reimbursement pending", "doctor ne dekha nahi", "dawai nahi mili", "ayushman card nahi bana", "aiims appointment"]
+      },
+      "overlaps": [
+        {"with": "State Governments", "topic": "public health and hospitals", "note": "Public health and hospitals are State subjects; State and district hospitals belong with State Governments."},
+        {"with": "ministry_of_labour_and_employment", "topic": "ESIC", "note": "ESI medical benefits are a Labour Ministry matter (Labour item 24)."},
+        {"with": "department_of_ex_servicemen_welfare", "topic": "ECHS", "note": "The ex-servicemen health scheme is a DESW subject (DESW item 2)."}
+      ],
+      "notes": "The AoB names the Rashtriya Swasthya Bima Yojana (item 15A); later health-insurance schemes are not named in the AoB text."
+    },
+    {
+      "ministry_key": "unique_identification_authority_of_india",
+      "official_name": "Unique Identification Authority of India",
+      "parent_ministry": "Ministry of Electronics and Information Technology",
+      "kb_role": "body_under_aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY", "items": ["14"]}],
+      "official_urls": ["https://uidai.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "UIDAI is allocated to MeitY; it issues and updates Aadhaar", "aob_items": ["MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:14"]}
+      ],
+      "common_grievance_categories": ["Aadhaar enrolment", "Aadhaar demographic or biometric update", "Aadhaar authentication failure", "Aadhaar card not received"],
+      "keywords": {
+        "en": ["Aadhaar", "Aadhar", "Aadhaar update", "enrolment", "biometric", "address change", "date of birth correction", "e-Aadhaar", "authentication"],
+        "hi": ["आधार", "आधार कार्ड", "आधार अपडेट", "बायोमेट्रिक", "आधार सुधार", "आधार नामांकन"],
+        "hinglish": ["aadhar card update nahi ho raha", "aadhar me naam galat", "biometric fail", "aadhar card nahi aaya", "aadhar me janam tithi"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_electronics_and_information_technology", "topic": "parent ministry", "note": "UIDAI is allocated to MeitY (item 14)."},
+        {"with": "department_of_food_and_public_distribution", "topic": "Aadhaar-linked benefits", "note": "Benefits that use Aadhaar (ration, subsidies, bank seeding) are handled by the department running the benefit."}
+      ],
+      "notes": "The AoB names UIDAI only; its functions come from its own statute, which is not part of the AoB text."
+    },
+    {
+      "ministry_key": "ministry_of_electronics_and_information_technology",
+      "official_name": "Ministry of Electronics and Information Technology",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY"}],
+      "official_urls": ["https://www.meity.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "IT, electronics and internet policy (except ISP licensing)", "aob_items": ["MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:1", "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:2"]},
+        {"text": "Information Technology Act, online gaming and cyber security", "aob_items": ["MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:5", "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:5A", "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:5B"]},
+        {"text": "E-governance support, Digital India Corporation and the National Informatics Centre", "aob_items": ["MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:3", "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:8", "MINISTRY OF ELECTRONICS AND INFORMATION TECHNOLOGY:11"]}
+      ],
+      "common_grievance_categories": ["government website or app not working", "IT Act and online platform matters", "online gaming", "cyber security incident"],
+      "keywords": {
+        "en": ["website not working", "government app", "online portal", "IT Act", "online gaming", "cyber security", "NIC", "e-governance", "data leak", "social media content"],
+        "hi": ["वेबसाइट", "ऑनलाइन पोर्टल", "साइबर सुरक्षा", "ऑनलाइन गेमिंग", "आईटी अधिनियम"],
+        "hinglish": ["website nahi khul rahi", "portal down hai", "online gaming app fraud", "data leak ho gaya"]
+      },
+      "overlaps": [
+        {"with": "department_of_telecommunications", "topic": "internet service", "note": "Licensing of internet service providers stays with DoT (MeitY item 1)."},
+        {"with": "ministry_of_home_affairs", "topic": "cyber crime", "note": "Cyber crime is an MHA subject (Internal Security item 36A); cyber security under the IT Act is MeitY (5B)."},
+        {"with": "Department running the service", "topic": "website problems", "note": "A problem with one department's online service usually belongs to that department, not MeitY."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_road_transport_and_highways",
+      "official_name": "Ministry of Road Transport and Highways",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF ROAD TRANSPORT AND HIGHWAYS"}],
+      "official_urls": ["https://morth.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "National highways and the National Highways Authority of India", "aob_items": ["MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:3", "MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:14"]},
+        {"text": "Motor vehicles legislation and compulsory motor insurance", "aob_items": ["MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:11", "MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:1"]},
+        {"text": "Motor Vehicles Act administration and roads in Union Territories", "aob_items": ["MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:6", "MINISTRY OF ROAD TRANSPORT AND HIGHWAYS:5"]}
+      ],
+      "common_grievance_categories": ["national highway condition", "toll plaza or FASTag deduction", "land compensation for a national highway", "driving licence or vehicle registration rules"],
+      "keywords": {
+        "en": ["highway", "national highway", "NH", "toll", "toll plaza", "FASTag", "NHAI", "pothole", "road accident", "driving licence", "vehicle registration", "RC"],
+        "hi": ["राजमार्ग", "राष्ट्रीय राजमार्ग", "टोल", "फास्टैग", "सड़क", "गड्ढे", "ड्राइविंग लाइसेंस", "वाहन पंजीकरण"],
+        "hinglish": ["toll pe paise do baar kate", "highway pe gaddhe", "fastag se paisa kata", "nhai road kharab", "driving licence nahi bana"]
+      },
+      "overlaps": [
+        {"with": "department_of_rural_development", "topic": "rural roads", "note": "Rural connectivity (PMGSY) is a Rural Development subject (item 9)."},
+        {"with": "State Governments", "topic": "state roads and transport offices", "note": "State highways, city roads and regional transport offices are run by States; MoRTH sets central law and runs national highways."}
+      ],
+      "notes": "Checked as https://morth.nic.in/, which redirects to morth.gov.in."
+    },
+    {
+      "ministry_key": "department_of_ex_servicemen_welfare",
+      "official_name": "Department of Ex-Servicemen Welfare",
+      "parent_ministry": "Ministry of Defence",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF EX-SERVICEMEN WELFARE"}],
+      "official_urls": ["https://desw.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Armed Forces veterans, including pensioners", "aob_items": ["DEPARTMENT OF EX-SERVICEMEN WELFARE:1"]},
+        {"text": "The ex-servicemen contributory health scheme", "aob_items": ["DEPARTMENT OF EX-SERVICEMEN WELFARE:2"]},
+        {"text": "Resettlement (DGR) and the Kendriya Sainik Board", "aob_items": ["DEPARTMENT OF EX-SERVICEMEN WELFARE:3"]},
+        {"text": "Army, Air Force and Navy pension regulations", "aob_items": ["DEPARTMENT OF EX-SERVICEMEN WELFARE:4"]}
+      ],
+      "common_grievance_categories": ["armed forces pension", "ECHS membership or treatment", "resettlement or re-employment", "welfare grants for veterans"],
+      "keywords": {
+        "en": ["ex-serviceman", "veteran", "army pension", "defence pension", "ECHS", "OROP", "resettlement", "sainik board", "family pension soldier"],
+        "hi": ["पूर्व सैनिक", "सेना पेंशन", "ईसीएचएस", "सैनिक बोर्ड", "पुनर्वास"],
+        "hinglish": ["fauji pension nahi aayi", "echs card", "ex serviceman", "army pension", "sainik board se madad"]
+      },
+      "overlaps": [
+        {"with": "department_of_defence_finance", "topic": "pension payment", "note": "Pension accounting and payment run through the Defence Accounts Department (Department of Defence item 15)."},
+        {"with": "department_of_health_and_family_welfare", "topic": "health schemes", "note": "CGHS (civil servants) is a Health subject; ECHS is DESW."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_micro_small_and_medium_enterprises",
+      "official_name": "Ministry of Micro, Small and Medium Enterprises",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES"}],
+      "official_urls": ["https://msme.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Development of micro, small and medium enterprises, including khadi, village and coir industries", "aob_items": ["MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:3", "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:9", "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:10"]},
+        {"text": "The MSMED Act and public procurement preference for small enterprises", "aob_items": ["MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:21", "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:6"]},
+        {"text": "Credit guarantee trust and employment-generation programmes", "aob_items": ["MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:13", "MINISTRY OF MICRO, SMALL AND MEDIUM ENTERPRISES:25"]}
+      ],
+      "common_grievance_categories": ["enterprise (Udyam) registration", "delayed payment to a small enterprise", "employment-generation programme loan or subsidy", "khadi and village industries", "credit guarantee"],
+      "keywords": {
+        "en": ["MSME", "Udyam registration", "small business", "PMEGP", "KVIC", "khadi", "delayed payment", "credit guarantee", "NSIC", "small industry"],
+        "hi": ["एमएसएमई", "उद्यम पंजीकरण", "खादी", "लघु उद्योग", "छोटा उद्योग", "भुगतान में देरी"],
+        "hinglish": ["udyam registration", "pmegp loan subsidy nahi mili", "msme payment atka", "chhota business loan"]
+      },
+      "overlaps": [
+        {"with": "department_of_financial_services_banking_division", "topic": "loans", "note": "A bank's handling of a loan is a banking matter; the scheme rules are MSME."},
+        {"with": "ministry_of_skill_development_and_entrepreneurship", "topic": "entrepreneurship training", "note": "Entrepreneurship institutes are listed under MSDE (MSDE item 15)."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_defence_finance",
+      "official_name": "Defence Accounts Department (CPGRAMS entity: Department of Defence Finance)",
+      "parent_ministry": "Ministry of Defence",
+      "kb_role": "body_under_aob_unit",
+      "mapping_status": "inferred",
+      "aob_refs": [{"section": "DEPARTMENT OF DEFENCE", "items": ["15"]}],
+      "official_urls": ["https://cgda.nic.in/", "https://www.mod.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The Defence Accounts Department, which handles defence pay and pension accounting", "aob_items": ["DEPARTMENT OF DEFENCE:15"]}
+      ],
+      "common_grievance_categories": ["defence pension sanction or payment", "pension revision arrears", "pay and allowance accounting of defence personnel"],
+      "keywords": {
+        "en": ["defence accounts", "PCDA", "CGDA", "SPARSH", "defence pension payment", "pension arrears", "pension revision"],
+        "hi": ["रक्षा लेखा", "रक्षा पेंशन", "पेंशन बकाया", "स्पर्श"],
+        "hinglish": ["sparsh pension issue", "pcda pension", "pension arrear nahi mila", "defence pension late"]
+      },
+      "overlaps": [
+        {"with": "department_of_ex_servicemen_welfare", "topic": "pension policy", "note": "Pension regulations for the forces are DESW subjects (DESW item 4)."}
+      ],
+      "notes": "The AoB has no 'Department of Defence Finance'. Mapping the CPGRAMS entity to the Defence Accounts Department (item 15) is inferred and needs review by the project owner."
+    },
+    {
+      "ministry_key": "department_of_defence",
+      "official_name": "Department of Defence",
+      "parent_ministry": "Ministry of Defence",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF DEFENCE"}],
+      "official_urls": ["https://www.mod.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Cantonments and defence land", "aob_items": ["DEPARTMENT OF DEFENCE:12", "DEPARTMENT OF DEFENCE:13"]},
+        {"text": "Civilian services paid from defence estimates", "aob_items": ["DEPARTMENT OF DEFENCE:10"]},
+        {"text": "Canteen Stores Department and the National Cadet Corps", "aob_items": ["DEPARTMENT OF DEFENCE:9", "DEPARTMENT OF DEFENCE:6"]},
+        {"text": "Coast Guard and Border Roads Organisation", "aob_items": ["DEPARTMENT OF DEFENCE:17", "DEPARTMENT OF DEFENCE:20"]}
+      ],
+      "common_grievance_categories": ["cantonment board services", "defence land dispute", "defence civilian employee service matter", "CSD canteen", "NCC"],
+      "keywords": {
+        "en": ["cantonment", "cantonment board", "defence land", "CSD canteen", "NCC", "coast guard", "Border Roads", "defence civilian employee"],
+        "hi": ["छावनी", "छावनी परिषद", "रक्षा भूमि", "कैंटीन", "एनसीसी", "तटरक्षक"],
+        "hinglish": ["cantonment board", "csd canteen card", "defence land kabza", "ncc certificate"]
+      },
+      "overlaps": [
+        {"with": "Department of Military Affairs (outside this KB)", "topic": "armed forces", "note": "Matters of the Army, Navy and Air Force are largely with the Department of Military Affairs."},
+        {"with": "department_of_ex_servicemen_welfare", "topic": "veterans", "note": "Veterans and their pensions are DESW subjects."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_housing_and_urban_affairs",
+      "official_name": "Ministry of Housing and Urban Affairs",
+      "parent_ministry": null,
+      "kb_role": "ministry_with_departments",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF CAPITAL DEVELOPMENT"}, {"section": "DEPARTMENT OF URBAN DEVELOPMENT"}],
+      "official_urls": ["https://mohua.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Central Public Works Department, Union properties and government accommodation", "aob_items": ["DEPARTMENT OF CAPITAL DEVELOPMENT:4", "DEPARTMENT OF CAPITAL DEVELOPMENT:1", "DEPARTMENT OF CAPITAL DEVELOPMENT:5"]},
+        {"text": "Delhi Development Authority, Delhi land and Delhi Metro", "aob_items": ["DEPARTMENT OF CAPITAL DEVELOPMENT:10", "DEPARTMENT OF CAPITAL DEVELOPMENT:15", "DEPARTMENT OF CAPITAL DEVELOPMENT:21"]},
+        {"text": "Urban housing policy and urban missions", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:11", "DEPARTMENT OF URBAN DEVELOPMENT:17"]},
+        {"text": "Street vendors law and real-estate regulation law", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:27", "DEPARTMENT OF URBAN DEVELOPMENT:28"]}
+      ],
+      "common_grievance_categories": ["urban housing scheme benefit", "DDA flat or land", "government quarter allotment", "CPWD maintenance", "metro rail", "builder or real-estate project delay"],
+      "keywords": {
+        "en": ["PMAY urban", "housing scheme", "DDA", "CPWD", "government quarter", "metro", "smart city", "street vendor", "RERA", "builder", "possession"],
+        "hi": ["आवास योजना", "शहरी आवास", "डीडीए", "सीपीडब्ल्यूडी", "सरकारी आवास", "मेट्रो", "रेहड़ी पटरी"],
+        "hinglish": ["pmay ka paisa nahi aaya", "dda flat", "government quarter allotment", "builder possession nahi de raha", "cpwd repair nahi kiya"]
+      },
+      "overlaps": [
+        {"with": "department_of_urban_development", "topic": "successor", "note": "From Sep 2026, CPGRAMS reports list the Department of Urban Development instead of MoHUA (Phase 3 relationship, D-025)."},
+        {"with": "department_of_rural_development", "topic": "housing", "note": "Rural housing is a Rural Development subject (item 8)."},
+        {"with": "State Governments and municipalities", "topic": "civic services", "note": "Local government is a State subject; municipal services are usually handled by the city or State."}
+      ],
+      "notes": "Last printed in CPGRAMS reports in Aug 2026."
+    },
+    {
+      "ministry_key": "department_of_urban_development",
+      "official_name": "Department of Urban Development",
+      "parent_ministry": "Ministry of Housing and Urban Affairs",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF URBAN DEVELOPMENT"}],
+      "official_urls": ["https://mohua.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Urban housing policy and urban missions", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:11", "DEPARTMENT OF URBAN DEVELOPMENT:17"]},
+        {"text": "Urban transport planning, water supply, sewerage and drainage (policy)", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:1", "DEPARTMENT OF URBAN DEVELOPMENT:7"]},
+        {"text": "Urban employment and poverty alleviation programmes", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:16"]},
+        {"text": "Street vendors law, real-estate regulation law and public premises eviction", "aob_items": ["DEPARTMENT OF URBAN DEVELOPMENT:27", "DEPARTMENT OF URBAN DEVELOPMENT:28", "DEPARTMENT OF URBAN DEVELOPMENT:25"]}
+      ],
+      "common_grievance_categories": ["urban housing scheme benefit", "urban mission works", "street vending", "builder or real-estate project delay", "urban water or sewerage (policy)"],
+      "keywords": {
+        "en": ["PMAY urban", "urban housing", "AMRUT", "Swachh Bharat urban", "street vendor", "RERA", "builder", "urban transport", "sewerage", "municipal"],
+        "hi": ["शहरी आवास", "आवास योजना", "रेहड़ी पटरी", "सीवर", "नगर निगम"],
+        "hinglish": ["pmay urban paisa", "street vendor license", "builder flat nahi de raha", "sewer line"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_housing_and_urban_affairs", "topic": "predecessor", "note": "Part of MoHUA until Sep 2026 in CPGRAMS reports; Capital Development matters (CPWD, DDA, government accommodation) are a separate AoB department."},
+        {"with": "ministry_of_drinking_water_and_sanitation", "topic": "water", "note": "Rural drinking water and sanitation are DDWS subjects; urban water supply is here (item 7)."}
+      ],
+      "notes": "CPGRAMS lists this entity from Sep 2026 only, so Part A has a single month of data for it."
+    },
+    {
+      "ministry_key": "department_of_higher_education",
+      "official_name": "Department of Higher Education",
+      "parent_ministry": "Ministry of Education",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF HIGHER EDUCATION"}],
+      "official_urls": ["https://www.education.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "University education, central universities, IITs and the University Grants Commission", "aob_items": ["DEPARTMENT OF HIGHER EDUCATION:1", "DEPARTMENT OF HIGHER EDUCATION:33", "DEPARTMENT OF HIGHER EDUCATION:37"]},
+        {"text": "Technical education and AICTE", "aob_items": ["DEPARTMENT OF HIGHER EDUCATION:24", "DEPARTMENT OF HIGHER EDUCATION:28"]},
+        {"text": "Scholarships in the Department's subjects", "aob_items": ["DEPARTMENT OF HIGHER EDUCATION:15"]}
+      ],
+      "common_grievance_categories": ["degree or marksheet not issued", "central university admission or examination", "college fee refund", "scholarship (higher education)", "UGC or AICTE regulation"],
+      "keywords": {
+        "en": ["university", "college", "degree", "marksheet", "UGC", "AICTE", "IIT", "NIT", "central university", "scholarship", "fee refund", "hostel"],
+        "hi": ["विश्वविद्यालय", "कॉलेज", "डिग्री", "अंकपत्र", "छात्रवृत्ति", "यूजीसी", "फीस वापसी"],
+        "hinglish": ["degree nahi mili", "college fees refund", "scholarship nahi aayi", "university result late", "marksheet galat"]
+      },
+      "overlaps": [
+        {"with": "department_of_social_justice_and_empowerment", "topic": "scholarships", "note": "Scholarships for SCs and OBCs are DoSJE schemes (DoSJE item 3)."},
+        {"with": "department_of_school_education_and_literacy", "topic": "school level", "note": "School and board matters are School Education subjects."},
+        {"with": "State Governments", "topic": "state universities", "note": "State universities and colleges are generally handled by State Governments."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_school_education_and_literacy",
+      "official_name": "Department of School Education and Literacy",
+      "parent_ministry": "Ministry of Education",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF SCHOOL EDUCATION AND LITERACY"}],
+      "official_urls": ["https://dsel.education.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Elementary and secondary education", "aob_items": ["DEPARTMENT OF SCHOOL EDUCATION AND LITERACY:1", "DEPARTMENT OF SCHOOL EDUCATION AND LITERACY:12"]},
+        {"text": "NCERT and the National Council for Teacher Education", "aob_items": ["DEPARTMENT OF SCHOOL EDUCATION AND LITERACY:13", "DEPARTMENT OF SCHOOL EDUCATION AND LITERACY:10"]},
+        {"text": "Adult education", "aob_items": ["DEPARTMENT OF SCHOOL EDUCATION AND LITERACY:4"]}
+      ],
+      "common_grievance_categories": ["central school admission", "school board result or certificate", "textbooks", "teacher training institutions"],
+      "keywords": {
+        "en": ["school", "Kendriya Vidyalaya", "KV admission", "CBSE", "board exam", "NCERT", "textbook", "teacher", "school fees", "RTE admission"],
+        "hi": ["स्कूल", "विद्यालय", "केंद्रीय विद्यालय", "सीबीएसई", "बोर्ड परीक्षा", "एनसीईआरटी", "शिक्षक"],
+        "hinglish": ["kv admission", "cbse result galat", "school fees zyada", "ncert book nahi mili", "teacher nahi aate"]
+      },
+      "overlaps": [
+        {"with": "State Governments", "topic": "state schools", "note": "Education is a concurrent subject; State government schools and State boards are run by States."},
+        {"with": "department_of_higher_education", "topic": "college level", "note": "Universities and colleges are Higher Education subjects."}
+      ],
+      "notes": "Checked URL redirects to www.dsel-education.gov.in."
+    },
+    {
+      "ministry_key": "department_of_consumer_affairs",
+      "official_name": "Department of Consumer Affairs",
+      "parent_ministry": "Ministry of Consumer Affairs, Food and Public Distribution",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF CONSUMER AFFAIRS"}],
+      "official_urls": ["https://consumeraffairs.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The Consumer Protection Act", "aob_items": ["DEPARTMENT OF CONSUMER AFFAIRS:15"]},
+        {"text": "Weights and measures (legal metrology) and packaged commodities", "aob_items": ["DEPARTMENT OF CONSUMER AFFAIRS:9", "DEPARTMENT OF CONSUMER AFFAIRS:6"]},
+        {"text": "Bureau of Indian Standards", "aob_items": ["DEPARTMENT OF CONSUMER AFFAIRS:10"]},
+        {"text": "Essential commodities and price monitoring", "aob_items": ["DEPARTMENT OF CONSUMER AFFAIRS:4", "DEPARTMENT OF CONSUMER AFFAIRS:13"]}
+      ],
+      "common_grievance_categories": ["defective product or deficient service by a business", "online purchase refund", "charged above MRP", "short weight or measure", "hallmark or ISI standard"],
+      "keywords": {
+        "en": ["consumer complaint", "refund", "defective product", "MRP", "overcharging", "online shopping", "e-commerce", "warranty", "hallmark", "BIS", "short weight"],
+        "hi": ["उपभोक्ता शिकायत", "एमआरपी से ज्यादा", "खराब सामान", "रिफंड", "ऑनलाइन खरीद", "कम तौल"],
+        "hinglish": ["online order refund nahi mila", "mrp se zyada liya", "product kharab nikla", "warranty nahi de rahe", "kam tol"]
+      },
+      "overlaps": [
+        {"with": "department_of_food_and_public_distribution", "topic": "essential commodities", "note": "The Essential Commodities Act appears in both lists (DoCA item 4, DFPD item 11), for different commodities."},
+        {"with": "Sector departments", "topic": "regulated services", "note": "Complaints about banks, telecom or insurance usually go to that sector's department."}
+      ],
+      "notes": "consumeraffairs.nic.in timed out on 2026-10-21; the department's .gov.in site was checked instead."
+    },
+    {
+      "ministry_key": "department_of_food_and_public_distribution",
+      "official_name": "Department of Food and Public Distribution",
+      "parent_ministry": "Ministry of Consumer Affairs, Food and Public Distribution",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF FOOD AND PUBLIC DISTRIBUTION"}],
+      "official_urls": ["https://dfpd.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Public Distribution System", "aob_items": ["DEPARTMENT OF FOOD AND PUBLIC DISTRIBUTION:10"]},
+        {"text": "Food Corporation of India and Central Warehousing Corporation", "aob_items": ["DEPARTMENT OF FOOD AND PUBLIC DISTRIBUTION:4"]},
+        {"text": "Supply and distribution of foodgrains and sugar", "aob_items": ["DEPARTMENT OF FOOD AND PUBLIC DISTRIBUTION:7", "DEPARTMENT OF FOOD AND PUBLIC DISTRIBUTION:8"]}
+      ],
+      "common_grievance_categories": ["ration not received", "ration card name or member", "fair price shop conduct", "foodgrain procurement payment", "sugar"],
+      "keywords": {
+        "en": ["ration", "ration card", "PDS", "fair price shop", "FCI", "foodgrain", "wheat procurement", "free ration", "one nation one ration card"],
+        "hi": ["राशन", "राशन कार्ड", "कोटेदार", "सरकारी राशन", "उचित मूल्य की दुकान", "एफसीआई", "गेहूं खरीद"],
+        "hinglish": ["ration nahi mila", "ration card me naam nahi", "kotedar kam deta hai", "free ration band", "gehu ka paisa nahi aaya"]
+      },
+      "overlaps": [
+        {"with": "State Governments", "topic": "ration distribution", "note": "Ration cards and fair price shops are run by State food departments; the central department sets policy and allocates grain."},
+        {"with": "department_of_consumer_affairs", "topic": "essential commodities", "note": "See DoCA."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_petroleum_and_natural_gas",
+      "official_name": "Ministry of Petroleum and Natural Gas",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF PETROLEUM AND NATURAL GAS"}],
+      "official_urls": ["https://mopng.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Supply, distribution, marketing and pricing of petroleum products and natural gas", "aob_items": ["MINISTRY OF PETROLEUM AND NATURAL GAS:2"]},
+        {"text": "Public sector oil companies in the Ministry's subjects", "aob_items": ["MINISTRY OF PETROLEUM AND NATURAL GAS:8"]}
+      ],
+      "common_grievance_categories": ["LPG cylinder booking or delivery", "LPG subsidy or free connection scheme", "petrol pump quantity or quality", "piped gas connection", "dealership or distributorship"],
+      "keywords": {
+        "en": ["LPG", "gas cylinder", "gas agency", "gas booking", "Ujjwala", "gas subsidy", "petrol pump", "diesel", "PNG", "distributor"],
+        "hi": ["गैस सिलेंडर", "एलपीजी", "गैस एजेंसी", "उज्ज्वला", "गैस सब्सिडी", "पेट्रोल पंप", "डीजल"],
+        "hinglish": ["gas cylinder nahi aaya", "gas subsidy nahi aayi", "petrol pump pe kam tel", "gas booking nahi ho rahi", "ujjwala connection"]
+      },
+      "overlaps": [
+        {"with": "department_of_consumer_affairs", "topic": "measurement", "note": "Weights and measures (legal metrology) are DoCA subjects."}
+      ],
+      "notes": "Checked URL redirects to the Hindi home page."
+    },
+    {
+      "ministry_key": "department_of_personnel_and_training",
+      "official_name": "Department of Personnel and Training",
+      "parent_ministry": "Ministry of Personnel, Public Grievances and Pensions",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF PERSONNEL AND TRAINING"}],
+      "official_urls": ["https://dopt.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Recruitment, promotion, seniority and reservation policy for Central services", "aob_items": ["DEPARTMENT OF PERSONNEL AND TRAINING:1", "DEPARTMENT OF PERSONNEL AND TRAINING:2"]},
+        {"text": "Conditions of service of Central Government employees (excluding pension rules)", "aob_items": ["DEPARTMENT OF PERSONNEL AND TRAINING:22", "DEPARTMENT OF PERSONNEL AND TRAINING:23"]},
+        {"text": "Vigilance, the Central Vigilance Commission, CBI and the Prevention of Corruption Act", "aob_items": ["DEPARTMENT OF PERSONNEL AND TRAINING:20", "DEPARTMENT OF PERSONNEL AND TRAINING:20A"]},
+        {"text": "Union Public Service Commission and the Right to Information Act", "aob_items": ["DEPARTMENT OF PERSONNEL AND TRAINING:40", "DEPARTMENT OF PERSONNEL AND TRAINING:46"]}
+      ],
+      "common_grievance_categories": ["central government service matter (promotion, seniority)", "reservation in central posts", "corruption or vigilance complaint", "RTI Act implementation", "UPSC"],
+      "keywords": {
+        "en": ["promotion", "seniority", "central government employee", "reservation roster", "RTI", "vigilance", "corruption", "CBI", "UPSC", "service rules", "transfer policy"],
+        "hi": ["पदोन्नति", "वरिष्ठता", "आरक्षण", "आरटीआई", "भ्रष्टाचार", "सतर्कता", "संघ लोक सेवा आयोग"],
+        "hinglish": ["promotion nahi hua", "rti ka jawab nahi", "corruption complaint", "seniority galat", "upsc exam"]
+      },
+      "overlaps": [
+        {"with": "staff_selection_commission", "topic": "recruitment exams", "note": "SSC examinations are handled by SSC (DoPT item 5A)."},
+        {"with": "Employing ministry", "topic": "individual staff cases", "note": "An individual employee's case is normally handled by the employing ministry; DoPT sets the rules."},
+        {"with": "Central Government pension (DoPPW, outside this KB)", "topic": "pensions", "note": "Pension rules are excluded from DoPT item 23."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "staff_selection_commission",
+      "official_name": "Staff Selection Commission",
+      "parent_ministry": "Ministry of Personnel, Public Grievances and Pensions (Department of Personnel and Training)",
+      "kb_role": "body_under_aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF PERSONNEL AND TRAINING", "items": ["5A", "5"]}],
+      "official_urls": ["https://ssc.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The Staff Selection Commission, which recruits staff for Central ministries and their offices", "aob_items": ["DEPARTMENT OF PERSONNEL AND TRAINING:5A", "DEPARTMENT OF PERSONNEL AND TRAINING:5"]}
+      ],
+      "common_grievance_categories": ["examination result", "answer key challenge", "admit card", "document verification or selection", "examination centre conduct"],
+      "keywords": {
+        "en": ["SSC", "CGL", "CHSL", "MTS", "GD constable", "exam result", "answer key", "admit card", "selection list", "recruitment exam"],
+        "hi": ["एसएससी", "परीक्षा परिणाम", "उत्तर कुंजी", "प्रवेश पत्र", "भर्ती परीक्षा"],
+        "hinglish": ["ssc result nahi aaya", "answer key galat", "admit card download nahi", "ssc cgl", "joining letter nahi aaya"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_railways_railway_board", "topic": "railway recruitment", "note": "Railway recruitment examinations are run by the Railways, not SSC."},
+        {"with": "department_of_personnel_and_training", "topic": "recruitment policy", "note": "Recruitment rules are DoPT subjects."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_rural_development",
+      "official_name": "Department of Rural Development",
+      "parent_ministry": "Ministry of Rural Development",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF RURAL DEVELOPMENT"}],
+      "official_urls": ["https://rural.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Rural employment programmes", "aob_items": ["DEPARTMENT OF RURAL DEVELOPMENT:6"]},
+        {"text": "Rural housing", "aob_items": ["DEPARTMENT OF RURAL DEVELOPMENT:8"]},
+        {"text": "Rural connectivity, including the Pradhan Mantri Gram Sadak Yojana", "aob_items": ["DEPARTMENT OF RURAL DEVELOPMENT:9"]},
+        {"text": "Integrated rural development for small and marginal farmers and agricultural labourers", "aob_items": ["DEPARTMENT OF RURAL DEVELOPMENT:7"]}
+      ],
+      "common_grievance_categories": ["rural employment wages or job card", "rural housing scheme instalment", "rural road", "self-help group or livelihood scheme"],
+      "keywords": {
+        "en": ["MGNREGA", "NREGA", "job card", "wages", "rural housing", "PMAY gramin", "rural road", "PMGSY", "self help group", "village"],
+        "hi": ["मनरेगा", "जॉब कार्ड", "मजदूरी", "प्रधानमंत्री आवास ग्रामीण", "ग्राम सड़क", "स्वयं सहायता समूह", "गांव"],
+        "hinglish": ["nrega ka paisa nahi mila", "job card nahi bana", "awas yojana gramin kist", "gaon ki sadak kharab", "pradhan ne naam kaat diya"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_panchayati_raj", "topic": "village administration", "note": "Panchayat functioning is a Panchayati Raj subject."},
+        {"with": "ministry_of_housing_and_urban_affairs", "topic": "housing", "note": "Urban housing is MoHUA/Urban Development."},
+        {"with": "State Governments", "topic": "implementation", "note": "Rural schemes are implemented by States and panchayats; payment and list problems often sit at that level."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_panchayati_raj",
+      "official_name": "Ministry of Panchayati Raj",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF PANCHAYATI RAJ"}],
+      "official_urls": ["https://panchayat.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Panchayati raj and panchayati raj institutions; district planning committees", "aob_items": ["MINISTRY OF PANCHAYATI RAJ:1", "MINISTRY OF PANCHAYATI RAJ:2"]}
+      ],
+      "common_grievance_categories": ["gram panchayat functioning", "panchayat funds or works", "gram sabha"],
+      "keywords": {
+        "en": ["panchayat", "gram panchayat", "sarpanch", "pradhan", "gram sabha", "panchayat fund", "village council"],
+        "hi": ["पंचायत", "ग्राम पंचायत", "सरपंच", "प्रधान", "ग्राम सभा", "पंचायत निधि"],
+        "hinglish": ["sarpanch ne kaam nahi kiya", "gram panchayat fund", "pradhan bhrashtachar", "gram sabha nahi hui"]
+      },
+      "overlaps": [
+        {"with": "State Governments", "topic": "local government", "note": "Panchayats are constituted under State laws; individual panchayat complaints usually belong with the State."},
+        {"with": "department_of_rural_development", "topic": "rural schemes", "note": "Scheme benefits are Rural Development subjects."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_corporate_affairs",
+      "official_name": "Ministry of Corporate Affairs",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF CORPORATE AFFAIRS"}],
+      "official_urls": ["https://www.mca.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "The Companies Act, 2013 and the Limited Liability Partnership Act", "aob_items": ["MINISTRY OF CORPORATE AFFAIRS:21", "MINISTRY OF CORPORATE AFFAIRS:20"]},
+        {"text": "Investor Education and Protection Fund Authority", "aob_items": ["MINISTRY OF CORPORATE AFFAIRS:17"]},
+        {"text": "Serious Fraud Investigation Office, insolvency and competition law", "aob_items": ["MINISTRY OF CORPORATE AFFAIRS:12", "MINISTRY OF CORPORATE AFFAIRS:13", "MINISTRY OF CORPORATE AFFAIRS:11"]}
+      ],
+      "common_grievance_categories": ["company or LLP registration and filings", "unclaimed shares or dividend refund", "company fraud", "insolvency proceedings"],
+      "keywords": {
+        "en": ["company registration", "ROC", "MCA21", "director", "DIN", "LLP", "IEPF", "unclaimed dividend", "shares", "insolvency", "company fraud"],
+        "hi": ["कंपनी पंजीकरण", "कंपनी", "लाभांश", "शेयर", "दिवाला"],
+        "hinglish": ["iepf refund nahi aaya", "roc filing", "company ne paisa nahi lautaya", "shares transfer"]
+      },
+      "overlaps": [
+        {"with": "department_of_financial_services_banking_division", "topic": "deposit-taking companies", "note": "Chit funds and deposit-taking non-banking companies are DFS subjects (DFS item 14)."},
+        {"with": "Securities regulator (outside this KB)", "topic": "listed securities", "note": "Complaints about listed securities and brokers may belong with the securities regulator."}
+      ],
+      "notes": "www.mca.gov.in refused automated checks (403) on 2026-10-21; the address is from government directory listings."
+    },
+    {
+      "ministry_key": "ministry_of_skill_development_and_entrepreneurship",
+      "official_name": "Ministry of Skill Development and Entrepreneurship",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF SKILL DEVELOPMENT AND ENTREPRENEURSHIP"}],
+      "official_urls": ["https://msde.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Industrial Training Institutes", "aob_items": ["MINISTRY OF SKILL DEVELOPMENT AND ENTREPRENEURSHIP:12"]},
+        {"text": "Skill mapping and certification; National Skill Development Corporation", "aob_items": ["MINISTRY OF SKILL DEVELOPMENT AND ENTREPRENEURSHIP:2", "MINISTRY OF SKILL DEVELOPMENT AND ENTREPRENEURSHIP:13"]}
+      ],
+      "common_grievance_categories": ["ITI admission or certificate", "skill training scheme certificate or stipend", "training centre conduct", "apprenticeship"],
+      "keywords": {
+        "en": ["ITI", "skill training", "PMKVY", "skill certificate", "NSDC", "apprenticeship", "training centre", "NCVT"],
+        "hi": ["आईटीआई", "कौशल प्रशिक्षण", "कौशल प्रमाणपत्र", "प्रशिक्षण केंद्र", "अप्रेंटिस"],
+        "hinglish": ["iti certificate nahi mila", "pmkvy training ka paisa", "training centre band", "apprenticeship stipend"]
+      },
+      "overlaps": [
+        {"with": "department_of_higher_education", "topic": "technical education", "note": "Degree-level technical education is a Higher Education subject (item 24)."},
+        {"with": "ministry_of_micro_small_and_medium_enterprises", "topic": "entrepreneurship", "note": "MSME runs enterprise development schemes."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "department_of_justice",
+      "official_name": "Department of Justice",
+      "parent_ministry": "Ministry of Law and Justice",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF JUSTICE"}],
+      "official_urls": ["https://doj.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Administration of justice, access to justice and legal reforms", "aob_items": ["DEPARTMENT OF JUSTICE:12", "DEPARTMENT OF JUSTICE:13"]},
+        {"text": "Legal aid to the poor", "aob_items": ["DEPARTMENT OF JUSTICE:11"]},
+        {"text": "Appointment of judges of the Supreme Court and High Courts; organisation of courts", "aob_items": ["DEPARTMENT OF JUSTICE:1", "DEPARTMENT OF JUSTICE:2", "DEPARTMENT OF JUSTICE:5"]}
+      ],
+      "common_grievance_categories": ["delay in court proceedings (administrative side)", "legal aid", "court infrastructure or e-courts"],
+      "keywords": {
+        "en": ["court case", "court delay", "judge", "legal aid", "e-court", "hearing date", "justice", "high court"],
+        "hi": ["अदालत", "मुकदमा", "न्याय", "कानूनी सहायता", "न्यायाधीश", "तारीख"],
+        "hinglish": ["case ki tareekh", "court me der", "nyay nahi mila", "free vakil", "legal aid chahiye"]
+      },
+      "overlaps": [
+        {"with": "Courts (outside this KB)", "topic": "judicial decisions", "note": "The executive cannot decide the merits of a court case. Whether CPGRAMS accepts a given court-related grievance has not been verified in this phase."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_drinking_water_and_sanitation",
+      "official_name": "Department of Drinking Water and Sanitation",
+      "parent_ministry": "Ministry of Jal Shakti",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF DRINKING WATER AND SANITATION"}],
+      "official_urls": ["https://jalshakti-ddws.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Rural water supply, sewage, drainage and sanitation", "aob_items": ["DEPARTMENT OF DRINKING WATER AND SANITATION:1"]},
+        {"text": "Drinking water projects covering both urban and rural areas (coordination)", "aob_items": ["DEPARTMENT OF DRINKING WATER AND SANITATION:4"]}
+      ],
+      "common_grievance_categories": ["household tap connection in a village", "no water in tap", "rural toilet scheme", "village sanitation"],
+      "keywords": {
+        "en": ["drinking water", "tap connection", "Jal Jeevan Mission", "har ghar jal", "toilet", "Swachh Bharat gramin", "village sanitation", "handpump"],
+        "hi": ["पेयजल", "पीने का पानी", "नल कनेक्शन", "हर घर जल", "शौचालय", "स्वच्छ भारत", "हैंडपंप"],
+        "hinglish": ["nal me paani nahi", "toilet ka paisa nahi mila", "har ghar jal", "gaon me paani nahi", "handpump kharab"]
+      },
+      "overlaps": [
+        {"with": "department_of_urban_development", "topic": "urban water", "note": "Urban water supply and sewerage are Urban Development subjects (item 7)."},
+        {"with": "State Governments", "topic": "water supply", "note": "Water supply schemes are built and run by State departments."}
+      ],
+      "notes": "CPGRAMS prints this entity as 'Ministry of Drinking Water and Sanitation'; the AoB lists it as a department of the Ministry of Jal Shakti."
+    },
+    {
+      "ministry_key": "department_of_social_justice_and_empowerment",
+      "official_name": "Department of Social Justice and Empowerment",
+      "parent_ministry": "Ministry of Social Justice and Empowerment",
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT"}],
+      "official_urls": ["https://socialjustice.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Nodal department for Scheduled Castes, backward classes and other groups; scholarships and welfare schemes for them", "aob_items": ["DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:2", "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:3"]},
+        {"text": "Senior citizens' programmes and the Senior Citizens Act", "aob_items": ["DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:5", "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:15"]},
+        {"text": "Welfare of transgender persons, rehabilitation of manual scavengers, de-addiction", "aob_items": ["DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:3A", "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:4", "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:7"]},
+        {"text": "The Prevention of Atrocities Act (as regards SCs) and the Protection of Civil Rights Act", "aob_items": ["DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:13", "DEPARTMENT OF SOCIAL JUSTICE AND EMPOWERMENT:12"]}
+      ],
+      "common_grievance_categories": ["scholarship for SC or OBC students", "senior citizen maintenance or care", "transgender welfare", "de-addiction support", "caste discrimination"],
+      "keywords": {
+        "en": ["SC scholarship", "post matric scholarship", "OBC", "scheduled caste", "caste atrocity", "senior citizen", "old age home", "transgender", "de-addiction", "manual scavenging"],
+        "hi": ["अनुसूचित जाति", "छात्रवृत्ति", "पिछड़ा वर्ग", "वरिष्ठ नागरिक", "वृद्धाश्रम", "नशा मुक्ति", "ट्रांसजेंडर", "जातिगत भेदभाव"],
+        "hinglish": ["post matric scholarship nahi aayi", "buzurg maa baap ko nahi rakhte", "caste ke naam pe atyachar", "nasha mukti kendra"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_home_affairs", "topic": "offences against SCs", "note": "Criminal investigation is a police (State) matter; criminal-law policy lies with MHA."},
+        {"with": "department_of_higher_education", "topic": "scholarships", "note": "General scholarships are Higher Education subjects."},
+        {"with": "Departments outside this KB", "topic": "related groups", "note": "Disability, Scheduled Tribes and minorities have their own departments."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_women_and_child_development",
+      "official_name": "Ministry of Women and Child Development",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF WOMEN AND CHILD DEVELOPMENT"}],
+      "official_urls": ["https://wcd.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Women and child welfare, pre-school care and nutrition", "aob_items": ["MINISTRY OF WOMEN AND CHILD DEVELOPMENT:2", "MINISTRY OF WOMEN AND CHILD DEVELOPMENT:4", "MINISTRY OF WOMEN AND CHILD DEVELOPMENT:5"]},
+        {"text": "National Commission for Women", "aob_items": ["MINISTRY OF WOMEN AND CHILD DEVELOPMENT:18"]},
+        {"text": "Adoption, Central Adoption Resource Agency and child helpline; juvenile justice", "aob_items": ["MINISTRY OF WOMEN AND CHILD DEVELOPMENT:22", "MINISTRY OF WOMEN AND CHILD DEVELOPMENT:24"]},
+        {"text": "Laws on trafficking, indecent representation of women and child marriage", "aob_items": ["MINISTRY OF WOMEN AND CHILD DEVELOPMENT:8", "MINISTRY OF WOMEN AND CHILD DEVELOPMENT:25"]}
+      ],
+      "common_grievance_categories": ["anganwadi services or nutrition", "maternity benefit scheme payment", "adoption process", "child protection", "harassment of women (policy and commission)"],
+      "keywords": {
+        "en": ["anganwadi", "nutrition", "poshan", "women", "domestic violence", "NCW", "adoption", "CARA", "child marriage", "childline", "maternity benefit"],
+        "hi": ["आंगनवाड़ी", "पोषण", "महिला", "घरेलू हिंसा", "महिला आयोग", "गोद लेना", "बाल विवाह", "मातृत्व लाभ"],
+        "hinglish": ["anganwadi me khana nahi", "pmmvy ka paisa nahi aaya", "ghar me maar peet", "adoption process slow", "bal vivah"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_home_affairs", "topic": "crimes against women and children", "note": "Investigation of crimes is a State police matter; criminal-law policy lies with MHA (item 37)."},
+        {"with": "department_of_health_and_family_welfare", "topic": "maternal and child health", "note": "Reproductive and child health is a Health subject (Health item 18)."}
+      ],
+      "notes": ""
+    },
+    {
+      "ministry_key": "ministry_of_external_affairs",
+      "official_name": "Ministry of External Affairs",
+      "parent_ministry": null,
+      "kb_role": "aob_unit",
+      "mapping_status": "direct",
+      "aob_refs": [{"section": "MINISTRY OF EXTERNAL AFFAIRS"}],
+      "official_urls": ["https://www.mea.gov.in/"],
+      "grievance_responsibilities": [
+        {"text": "Passports, and visas other than visas for entry into India", "aob_items": ["MINISTRY OF EXTERNAL AFFAIRS:5"]},
+        {"text": "Consular functions", "aob_items": ["MINISTRY OF EXTERNAL AFFAIRS:10"]},
+        {"text": "Overseas Indians, emigration under the Emigration Act, and protection and welfare of overseas Indians", "aob_items": ["MINISTRY OF EXTERNAL AFFAIRS:42", "MINISTRY OF EXTERNAL AFFAIRS:43", "MINISTRY OF EXTERNAL AFFAIRS:55"]}
+      ],
+      "common_grievance_categories": ["passport application or renewal delay", "passport police verification pending", "Indian stranded or in distress abroad", "emigration clearance or recruiting agent", "embassy or consulate service"],
+      "keywords": {
+        "en": ["passport", "passport renewal", "passport police verification", "tatkal passport", "embassy", "consulate", "NRI", "stranded abroad", "emigration", "recruiting agent"],
+        "hi": ["पासपोर्ट", "पासपोर्ट नवीनीकरण", "दूतावास", "विदेश में फंसे", "प्रवासी", "उत्प्रवास"],
+        "hinglish": ["passport nahi aaya", "passport police verification pending", "videsh me phans gaye", "embassy madad nahi kar rahi", "agent ne dhokha diya videsh"]
+      },
+      "overlaps": [
+        {"with": "ministry_of_home_affairs", "topic": "foreigners and visas into India", "note": "Visas for entry into India, and the stay of foreigners, are MHA subjects."},
+        {"with": "State Governments", "topic": "police verification", "note": "Passport police verification is done by State police."}
+      ],
+      "notes": ""
+    }
+  ]
+}

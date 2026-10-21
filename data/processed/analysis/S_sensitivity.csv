@@ -1,0 +1,11 @@
+variant,group,ministries,spearman_vs_default,max_rank_shift,median_rank_shift,top_quartile_changes
+equal_default,A,42,1.0,0.0,0.0,0
+equal_default,B,46,1.0,0.0,0.0,0
+official_rank_heavy,A,42,0.9510574507738433,10.0,2.0,4
+official_rank_heavy,B,46,0.9232809127351218,14.0,3.0,6
+backlog_heavy,A,42,0.9486265294546634,12.0,2.0,0
+backlog_heavy,B,46,0.9076164045636756,14.0,3.5,4
+without_closing_time,A,40,0.9559099437148219,14.0,1.0,0
+without_closing_time,B,46,1.0,0.0,0.0,0
+with_over_1000_list,A,42,0.9491127137184994,9.0,3.0,4
+with_over_1000_list,B,46,1.0,2.0,0.0,0
