@@ -84,6 +84,7 @@ def load_items(labels_path: Path | None) -> tuple[list[dict], str]:
                     "language": r.get("language") or texts[r["id"]]["language_hint"],
                     "scenario": intent[r["id"]]["scenario"],
                     "intent": intent[r["id"]]["intended_department"],
+                    "labelled_by": r["labelled_by"].strip(),
                 }
             )
         return items, "owner"
@@ -288,7 +289,7 @@ def _ci(ci: tuple[float, float]) -> str:
     return f"[{100 * ci[0]:.1f}, {100 * ci[1]:.1f}]"
 
 
-def write_report(items, mode, results, drafts, names, systems_not_run) -> None:
+def write_report(items, mode, results, drafts, names, systems_not_run, human=None) -> None:
     banner = (
         (
             "**PROXY RESULTS: the reference labels are the author's generation intent, not the owner's "
@@ -296,7 +297,12 @@ def write_report(items, mode, results, drafts, names, systems_not_run) -> None:
             "owner labelling (docs/labelling_guide.md)."
         )
         if mode == "proxy"
-        else ("Reference labels: the project owner's labels (data/complaints/eval_owner_labels.csv).")
+        else (
+            "Reference labels: data/complaints/eval_owner_labels.csv, labelled by: "
+            f"**{', '.join(sorted({it['labelled_by'] for it in items}))}**. "
+            "Agreement of these labels with the author's generation intent: "
+            f"{sum(it['label'] == it['intent'] for it in items)} / {len(items)} complaints."
+        )
     )
     n_rout = results[next(iter(results))]["routable_n"]
     lines = [
@@ -390,7 +396,11 @@ def write_report(items, mode, results, drafts, names, systems_not_run) -> None:
             f"{int(d['missing_info_handled'].sum())} / {len(d)} |",
             f"| Routing correctness of the addressee (vs reference label) | {int(d['routing_correct_in_draft'].sum())} / {len(d)} |",
             f"| Mean placeholders per draft | {d['placeholders'].mean():.1f} |",
-            "| Clarity | **pending human rubric** (data/processed/evaluation/drafter_human_rubric.csv) |",
+            "| Clarity | **pending human rubric** (data/processed/evaluation/drafter_human_rubric.csv) |"
+            if human is None
+            else f"| Rubric (1-5) by {human['reviewer'].dropna().iloc[0]} | clarity {human['clarity_1to5'].mean():.2f}, "
+            f"faithfulness {human['faithfulness_1to5'].mean():.2f}, completeness {human['completeness_1to5'].mean():.2f}, "
+            f"missing-information handling {human['missing_info_1to5'].mean():.2f} |",
             "",
             f"Factuality violations found by the screen: {viol}. Real-source drafts: none (no real data used).",
             "",
@@ -430,17 +440,23 @@ def main(argv: list[str] | None = None) -> int:
             OUT_DIR / f"predictions_{name}.csv", index=False
         )
         results[name]["confusion_matrix"].to_csv(OUT_DIR / f"confusion_{name}.csv")
+    human = None
+    rubric_path = OUT_DIR / "drafter_human_rubric.csv"
     if drafts is not None:
         drafts.to_csv(OUT_DIR / "drafter_rubric_auto.csv", index=False)
-        drafts[["id", "language"]].assign(
-            clarity_1to5="",
-            faithfulness_1to5="",
-            completeness_1to5="",
-            missing_info_1to5="",
-            notes="",
-            reviewer="",
-        ).to_csv(OUT_DIR / "drafter_human_rubric.csv", index=False)
-    write_report(items, mode, results, drafts, names, not_run)
+        existing = pd.read_csv(rubric_path) if rubric_path.exists() else None
+        if existing is not None and existing["reviewer"].notna().any():
+            human = existing  # never overwrite a filled rubric
+        else:
+            drafts[["id", "language"]].assign(
+                clarity_1to5="",
+                faithfulness_1to5="",
+                completeness_1to5="",
+                missing_info_1to5="",
+                notes="",
+                reviewer="",
+            ).to_csv(rubric_path, index=False)
+    write_report(items, mode, results, drafts, names, not_run, human)
     for name, m in results.items():
         print(
             f"{name}: top1 {m['top1']:.3f} top3 {m['top3']:.3f} macroF1 {m['macro_f1']:.3f} "

@@ -4,9 +4,10 @@ How every metric and test is defined, which data each analysis uses, and what th
 support. Generated result tables: [analysis_results.md](analysis_results.md) and `data/processed/analysis/`.
 Data rules: [data_quality.md §5](data_quality.md).
 
-> **Status: provisional.** The project owner's visual check of the sampled values
-> ([manual_verification.csv](manual_verification.csv)) is still pending. The results rest on the internal
-> identity checks and cross-table checks of Phase 3, not yet on independent visual confirmation.
+> **Status:** the 12 sampled values ([manual_verification.csv](manual_verification.csv)) were checked
+> against the rendered PDF pages on 2026-10-22: 12 of 12 match. The check was done by the AI assistant at the
+> owner's request, not by an independent person. Part A was also rebuilt from the PDFs into a fresh database
+> with identical outputs.
 
 Reproduce: `python -m src.analysis.run` (re-creates the SQL views in `sql/views/`, then runs `src/analysis/`).
 Thresholds live in `src/analysis/config.py`.
@@ -110,7 +111,7 @@ claims.
 does not say the trend is large (see Sen's slope), will continue, or has a cause. All data are observational;
 no causal statement is made.
 
-## 5. Findings (provisional; strongest evidence first)
+## 5. Findings (strongest evidence first)
 
 1. **Demand roughly doubled in the core window, and disposals kept pace in aggregate.** Monthly receipts rose
    from 109,209 (Apr 2023) to 227,837 (Sep 2026): Sen's slope +2,232/month (1.44% of the mean), τ = 0.58,

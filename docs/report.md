@@ -1,8 +1,8 @@
 # CPGRAMS grievance analytics and routing assistant: report
 
-*As of 22 October 2026. All Part A findings are provisional until the project owner has visually verified 12
-sampled values against the PDFs (`docs/manual_verification.csv`). All Part B results use synthetic data and
-proxy labels.*
+*As of 22 October 2026. 12 sampled Part A values were checked against the PDFs (12 of 12 match) and Part A
+was rebuilt from the PDFs into a fresh database with identical outputs. Both checks were done by the AI assistant,
+not by an independent person. All Part B results use synthetic data and assistant-assigned labels.*
 
 ## 1. Data coverage
 
@@ -66,38 +66,37 @@ proxy labels.*
 - **Scorecard.** Within-group ranks are stable at the extremes and wide in the middle. For example,
   Ministry of Power is rank 1 of 42 (interval 1–5) and Department of Posts rank 5 (interval 1–16).
 
-## 5. Router evaluation (synthetic, proxy labels)
+## 5. Router evaluation (synthetic data)
 
-300 synthetic complaints in English, Hindi and Hinglish; the reference labels are the author's
-generation intent. The owner's independent labels are pending.
+300 synthetic complaints in English, Hindi and Hinglish. Reference labels for all 300 complaints were assigned by the AI assistant (Claude) at the owner's request and are **not independent** (the same assistant wrote the complaints; its labels agree with its own writing intent on 283 of 300).
 
 | System | Top-1 (95% CI) | Top-3 | Macro-F1 | Non-routable correctly abstained |
 |---|---|---|---|---|
-| Retrieval + rules (lexical, default) | 62.1% (56.0–67.8) | 86.3% | 0.66 | 24 / 44 |
-| Retrieval + rules (hybrid) | 66.4% (60.4–71.9) | 88.7% | 0.70 | 28 / 44 |
-| TF-IDF + logistic regression baseline | 9.4% (6.4–13.6) | 67.6% | 0.15 | 43 / 44 (it abstains on 90%) |
+| Retrieval + rules (lexical, default) | 65.3% (59.2–71.0) | 89.1% | 0.69 | 28 / 52 |
+| Retrieval + rules (hybrid) | 70.2% (64.2–75.5) | 90.7% | 0.74 | 32 / 52 |
+| TF-IDF + logistic regression baseline | 9.7% (6.6–14.0) | 69.8% | 0.16 | 51 / 52 (it abstains on 90%) |
 | Retrieval + LLM | not run (no API key) | | | |
 
 - **Most common errors:** vocabulary collisions ("company" → Corporate Affairs; "card" or "bank" →
   Banking), near-duplicate mandates (MoHUA vs Urban Development), and vague complaints being routed
-  instead of questioned (10 of 12).
+  instead of questioned (11 of 13).
 - **Prompt injection:** 9 of 10 attempts flagged; none changed the output.
 
 ## 6. Drafter evaluation (50 synthetic drafts)
 
 - **Automated checks:** all 50 drafts are complete and reproduce the complaint verbatim, with **0
   unsupported factual tokens and 0 unsupported claim words**.
-- **Addressee:** correct in 29 of 50, because routing errors carry into the draft.
-- **Not yet done:** human clarity ratings.
+- **Addressee:** correct in 31 of 50, because routing errors carry into the draft.
+- **Rubric (assistant, 1–5):** clarity 3.8, faithfulness 5.0, completeness 2.0, missing-information handling 5.0.
 - **Screen test:** a deliberately corrupted draft (an invented amount, deadline, threat and allegation)
   was caught in full.
 
 ## 7. Limitations
 
-- **Part A:** provisional until visual verification. Published lists are censored at their thresholds.
+- **Part A:** verified on a 12-value sample by the assistant, not a person. Published lists are censored at their thresholds.
   The monthly ministry panel covers only 20 months. Validation failures in 2026 ministry flows end the
   panel in Jan 2026. No causal inference is possible.
-- **Part B data:** synthetic data written by one author, who also wrote the keywords, and proxy labels.
+- **Part B data:** synthetic data; the same assistant wrote the keywords, the complaints and the labels.
   The results are not evidence about real citizen complaints.
 - **Part B system:**
   - The LLM path has not been run against the live API.
@@ -121,6 +120,6 @@ or conduct.
    rank.
 3. **Before any production use of automated routing, evaluate on independently labelled real complaints
    and build "ask, don't guess" into the tool.** Even on clean synthetic text, the best router is right at
-   rank 1 only about two times in three, while a department is in its top 3 about 9 times in 10. The
+   rank 1 about two times in three (65%), while a department is in its top 3 about 9 times in 10 (89%). The
    evidence supports showing a short list with official mandate evidence and asking a clarifying question.
    It does not support auto-assigning.

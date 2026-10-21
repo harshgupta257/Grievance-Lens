@@ -1,10 +1,10 @@
 # CPGRAMS Grievance Intelligence Platform
 
-> **Status: all 13 phases built (portfolio project).** Two things are pending the project owner: the visual
-> verification of 12 sampled report values (Part A results are provisional until then), and labelling the
-> 300-complaint evaluation set (Part B results are **proxy** results until then). The LLM routing path is built
-> and unit-tested but has not been run against the live API. No Power BI report or deployment exists. See
-> [Limitations](#limitations).
+> **Status: all 13 phases built (portfolio project).** The 12 sampled report values were checked against the
+> PDFs (12 of 12 match), and the 300 evaluation complaints were labelled. Both were done by the AI assistant at the
+> owner's request, so neither is an independent human check. Part A was rebuilt from the PDFs into a fresh
+> database with identical outputs. The LLM routing path is built and unit-tested but has not been run against the
+> live API. No Power BI report or deployment exists. See [Limitations](#limitations).
 
 Data analytics on India's public grievance reports, plus an assistant that helps citizens work out which Central
 Government department handles their grievance and prepares a draft complaint they review and **submit
@@ -58,7 +58,7 @@ flowchart LR
     API -.->|user submits| PORTAL[pgportal.gov.in]
 ```
 
-Every design decision, with the alternatives rejected, is in **[DESIGN.md](DESIGN.md)** (D-001 to D-046).
+Every design decision, with the alternatives rejected, is in **[DESIGN.md](DESIGN.md)** (D-001 to D-047).
 
 ## Technology stack
 
@@ -166,7 +166,7 @@ Extraction problems are stored, never dropped. Manual corrections need a reason 
 Details: [docs/methodology.md](docs/methodology.md), [docs/scorecard.md](docs/scorecard.md),
 [docs/data_quality.md](docs/data_quality.md). Summary report: **[docs/report.md](docs/report.md)**.
 
-**Key verified findings (provisional):**
+**Key verified findings** (12 sampled values checked against the PDFs: 12 of 12 match):
 - **Demand:** monthly receipts roughly doubled (109,209 in Apr 2023 → 227,837 in Sep 2026; +2,232 a month,
   q = 0.004), and disposals kept pace.
 - **Backlog:** aggregate month-end pending shows no significant trend.
@@ -201,19 +201,18 @@ Details: [docs/mandate_knowledge_base.md](docs/mandate_knowledge_base.md), [docs
 
 ## Evaluation results
 
-**Proxy results:** 300 synthetic complaints, with reference labels from the author's generation intent and
-the owner's independent labels pending. **These are not results on real complaints**
+300 synthetic complaints. Reference labels for all 300 complaints were assigned by the AI assistant (Claude) at the owner's request and are **not independent** (the same assistant wrote the complaints; its labels agree with its own writing intent on 283 of 300). **These are not results on real complaints**
 ([docs/evaluation.md](docs/evaluation.md), [docs/evaluation_results.md](docs/evaluation_results.md)).
 
 | System | Top-1 (95% CI) | Top-3 | Macro-F1 | Non-routable correctly abstained |
 |---|---|---|---|---|
-| Retrieval + rules, lexical (default) | 62.1% (56.0–67.8) | 86.3% | 0.66 | 24 / 44 |
-| Retrieval + rules, hybrid | 66.4% (60.4–71.9) | 88.7% | 0.70 | 28 / 44 |
-| TF-IDF + logistic regression baseline | 9.4% (6.4–13.6) | 67.6% | 0.15 | 43 / 44 (it abstains on 90%) |
+| Retrieval + rules, lexical (default) | 65.3% (59.2–71.0) | 89.1% | 0.69 | 28 / 52 |
+| Retrieval + rules, hybrid | 70.2% (64.2–75.5) | 90.7% | 0.74 | 32 / 52 |
+| TF-IDF + logistic regression baseline | 9.7% (6.6–14.0) | 69.8% | 0.16 | 51 / 52 (it abstains on 90%) |
 | Retrieval + LLM | not run: no API key in the build environment | | | |
 
 - **Drafter:** 50 drafts, all complete and verbatim, with 0 unsupported factual tokens and 0 unsupported
-  claim words. The addressee was correct in 29 of 50, because routing errors carry over.
+  claim words. The addressee was correct in 31 of 50, because routing errors carry over. Rubric scores (assistant, 1–5): clarity 3.8, faithfulness 5.0, completeness 2.0 (many placeholders left for the user).
 - **Prompt injection:** 9 of 10 attempts flagged, and none changed the output.
 
 ## Running the app
@@ -241,7 +240,7 @@ Captured from the running app with headless Chrome on 22 Oct 2026.
 ```powershell
 python -m pytest                      # 183 unit + API tests; DB integration tests skip without a database
 $env:TEST_DATABASE_URL = "postgresql+psycopg2://cpgrams:<password>@127.0.0.1:5432/cpgrams"
-python -m pytest -m "pdf or not pdf"  # everything, incl. DB integration and PDF golden-value tests
+python -m pytest -m "pdf or not pdf"  # all 220 tests, incl. DB integration and PDF golden values
 ruff check . ; ruff format --check .
 ```
 
@@ -250,7 +249,7 @@ External APIs are mocked: the LLM path is tested with a fake client, and no test
 ## Project structure
 
 ```
-├── DESIGN.md                    decision log (D-001 to D-046), architecture, limitations
+├── DESIGN.md                    decision log (D-001 to D-047), architecture, limitations
 ├── data/
 │   ├── manifest.csv             every source PDF: URL, checksum
 │   ├── reference/               ministry master, aliases; mandates/ (AoB items, departments.json, sources, URL checks)
@@ -272,14 +271,14 @@ External APIs are mocked: the LLM path is tested with a fake client, and no test
 
 ## Limitations
 
-- **Provisional data:** Part A values await the owner's visual check of 12 sampled values. Published
+- **Verification by the assistant, not a person:** 12 of 12 sampled values match the PDFs. Published
   lists are censored at their thresholds, the ministry panel covers 20 months, and the data are
   observational (no causal claims).
-- **Proxy evaluation:** Part B data are synthetic and written by one author, who also wrote the knowledge
-  base keywords, so the evaluation uses proxy labels and is likely optimistic.
+- **Non-independent evaluation:** Part B data are synthetic, and the same assistant wrote the keywords,
+  the complaints and the labels, so the results are likely optimistic.
 - **LLM path not run:** no LLM results are claimed.
-- **Coverage:** the knowledge base covers 37 of 92 CPGRAMS entities, and the Defence Finance mapping is
-  inferred.
+- **Coverage:** the knowledge base covers 37 of 92 CPGRAMS entities (review notes:
+  [docs/kb_review.md](docs/kb_review.md)).
 - **Abstention:** weak on vague complaints (2 of 12).
 - **Not executed here:** Docker (WSL2 is missing on the build machine; PostgreSQL 16.2 was used directly).
   No Power BI report, no deployment, no authentication, and in-memory rate limiting.

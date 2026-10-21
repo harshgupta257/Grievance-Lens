@@ -237,7 +237,7 @@ Acceptable: ministry_of_petroleum_and_natural_gas
 **lexical (official text only)**
 
 1. Department of Higher Education (score 0.319); best evidence: "National Book Trust." [AoB Department Of Higher Education item 34 (p110)]
-2. Department of Justice (score 0.247); best evidence: "Access to Justice, Justice Delivery and Legal Reforms." [AoB Department Of Justice item 13 (p125)]
+2. Department of Justice (score 0.246); best evidence: "Access to Justice, Justice Delivery and Legal Reforms." [AoB Department Of Justice item 13 (p125)]
 3. Ministry of Petroleum and Natural Gas ✓ (score 0.210); best evidence: "Ministry of Petroleum and Natural Gas ; Petroleum Aur Prakritik Gas Mantralaya" [department names (Part A, AoB heading)]
 
 **dense**

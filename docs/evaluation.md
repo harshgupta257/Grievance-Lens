@@ -8,10 +8,10 @@ python -m src.evaluation.run --labels data/complaints/eval_owner_labels.csv   # 
 Numbers: [evaluation_results.md](evaluation_results.md) (generated). Per-item predictions by id, confusion
 matrices and drafter rubric sheets are in `data/processed/evaluation/`. They contain no complaint text.
 
-> **Status: proxy evaluation only.** The owner has not labelled the evaluation set yet, so the reference
-> labels are the author's *generation intent*, not independent labels. The LLM router was **not run** (no
-> API key). All data are **synthetic**. None of these numbers is evidence of performance on real citizen
-> complaints.
+> **Status: final run with assistant labels.** At the owner's request the AI assistant labelled all 300
+> complaints (`labelled_by` in the sheet). These labels are **not independent**: the same assistant wrote the
+> complaints, and its labels agree with its own writing intent on 283 of 300. The LLM router was **not run**
+> (no API key). All data are **synthetic**; none of these numbers is evidence about real citizen complaints.
 
 ## 1. Protocol
 
@@ -48,16 +48,19 @@ matrices and drafter rubric sheets are in `data/processed/evaluation/`. They con
 
 The automated checks are screens, not proof that a draft is correct.
 
-## 2. Results (proxy) and what they mean
+## 2. Results and what they mean
 
 | System | Top-1 | 95% CI | Top-3 | Macro-F1 | Abstains (routable) | Non-routable abstained |
 |---|---|---|---|---|---|---|
-| Router, lexical (default) | 62.1% | 56.0–67.8 | 86.3% | 0.660 | 14.8% | 24 / 44 |
-| Router, hybrid | 66.4% | 60.4–71.9 | 88.7% | 0.702 | 14.8% | 28 / 44 |
-| Baseline | 9.4% | 6.4–13.6 | 67.6% | 0.150 | 89.8% | 43 / 44 |
+| Router, lexical (default) | 65.3% | 59.2–71.0 | 89.1% | 0.689 | 13.7% | 28 / 52 |
+| Router, hybrid | 70.2% | 64.2–75.5 | 90.7% | 0.741 | 13.7% | 32 / 52 |
+| Baseline | 9.7% | 6.6–14.0 | 69.8% | 0.159 | 89.5% | 51 / 52 |
+
+With the earlier proxy labels (generation intent) the figures were 62.1% / 66.4% / 9.4% top-1. The
+assistant's labels moved 17 complaints, mostly to "State Government".
 | Router, LLM | not run | | | | | |
 
-1. **The router gets about 6 in 10 complaints right at rank 1, and about 9 in 10 within its top 3.** That
+1. **The router gets about 2 in 3 complaints right at rank 1, and about 9 in 10 within its top 3.** That
    is why the interface shows alternatives and asks the user to confirm. On the 80 development items it was
    right 80% of the time (64/80), so the gap shows how much development data flatters a tuned system, even
    one with only three tuned numbers.
@@ -65,30 +68,31 @@ The automated checks are screens, not proof that a draft is correct.
    way round (utility 0.74 vs 0.80). The default stays lexical: switching because of evaluation results
    would turn the evaluation set into tuning data. The two intervals overlap heavily. A fresh labelled
    set is the right way to choose again.
-3. **Language.** Lexical is similar across English, Hindi and Hinglish (60–65%). The hybrid helps English
-   most (75.6%) but not Hindi (58.0%).
-4. **Abstention is weak where it matters most.** The lexical router abstained on 14 of 18 State matters
-   and 8 of 14 out-of-scope items, but on only **2 of 12 too-vague** complaints: vague text still
-   retrieves something. It also abstains on 15% of routable items.
+3. **Language.** Lexical: English 61.1%, Hindi 69.7%, Hinglish 65.9%. The hybrid helps English most
+   (78.9%) but not Hindi (60.5%).
+4. **Abstention is weak where it matters most.** The lexical router abstained on 18 of 25 State matters
+   and 8 of 14 out-of-scope items, but on only **2 of 13 too-vague** complaints: vague text still
+   retrieves something. It also abstains on 14% of routable items.
 5. **The baseline mostly refuses.** About 7 training examples per class across 40 classes are too few. Its
-   tuned threshold makes it abstain on 90% of routable items. That explains its 43/44 "correct
+   tuned threshold makes it abstain on 90% of routable items. That explains its 51/52 "correct
    abstentions", so it is not a usable router. It is reported because the brief requires a transparent
    baseline, and as a floor.
 6. **Prompt injection.** 9 of 10 injection items were flagged and 9 of 10 routed to the underlying
    grievance's department. No embedded instruction changed the output: the offline router has no
    instruction-following component.
 7. **Drafter.** All 50 drafts are complete, reproduce the complaint verbatim, and have **0 unsupported
-   factual tokens and 0 unsupported claim words**. The addressee was correct in 29 of 50, the router's
-   accuracy carried into the draft. Clarity is not yet rated.
+   factual tokens and 0 unsupported claim words**. The addressee was correct in 31 of 50, the router's
+   accuracy carried into the draft. Rubric by the assistant (stated criteria, 5 drafts read in full): clarity
+   3.8, faithfulness 5.0, completeness 2.0, missing-information handling 5.0.
 
 **Failure cases** (from `predictions_offline.csv` and the confusions in the results):
 - **Vocabulary collisions:**
-  - "company" pulled Telecommunications and Labour complaints to Corporate Affairs (4 + 3 cases);
+  - "company" pulled Telecommunications and Labour complaints to Corporate Affairs (3 + 2 cases);
   - "card" and "bank" pull Aadhaar, ration and tax items to Banking;
   - "exam" and "result" pull school items to the Staff Selection Commission.
 - **Near-duplicate mandates:** MoHUA vs the Department of Urban Development (urban housing), CBDT vs the
   Department of Revenue. Both pairs are partly accepted as alternatives.
-- **Vague complaints** are routed instead of questioned (10 of 12).
+- **Vague complaints** are routed instead of questioned (11 of 13).
 
 ## 3. Limitations of this design
 
@@ -105,10 +109,11 @@ The automated checks are screens, not proof that a draft is correct.
 
 ## 4. Completing the evaluation
 
-1. The owner labels `data/complaints/eval_owner_labels.csv` ([labelling_guide.md](labelling_guide.md)),
-   without opening the generation-intent file.
+1. Done by the assistant (not independent). For an independent result, a person re-labels
+   `data/complaints/eval_owner_labels.csv` ([labelling_guide.md](labelling_guide.md)) without opening the
+   generation-intent file, and sets `labelled_by` to their name.
 2. Optional: configure the LLM (`.env`). The evaluation makes about 300 calls, all cached; the cost
    estimate goes to `data/interim/llm/usage.jsonl`.
 3. Run `python -m src.evaluation.run --labels data/complaints/eval_owner_labels.csv`.
-4. Rate clarity in `drafter_human_rubric.csv`.
+4. Clarity was rated by the assistant; a person can overwrite `drafter_human_rubric.csv`.
 5. **Do not re-tune on these results.** Further tuning needs a new held-out set.

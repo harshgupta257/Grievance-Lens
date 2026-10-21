@@ -1,51 +1,51 @@
 id,language,clarity_1to5,faithfulness_1to5,completeness_1to5,missing_info_1to5,notes,reviewer
-eval-0142-257f051e,en,,,,,,
-eval-0220-478e7a07,en,,,,,,
-eval-0010-f01bf672,en,,,,,,
-eval-0209-40c814de,en,,,,,,
-eval-0273-006ab46e,en,,,,,,
-eval-0167-1e4082a1,en,,,,,,
-eval-0275-e8e45bc0,en,,,,,,
-eval-0059-8ea73208,en,,,,,,
-eval-0255-9babd1f9,en,,,,,,
-eval-0253-d071ce29,en,,,,,,
-eval-0299-608b9ca5,en,,,,,,
-eval-0130-9ba46146,en,,,,,,
-eval-0289-c70498d8,en,,,,,,
-eval-0191-00580eef,en,,,,,,
-eval-0304-12d4c7bf,en,,,,,,
-eval-0076-9b802abb,en,,,,,,
-eval-0284-3146b8f9,en,,,,,,
-eval-0238-01f4c62c,hi,,,,,,
-eval-0037-2c4d8295,hi,,,,,,
-eval-0086-a3c7009d,hi,,,,,,
-eval-0150-b14cad2e,hi,,,,,,
-eval-0139-4c9a00e7,hi,,,,,,
-eval-0151-28452cad,hi,,,,,,
-eval-0091-57cfbfd7,hi,,,,,,
-eval-0036-329fbcab,hi,,,,,,
-eval-0007-cca30c4b,hi,,,,,,
-eval-0133-ba5e4488,hi,,,,,,
-eval-0024-482ce6aa,hi,,,,,,
-eval-0013-b912f422,hi,,,,,,
-eval-0120-3bf900d8,hi,,,,,,
-eval-0204-e22213b8,hi,,,,,,
-eval-0242-57ab4c34,hi,,,,,,
-eval-0157-0ba56b20,hi,,,,,,
-eval-0231-449deb06,hi,,,,,,
-eval-0075-3df10859,hinglish,,,,,,
-eval-0247-61c9cf59,hinglish,,,,,,
-eval-0111-e815bee9,hinglish,,,,,,
-eval-0009-4dbf824c,hinglish,,,,,,
-eval-0044-b5ced59b,hinglish,,,,,,
-eval-0224-f39bbbf0,hinglish,,,,,,
-eval-0283-0e1e8439,hinglish,,,,,,
-eval-0146-b9cd8555,hinglish,,,,,,
-eval-0117-2e32ca9b,hinglish,,,,,,
-eval-0033-d42ec4c2,hinglish,,,,,,
-eval-0296-083d2b00,hinglish,,,,,,
-eval-0141-47d2f5ad,hinglish,,,,,,
-eval-0153-e4f39588,hinglish,,,,,,
-eval-0280-fd67bd8d,hinglish,,,,,,
-eval-0281-f4bf1c1c,hinglish,,,,,,
-eval-0268-c32851ac,hinglish,,,,,,
+eval-0137-3fb3ba2a,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0178-a18c714e,en,5,5,3,5,,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0010-f01bf672,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0274-5e2e9510,en,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0284-3146b8f9,en,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0257-b9118bce,en,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0240-4a5387bc,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0059-8ea73208,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0255-9babd1f9,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0253-d071ce29,en,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0197-dab28d02,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0125-84ddbbc6,en,3,5,2,5,subject is a placeholder; timeline repeats most of the complaint,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0289-c70498d8,en,5,5,3,5,addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0304-12d4c7bf,en,5,5,3,5,,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0275-e8e45bc0,en,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0076-9b802abb,en,5,5,3,5,,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0215-cdc26861,en,5,5,3,5,,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0238-01f4c62c,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0037-2c4d8295,hi,4,5,1,5,subject is a placeholder; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0086-a3c7009d,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0150-b14cad2e,hi,3,5,1,5,subject is a placeholder; timeline repeats most of the complaint,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0139-4c9a00e7,hi,4,5,1,5,subject is a placeholder; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0151-28452cad,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0091-57cfbfd7,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0036-329fbcab,hi,4,5,1,5,subject is a placeholder; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0007-cca30c4b,hi,4,5,1,5,subject is a placeholder; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0133-ba5e4488,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0024-482ce6aa,hi,3,5,1,5,subject is a placeholder; timeline repeats most of the complaint; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0013-b912f422,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0120-3bf900d8,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0204-e22213b8,hi,3,5,1,5,subject is a placeholder; timeline repeats most of the complaint,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0242-57ab4c34,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0157-0ba56b20,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0231-449deb06,hi,4,5,1,5,subject is a placeholder,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0075-3df10859,hinglish,3,5,2,5,subject is a placeholder; Hinglish text inside an English frame; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0170-f43fb54c,hinglish,2,5,3,5,subject is a placeholder; timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0153-e4f39588,hinglish,4,5,3,5,Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0009-4dbf824c,hinglish,3,5,2,5,subject is a placeholder; Hinglish text inside an English frame; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0044-b5ced59b,hinglish,4,5,3,5,Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0224-f39bbbf0,hinglish,3,5,4,5,timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0282-525ae0fd,hinglish,3,5,1,5,subject is a placeholder; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0146-b9cd8555,hinglish,3,5,1,5,subject is a placeholder; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0117-2e32ca9b,hinglish,2,5,3,5,subject is a placeholder; timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0033-d42ec4c2,hinglish,2,5,2,5,subject is a placeholder; timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0122-cdc19b07,hinglish,3,5,4,5,timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0141-47d2f5ad,hinglish,2,5,3,5,subject is a placeholder; timeline repeats most of the complaint; Hinglish text inside an English frame; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0264-01cfb2fd,hinglish,3,5,2,5,subject is a placeholder; Hinglish text inside an English frame; addressed to a wrong department,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0241-e4f460f5,hinglish,4,5,3,5,Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0158-cf23218a,hinglish,3,5,4,5,timeline repeats most of the complaint; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"
+eval-0267-2c36d558,hinglish,3,5,1,5,subject is a placeholder; Hinglish text inside an English frame,"AI assistant (Claude): stated criteria, 5 drafts read in full"

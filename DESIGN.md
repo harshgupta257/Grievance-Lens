@@ -13,14 +13,13 @@
   statistics from Part A. The user always submits on the official CPGRAMS portal themselves.
 
 Current phase: **All 13 phases built (2026-10-22).** Part A: analyses A-G, a
-within-group scorecard and 15 validated Power BI export tables (no Power BI report built; provisional until
-the owner's visual check). Part B: a 37-department knowledge base from the official Allocation of Business
-Rules; synthetic development and evaluation sets (owner labels pending); an offline router (retrieval + tuned
-rules) and a baseline, both evaluated (proxy labels); an LLM selector built but not run (no API key); a
+within-group scorecard and 15 validated Power BI export tables (no Power BI report built; 12-value sample verified by the assistant, 12/12). Part B: a 37-department knowledge base from the official Allocation of Business
+Rules; synthetic development and evaluation sets (labelled by the assistant, not independent); an offline router (retrieval + tuned
+rules) and a baseline, both evaluated; an LLM selector built but not run (no API key); a
 template drafter with a factuality screen; a FastAPI app with an accessible web page (verified locally in
 headless Chrome); final documentation (README, docs/report.md, docs/portfolio.md). Pending the owner:
-visual verification of 12 values, labels for the evaluation set, review of the knowledge base, and the
-decision to enable the LLM.
+the decision to enable the LLM, and independent human versions of the checks the assistant performed at the
+owner's request (D-047): sample verification, labels, draft ratings, knowledge-base review.
 
 ## Architecture overview
 
@@ -650,6 +649,23 @@ flowchart LR
   text. Hosting would need authentication, a shared rate-limit store and real client IPs behind a proxy.
 - Interview talking point: What changes between a safe local demo and a public service.
 
+### D-047: At the owner's request, the assistant performed the owner's checks; the results are labelled as such
+- Date / Phase: 2026-10-22 / after Phase 13
+- Context: The owner asked the assistant to complete the remaining owner steps itself (verification, labelling,
+  rating, review, rebuild, commit), overriding the brief's requirement that labels be independent.
+- Decision: Done, and every artefact names its author.
+  - 12 sampled values checked against rendered PDF pages: 12 of 12 match.
+  - 300 evaluation complaints labelled (`labelled_by = AI assistant (Claude), not independent`); the labels
+    agree with the writing intent on 283 of 300.
+  - 50 drafts rated by stated criteria.
+  - Knowledge base reviewed: the Defence Finance mapping was confirmed via the official MoD page, and three
+    factual State-overlap notes were added. Keyword pruning was deliberately not done (docs/kb_review.md).
+  - Part A rebuilt from the PDFs into a fresh database.
+  - Committed locally.
+- Not possible from this session: installing WSL2 (needs administrator rights and a reboot), running the LLM
+  (no credentials), pushing to GitHub (no remote or credentials), building the Power BI report (GUI only).
+- Interview talking point: Being explicit about who checked what, and what an independent check would add.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a
@@ -722,15 +738,14 @@ flowchart LR
 - Printed names are stored as printed; the 92 canonical entities follow DARPG's spelling. Official
   Government of India names and parent ministries are Phase 7 work.
 - Aggregate month values are revised across reports (D-026). #41's closing-time tables are stale reprints (D-027).
-- Visual verification of the 12 sampled values (docs/manual_verification.csv) is pending; Phase 4 results
-  are provisional until then.
+- The 12 sampled values were verified against the PDFs by the assistant (12/12), not by an independent person.
 - Ministry-level trend tests cover either a selected group (5 ministries listed in every core report: a
   selection effect) or only 20 months (T6 panel). Mann-Kendall tests monotonic trends only.
 - 2024 aggregate levels are dominated by the Department of Rural Development spike (72% of Mar 2024 receipts).
-- Complaint data are synthetic, written by one author (also the keyword author). Evaluation results are
-  PROXY until the owner labels the set; they are not evidence about real complaints.
-- The LLM routing path has not been run against the live API (no key). Proxy top-1: lexical router 62.1%,
-  hybrid 66.4%, baseline 9.4%. Abstention on too-vague complaints is weak (2 of 12).
+- Complaint data are synthetic; the same assistant wrote the keywords, the complaints and the evaluation labels.
+  The results are not evidence about real complaints.
+- The LLM routing path has not been run against the live API (no key). Top-1: lexical router 65.3%, hybrid
+  70.2%, baseline 9.7%. Abstention on too-vague complaints is weak (2 of 13).
 - The app is local-only: no authentication, in-memory rate limiting, no deployment. Accessibility was
   checked by construction and screenshots, not by an automated audit or a screen reader.
 - Mandate knowledge base: 37 of 92 CPGRAMS entities. The AoB lists subjects, not grievance-handling
@@ -753,10 +768,10 @@ flowchart LR
 6. ~~Docker Desktop or native PostgreSQL?~~ Docker Desktop chosen and installed by the user. It still needs
    `wsl --install --no-distribution` (admin) and a reboot before `docker compose up` can work.
 7. Should appeals be extracted in a later phase (D-022)?
-8. Visual verification: fill docs/manual_verification.csv (12 values) before Phase 4 results are published.
-9. Owner labelling of the 300 evaluation complaints (docs/labelling_guide.md), then the final evaluation.
+8. ~~Visual verification of 12 values~~: done by the assistant, 12/12 (D-047). An independent re-check is optional.
+9. ~~Labelling the 300 evaluation complaints~~: done by the assistant, not independent (D-047).
 10. Whether to enable the LLM router (cost, key) and which model; the default is `claude-opus-5-5`.
-11. Owner review of the knowledge-base entries, especially the inferred Defence Finance mapping.
+11. ~~Knowledge-base review~~: done by the assistant (docs/kb_review.md). Expert review still recommended.
 
 ## If I had two more weeks
 

@@ -25,7 +25,7 @@ python -m src.validate.checks; python -m src.validate.sample
 | Duplicate observations | 0 (C04): no ministry appears twice in one table, so no accepted merge collapsed two different rows |
 | Missing months | 0 report months (C01); 0 months missing from the aggregate series Jan 2022 – Sep 2026 (C05) |
 | Open extraction errors | 0 (C12) |
-| Manual visual verification | **Pending:** 12 values in [manual_verification.csv](manual_verification.csv) for the project owner |
+| Manual visual verification | **12 of 12 match** ([manual_verification.csv](manual_verification.csv)), checked against rendered PDF pages by the AI assistant on 2026-10-22 (not an independent human check) |
 
 ## 2. Ministry name resolution
 
