@@ -17,6 +17,10 @@ services:
         value: cf-connecting-ip
       - key: TRUSTED_PROXY_HOPS
         value: "3"
+      # Kept explicitly off: Render's blueprint sync does not delete variables removed from this file, and this one
+      # was on briefly to measure the proxy headers. Off = /health does not echo address headers.
+      - key: CLIENT_IP_DEBUG
+        value: "false"
       # Optional LLM routing: leave LLM_PROVIDER unset to run offline (no key needed).
       # To use Gemini, uncomment these. Render then asks for the key's value when you apply the blueprint
       # (sync: false = the value is typed into the dashboard, never stored in this file or in git).
