@@ -14,8 +14,22 @@ The app needs no database and no API key. It reads the knowledge base
 
 - **Backend:** FastAPI (`src/app/main.py`). It validates settings at startup (`RouterSettings`) and loads
   the router once.
-- **Frontend:** one static HTML, CSS and JavaScript page (`src/app/static/`), served by the same
-  application.
+- **Frontend:** static HTML, CSS and JavaScript pages (`src/app/static/`), served by the same application:
+
+  | Page | What it shows |
+  |---|---|
+  | `/` | Overview: latest month, monthly received vs disposed of, links to every section |
+  | `/trends` | National receipts, disposals and pending, with trend tests |
+  | `/ministries` | All 92 bodies, searchable, with group, listings, backlog trend and scorecard rank |
+  | `/ministry?key=…` | One ministry: mandate, published figures, backlog and GRAI history, list appearances |
+  | `/lists` | Repeated appearances in DARPG's published lists |
+  | `/scorecard` | Within-group scorecard with 90% rank intervals |
+  | `/demand` | Demand vs backlog quadrants |
+  | `/about` | Data, methods and limits |
+  | `/assistant` | The complaint routing and drafting assistant (never submits) |
+
+  The analytics pages draw their data from `site.js` calls to the `GET /api/*` endpoints below; charts are
+  plain SVG (DESIGN.md D-048).
 - **Why not Streamlit:**
   - Streamlit reruns the whole script on every interaction, and gives less control over accessibility,
     focus and the loading, empty and error states the brief asks for.
@@ -30,7 +44,11 @@ The app needs no database and no API key. It reads the knowledge base
 | `POST /draft` | `{complaint, language, department_key, category, clarifications, supporting_details}` → `Draft` | Unknown departments or clarification fields → `422`. Statistics are returned beside the draft |
 | `GET /ministry/{ministry_key}/performance` | Verified department figures, unavailable items and caveats | `404` for unknown departments |
 | `GET /departments` | The 37 departments (key and name) | |
-| `GET /` | The web page | |
+| `GET /api/overview` | Latest month, monthly national series, yearly totals, trend tests | Read from `data/processed/` |
+| `GET /api/ministries` | One row per ministry (92) | |
+| `GET /api/ministries/{ministry_key}` | Performance, GRAI history, list appearances, mandate | `404` for unknown keys |
+| `GET /api/scorecard`, `/api/listings`, `/api/demand-backlog` | Data for those pages | |
+| `GET /`, `/trends`, `/ministries`, `/ministry`, `/lists`, `/scorecard`, `/demand`, `/about`, `/assistant` | The web pages | |
 
 **Safety:**
 - **Logging and storage:** logs record only method, path, status and time, never request bodies

@@ -218,11 +218,13 @@ Details: [docs/mandate_knowledge_base.md](docs/mandate_knowledge_base.md), [docs
 ## Running the app
 
 ```powershell
-uvicorn src.app.main:app --host 127.0.0.1 --port 8000      # open http://127.0.0.1:8000/
+uvicorn src.app.main:app --host 127.0.0.1 --port 8000      # open http://127.0.0.1:8000/ (assistant: /assistant)
 python -m src.app.demo --base http://127.0.0.1:8000        # scripted end-to-end demo -> docs/app_demo.md
 ```
 
-Endpoints: `POST /route`, `POST /draft`, `GET /ministry/{key}/performance`, `GET /health`. See
+The website has analytics pages (overview, trends, ministries, listings, scorecard, demand vs backlog, about)
+and the complaint assistant at `/assistant`. Endpoints: `POST /route`, `POST /draft`,
+`GET /ministry/{key}/performance`, `GET /health`, and read-only `GET /api/*` for the pages. See
 [docs/app.md](docs/app.md).
 
 ## Screenshots

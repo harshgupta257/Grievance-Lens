@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · CPGRAMS Insights</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="about">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="site-nav"></div>
+  <main id="main" class="wide">
+    <header class="pagehead">
+      <h1 id="pagetitle">About this project</h1>
+      <p>What the data are, how they were processed, and what they cannot tell you.</p>
+    </header>
+    <section class="card">
+      <h2>Data</h2>
+      <p>53 monthly reports published by the Department of Administrative Reforms and Public Grievances (DARPG) on how
+        Central Ministries/Departments handle grievances on CPGRAMS (May 2022 – Sep 2026). 36,718 values were extracted
+        from the PDFs; each keeps its report, page and table. 92 ministries and departments appear under 121 printed names.</p>
+      <p>Twelve randomly sampled values were checked against the PDF pages (12 of 12 match), and the whole pipeline was
+        re-run from the PDFs into a fresh database with identical results. These checks were done by an AI assistant at
+        the project owner's request, not by an independent person.</p>
+    </section>
+    <section class="card">
+      <h2>Methods</h2>
+      <ul>
+        <li>Each month's figure comes from the latest report that prints it; partial months are flagged.</li>
+        <li>Trends use the Mann–Kendall test with an autocorrelation correction, Sen's slope for size, and false-discovery
+          control across ministries.</li>
+        <li>Lists are compared only within one threshold, rankings only within one method era and group, and absence
+          from a list is never treated as zero.</li>
+        <li>The scorecard is a project construct, not an official rating, and is always shown with its 90% rank interval.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>The complaint assistant</h2>
+      <p>The assistant suggests a department using the official <em>Allocation of Business Rules</em> (Cabinet Secretariat)
+        and project-written keywords, asks a question when it is unsure, and drafts a complaint using only what you wrote.
+        On 300 synthetic test complaints it chose the right department first 65% of the time and had it in its top three
+        89% of the time, which is why it always shows alternatives. You submit complaints yourself on the official
+        <a href="https://pgportal.gov.in/" target="_blank" rel="noopener">CPGRAMS portal</a>.</p>
+    </section>
+    <section class="card">
+      <h2>What this cannot tell you</h2>
+      <ul>
+        <li>Why a backlog rose or fell: the data are observational.</li>
+        <li>How your own complaint will be handled: these are aggregate figures.</li>
+        <li>Anything about State Government grievances: only Central Ministries/Departments are covered.</li>
+      </ul>
+    </section>
+  </main>
+  <footer class="wide foot">
+    <p>Portfolio project, not an official government service. Data: DARPG monthly CPGRAMS reports for Central
+      Ministries/Departments (#1–#53, May 2022 – Sep 2026), extracted with page-level provenance. Synthetic data only
+      in the complaint assistant's evaluation. This site never submits complaints.</p>
+  </footer>
+  <script src="/static/site.js"></script>
+</body>
+</html>

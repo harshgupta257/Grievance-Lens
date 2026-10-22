@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Grievance Routing Assistant</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="assistant">
+  <div id="site-nav"></div>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="top">
+    <div class="wrap">
+      <h1>Grievance Routing Assistant</h1>
+      <p class="lede">Find which Central Government department handles your grievance, and prepare a draft you can
+        review and submit yourself on the official <a href="https://pgportal.gov.in/" target="_blank" rel="noopener">CPGRAMS portal</a>.</p>
+      <p class="notice" role="note"><strong>This tool never submits complaints.</strong> Suggestions are not official
+        decisions. Do not include your name, phone number, Aadhaar or bank details in the text below.</p>
+    </div>
+  </header>
+
+  <main id="main" class="wrap">
+    <section aria-labelledby="s1" class="card">
+      <h2 id="s1"><span class="step">1</span> Describe your grievance</h2>
+      <form id="route-form" novalidate>
+        <label for="complaint">Your complaint (English, हिन्दी or Hinglish)</label>
+        <textarea id="complaint" name="complaint" rows="6" maxlength="4000" required
+          aria-describedby="complaint-help complaint-count"
+          placeholder="e.g. My PF withdrawal claim has been pending for three months…"></textarea>
+        <div class="row-between">
+          <span id="complaint-help" class="hint">At least 15 characters. Say what happened, which office or scheme, and since when.</span>
+          <span id="complaint-count" class="hint" aria-live="polite">0 / 4000</span>
+        </div>
+        <div class="row">
+          <label for="language" class="inline">Language</label>
+          <select id="language" name="language">
+            <option value="auto">Detect automatically</option>
+            <option value="en">English</option>
+            <option value="hi">हिन्दी (Hindi)</option>
+            <option value="hinglish">Hinglish</option>
+          </select>
+          <button id="route-btn" type="submit" class="primary">Find the right department</button>
+        </div>
+      </form>
+      <div id="route-status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="result" class="card" aria-labelledby="s2" hidden>
+      <h2 id="s2"><span class="step">2</span> Suggested department</h2>
+      <div id="result-body"></div>
+      <fieldset id="dept-choice" class="choices">
+        <legend>Which department do you want to address?</legend>
+        <div id="dept-options"></div>
+      </fieldset>
+    </section>
+
+    <section id="perf" class="card" aria-labelledby="s3" hidden>
+      <h2 id="s3">Historical figures for <span id="perf-name"></span></h2>
+      <p class="hint">Verified figures from DARPG's monthly CPGRAMS reports, for context only. They are not part of your
+        complaint and do not predict how your complaint will be handled.</p>
+      <div id="perf-body"></div>
+    </section>
+
+    <section id="draft-section" class="card" aria-labelledby="s4" hidden>
+      <h2 id="s4"><span class="step">3</span> Add details and prepare a draft</h2>
+      <p id="missing-hint" class="hint"></p>
+      <form id="draft-form" novalidate>
+        <div class="grid">
+          <div><label for="c-ref">Application / reference numbers</label><input id="c-ref" name="reference_numbers" maxlength="300"></div>
+          <div><label for="c-dates">Important dates</label><input id="c-dates" name="dates" maxlength="300" placeholder="e.g. applied on 12 March 2026"></div>
+          <div><label for="c-loc">Office, branch or place</label><input id="c-loc" name="location" maxlength="300"></div>
+          <div><label for="c-prev">What you already tried</label><input id="c-prev" name="previous_attempts" maxlength="500"></div>
+          <div class="full"><label for="c-action">What you want done</label><input id="c-action" name="action_requested" maxlength="500" placeholder="e.g. release my pending payment"></div>
+          <div class="full"><label for="c-docs">Documents you have (optional)</label><input id="c-docs" name="supporting_details" maxlength="1000"></div>
+        </div>
+        <div class="row">
+          <label for="draft-lang" class="inline">Draft language</label>
+          <select id="draft-lang"><option value="en">English</option><option value="hi">हिन्दी (Hindi)</option></select>
+          <button id="draft-btn" type="submit" class="primary">Prepare draft</button>
+        </div>
+        <p class="hint">Leave a field empty if you do not know it; the draft will show a placeholder for you to fill in.</p>
+      </form>
+      <div id="draft-status" class="status" role="status" aria-live="polite"></div>
+    </section>
+
+    <section id="draft-out" class="card" aria-labelledby="s5" hidden>
+      <h2 id="s5"><span class="step">4</span> Review your draft</h2>
+      <div id="draft-checks"></div>
+      <label for="draft-text">Draft (you can edit it here before copying)</label>
+      <textarea id="draft-text" rows="18"></textarea>
+      <div class="row">
+        <button id="copy-btn" type="button" class="primary">Copy draft</button>
+        <a class="button" href="https://pgportal.gov.in/" target="_blank" rel="noopener">Open the official CPGRAMS portal ↗</a>
+        <span id="copy-status" class="hint" role="status" aria-live="polite"></span>
+      </div>
+      <h3>Before you submit</h3>
+      <ol id="checklist"></ol>
+      <p class="notice"><strong>You submit the complaint yourself.</strong> This tool does not send anything to any
+        government system.</p>
+    </section>
+  </main>
+
+  <footer class="wrap foot">
+    <p>Portfolio project. Department suggestions use the official Allocation of Business Rules and project-written
+      keywords; statistics come from DARPG monthly reports. Results are provisional and not an official service.</p>
+  </footer>
+  <script src="/static/site.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

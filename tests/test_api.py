@@ -92,6 +92,35 @@ def test_page_and_security_headers(client):
     assert client.get("/static/app.js").status_code == 200
 
 
+def test_every_site_page_is_served(client):
+    for path in [
+        "/",
+        "/trends",
+        "/ministries",
+        "/ministry",
+        "/scorecard",
+        "/lists",
+        "/demand",
+        "/about",
+        "/assistant",
+    ]:
+        r = client.get(path)
+        assert r.status_code == 200 and "/static/site.js" in r.text, path
+    assert 'id="complaint"' in client.get("/assistant").text
+
+
+def test_site_data_endpoints(client):
+    ov = client.get("/api/overview").json()
+    assert ov["latest"]["month"] == "2026-09" and len(ov["monthly"]) == 57
+    ms = client.get("/api/ministries").json()
+    assert len(ms) == 92 and {"ministry_key", "name", "score", "in_assistant"} <= set(ms[0])
+    detail = client.get("/api/ministries/department_of_posts").json()
+    assert detail["performance"]["latest_reporting_month"] == "2026-09"
+    assert client.get("/api/ministries/not_a_department").status_code == 404
+    for path in ["/api/scorecard", "/api/listings", "/api/demand-backlog"]:
+        assert client.get(path).status_code == 200, path
+
+
 def test_no_endpoint_submits_anything(client):
     paths = {route.path for route in client.app.routes}
     assert not any("submit" in p for p in paths)

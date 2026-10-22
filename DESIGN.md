@@ -666,6 +666,21 @@ flowchart LR
   (no credentials), pushing to GitHub (no remote or credentials), building the Power BI report (GUI only).
 - Interview talking point: Being explicit about who checked what, and what an independent check would add.
 
+### D-048: A multi-page website: analytics pages plus the assistant, all from the same static app
+- Date / Phase: 2026-10-22 / after Phase 13
+- Context: The owner expected a whole website (browse the grievance data, and file a complaint), not only the
+  single assistant page. Part A's results existed only as CSVs, notebooks-style reports and a Power BI guide.
+- Decision: Eight analytics pages (overview, trends, ministries, ministry detail, listings, scorecard, demand vs
+  backlog, about) and the assistant at `/assistant`, sharing one navigation bar. Data comes from read-only
+  `GET /api/*` endpoints (`src/app/site_data.py`) that read the validated exports in `data/processed/`; no
+  database at run time, unpublished values stay `null`. Charts are hand-written SVG in `site.js` (no chart
+  library, so the strict same-origin CSP stays). Every chart has hover values and a table view; two-series charts
+  have a legend and direct labels; one y-axis only; colours validated for colour-blind separation in both modes.
+- Alternatives considered: a chart library from a CDN (would loosen the CSP); Streamlit (rejected in D-045);
+  pointing users to Power BI (needs a licence and a desktop install).
+- Consequences: Charts are simple by design. The pages repeat the caveats from the report (thresholded lists,
+  method eras, provisional values) next to the figures they qualify.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a

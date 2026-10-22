@@ -25,6 +25,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 
+from src.app import site_data
 from src.drafting.drafter import CLARIFICATION_FIELDS, Draft, DraftRequest, build_draft
 from src.performance.stats import DepartmentPerformance, department_performance
 from src.routing.router import Router
@@ -33,6 +34,26 @@ from src.routing.settings import RouterSettings, load_router_settings
 from src.routing.text import InputError
 
 STATIC = Path(__file__).with_name("static")
+PAGES = {
+    "/": "index.html",
+    "/trends": "trends.html",
+    "/ministries": "ministries.html",
+    "/ministry": "ministry.html",
+    "/scorecard": "scorecard.html",
+    "/lists": "lists.html",
+    "/demand": "demand.html",
+    "/assistant": "assistant.html",
+    "/about": "about.html",
+}
+
+
+def _page(name: str):
+    def serve() -> FileResponse:
+        return FileResponse(STATIC / name)
+
+    return serve
+
+
 REQUEST_TIMEOUT_S = 90.0
 log = logging.getLogger("cpgrams.app")
 
@@ -182,9 +203,37 @@ def create_app(
     async def http_error(_request: Request, exc: HTTPException):
         return JSONResponse({"error": exc.detail}, status_code=exc.status_code)
 
-    @app.get("/", include_in_schema=False)
-    def index() -> FileResponse:
-        return FileResponse(STATIC / "index.html")
+    # --- analytics data for the website (read-only, from the validated exports) ---
+    @app.get("/api/overview")
+    def api_overview() -> dict:
+        return site_data.overview()
+
+    @app.get("/api/ministries")
+    def api_ministries() -> list[dict]:
+        return site_data.ministries()
+
+    @app.get("/api/ministries/{ministry_key}")
+    def api_ministry(ministry_key: str) -> dict:
+        detail = site_data.ministry_detail(ministry_key)
+        if detail is None:
+            raise HTTPException(404, "Unknown ministry or department.")
+        return detail
+
+    @app.get("/api/scorecard")
+    def api_scorecard() -> dict:
+        return site_data.scorecard()
+
+    @app.get("/api/listings")
+    def api_listings() -> dict:
+        return site_data.listings()
+
+    @app.get("/api/demand-backlog")
+    def api_demand_backlog() -> dict:
+        return site_data.demand_backlog()
+
+    # --- website pages ---
+    for path, page in PAGES.items():
+        app.add_api_route(path, _page(page), methods=["GET"], include_in_schema=False)
 
     app.mount("/static", StaticFiles(directory=STATIC), name="static")
     return app
