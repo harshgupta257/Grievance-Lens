@@ -704,6 +704,34 @@ flowchart LR
   - The hop count must be checked once per host (docs/deploy.md).
   - The image build itself is verified in CI, not on the development machine (no WSL2).
 
+### D-050: Public name "Grievance Lens (unofficial)", a privacy page, and Gemini as a second LLM provider
+- Date / Phase: 2026-10-22 / after Phase 13
+- Context:
+  - "CPGRAMS Insights" could be mistaken for an official DARPG site.
+  - The public site had no privacy statement, although visitors type complaints into it.
+  - The owner asked whether a Gemini API key could be used.
+- Decision:
+  - **Name:** "Grievance Lens", with an "Unofficial" badge in the navigation. Every page footer says it is not a
+    government website and not affiliated with DARPG or CPGRAMS.
+  - **Privacy page** (`/privacy`): what is processed, what is not stored, what is logged, and what goes to an AI
+    provider. It shows the provider actually in use, read live from `/health`.
+  - **Gemini selector:** implemented beside Anthropic through a shared base class (same prompt, redaction,
+    schema, cache, cap and log). It calls the REST API with the standard library, so there is no new dependency.
+    - The default model is `gemini-3.5-flash-lite`: Google's documentation (checked 2026-10-22) restricts
+      Gemini 2.5 to existing users and recommends 3.5 Flash-Lite or 3.8 Flash for new projects.
+    - Gemini's free-tier terms allow product-improvement use and human review, and ask users not to send
+      personal information. Production therefore requires `GEMINI_PAID_TIER=true`.
+  - The LLM cache and usage log became best-effort. The container user can write only `data/interim/`, which
+    exposed that an unwritable cache would otherwise have turned every LLM-routed request into an error.
+- Alternatives considered:
+  - The `google-genai` SDK: a new dependency for one POST request.
+  - Allowing the free tier in production with a warning: this would break the privacy page's promise.
+- Consequences:
+  - The Gemini path is unit-tested only. A live run with a key is still to do, and so is a routing evaluation
+    on the 300 synthetic complaints, to compare it with the offline router.
+  - The name is a suggestion that the owner can change. It appears in the page template, `site.js`,
+    `assistant.html`, `render.yaml` and the README title.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a

@@ -18,8 +18,8 @@ RUN pip install -r requirements.txt
 COPY src/ src/
 COPY data/ data/
 
-# Run as an unprivileged user
-RUN useradd --create-home --uid 10001 app
+# Run as an unprivileged user; it may write only the LLM cache and usage log (deleted with the container)
+RUN useradd --create-home --uid 10001 app && mkdir -p data/interim/llm && chown -R app data/interim
 USER app
 
 EXPOSE 8000

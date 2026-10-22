@@ -1,25 +1,32 @@
-"""LLM candidate selection (provider-agnostic interface; Anthropic implementation).
+"""LLM candidate selection (provider-agnostic interface; Anthropic and Google Gemini implementations).
 
-`Selector` is the interface the router depends on. `AnthropicSelector` implements it with the official
-Anthropic SDK and structured JSON output. Another provider can be added by implementing `select()`;
-nothing else changes.
+`Selector` is the interface the router depends on. `_CachedSelector` holds what every provider shares
+(prompt, cache, call cap, usage log); a provider implements only `_request()`. `AnthropicSelector` uses the
+official Anthropic SDK; `GeminiSelector` calls the Gemini REST API with the standard library, so it adds no
+dependency. Both use structured JSON output restricted to the retrieved candidates.
 
 Safety: the complaint is redacted (src.routing.privacy) and placed in a delimited data block whose tag
 carries a random nonce, so text inside cannot close it. The system prompt says the block is data, not
 instructions. The JSON schema limits `department_key` to the retrieved candidates and `evidence_ids` to the
 evidence shown. The router re-validates everything (src.routing.router). Model output is never executed.
 
-Cost control: identical requests are served from a local cache (keyed by a SHA-256 of model, settings and
-prompt; the cache stores only the model's JSON output and usage, never complaint text); a per-process
-call cap; a usage log (tokens and estimated cost, no text) in data/interim/llm/usage.jsonl.
+Cost control: identical requests are served from a local cache (keyed by a SHA-256 of provider, model,
+settings and prompt; the cache stores only the model's JSON output and usage, never complaint text); a
+per-process call cap; a usage log (tokens and estimated cost, no text) in data/interim/llm/usage.jsonl.
+Cache and log are best-effort: if the folder is not writable (a read-only container), routing still works.
 """
 
 from __future__ import annotations
 
 import hashlib
 import json
+import logging
+import os
+import re
 import secrets
 import time
+import urllib.error
+import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Protocol
@@ -31,6 +38,8 @@ from src.routing.schemas import LLMSelection, llm_json_schema
 from src.routing.settings import RouterSettings
 
 LLM_DIR = PROJECT_ROOT / "data" / "interim" / "llm"
+GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+log = logging.getLogger("cpgrams.llm")
 
 SYSTEM_PROMPT = """You help route Indian citizens' grievances to the responsible Government of India department.
 
@@ -98,17 +107,12 @@ def build_prompt(complaint: str, candidates: list[dict]) -> tuple[str, str, dict
     return SYSTEM_PROMPT.replace("NONCE", nonce), user, evidence_map, list(evidence_map)
 
 
-class AnthropicSelector:
-    """Claude via the official SDK. Requires credentials resolvable by the SDK; tested with a fake client."""
+class _CachedSelector:
+    """Shared by every provider: prompt, cache, call cap and usage log. Subclasses implement `_request`."""
 
-    provider = "anthropic"
+    provider = ""
 
-    def __init__(self, settings: RouterSettings, client=None, cache_dir: Path = LLM_DIR):
-        if client is None:
-            import anthropic
-
-            client = anthropic.Anthropic(timeout=settings.llm_timeout_s, max_retries=settings.llm_max_retries)
-        self.client = client
+    def __init__(self, settings: RouterSettings, cache_dir: Path = LLM_DIR):
         self.s = settings
         self.cache_dir = cache_dir
         self.calls = 0
@@ -116,7 +120,14 @@ class AnthropicSelector:
     def _cache_key(self, system: str, user: str, schema: dict) -> str:
         # the nonce differs per request, so hash a nonce-free form to make identical complaints hit the cache
         stable = json.dumps(
-            [self.s.llm_model, self.s.llm_effort, _strip_nonce(system), _strip_nonce(user), schema],
+            [
+                self.provider,
+                self.s.llm_model,
+                self.s.llm_effort,
+                _strip_nonce(system),
+                _strip_nonce(user),
+                schema,
+            ],
             sort_keys=True,
             ensure_ascii=False,
         )
@@ -136,45 +147,31 @@ class AnthropicSelector:
         if self.calls >= self.s.llm_max_calls_per_process:
             raise CallBudgetExceeded(f"LLM call cap reached ({self.s.llm_max_calls_per_process} per process)")
         self.calls += 1
-        kwargs = {
-            "model": self.s.llm_model,
-            "max_tokens": self.s.llm_max_tokens,
-            "system": system,
-            "messages": [{"role": "user", "content": user}],
-            "output_config": {
-                "effort": self.s.llm_effort,
-                "format": {"type": "json_schema", "schema": schema},
-            },
-        }
         try:
-            if self.s.llm_refusal_fallback:
-                resp = self.client.beta.messages.create(
-                    betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kwargs
-                )
-            else:
-                resp = self.client.messages.create(**kwargs)
-        except Exception as exc:  # SDK errors (rate limit after retries, timeout, connection, 4xx)
+            text = self._request(system, user, schema, meta)
+        except Exception as exc:  # provider errors (rate limit after retries, timeout, connection, 4xx)
             meta.error = f"{type(exc).__name__}: {str(exc)[:200]}"
             self._log(meta)
             return None, meta
-        meta.stop_reason = resp.stop_reason or ""
-        usage = getattr(resp, "usage", None)
-        meta.input_tokens = int(getattr(usage, "input_tokens", 0) or 0)
-        meta.output_tokens = int(getattr(usage, "output_tokens", 0) or 0)
         meta.estimated_cost_usd = (
             meta.input_tokens * self.s.llm_input_price_per_mtok
             + meta.output_tokens * self.s.llm_output_price_per_mtok
         ) / 1e6
         self._log(meta)
-        if resp.stop_reason == "refusal":
+        if text is None:  # refused or blocked by the provider
             return None, meta
-        text = next((b.text for b in resp.content if getattr(b, "type", "") == "text"), "")
-        cached.parent.mkdir(parents=True, exist_ok=True)
-        cached.write_text(json.dumps({"output": text, "stop_reason": meta.stop_reason}), encoding="utf-8")
+        try:
+            cached.parent.mkdir(parents=True, exist_ok=True)
+            cached.write_text(json.dumps({"output": text, "stop_reason": meta.stop_reason}), encoding="utf-8")
+        except OSError:
+            pass  # the cache is an optimisation only
         return _parse(text, meta), meta
 
+    def _request(self, system: str, user: str, schema: dict, meta: SelectionMeta) -> str | None:
+        """Call the model; fill meta.stop_reason and token counts; return the JSON text, or None if refused."""
+        raise NotImplementedError
+
     def _log(self, meta: SelectionMeta) -> None:
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
         rec = {
             "ts": time.strftime("%Y-%m-%dT%H:%M:%S"),
             "provider": meta.provider,
@@ -185,13 +182,137 @@ class AnthropicSelector:
             "stop_reason": meta.stop_reason,
             "error": meta.error,
         }  # deliberately no complaint text
-        with (self.cache_dir / "usage.jsonl").open("a", encoding="utf-8") as f:
-            f.write(json.dumps(rec) + "\n")
+        try:
+            self.cache_dir.mkdir(parents=True, exist_ok=True)
+            with (self.cache_dir / "usage.jsonl").open("a", encoding="utf-8") as f:
+                f.write(json.dumps(rec) + "\n")
+        except OSError:
+            log.info("llm usage %s", json.dumps(rec))  # still visible in the host's logs
+
+
+class AnthropicSelector(_CachedSelector):
+    """Claude via the official SDK. Requires credentials resolvable by the SDK; tested with a fake client."""
+
+    provider = "anthropic"
+
+    def __init__(self, settings: RouterSettings, client=None, cache_dir: Path = LLM_DIR):
+        super().__init__(settings, cache_dir)
+        if client is None:
+            import anthropic
+
+            client = anthropic.Anthropic(timeout=settings.llm_timeout_s, max_retries=settings.llm_max_retries)
+        self.client = client
+
+    def _request(self, system: str, user: str, schema: dict, meta: SelectionMeta) -> str | None:
+        kwargs = {
+            "model": self.s.llm_model,
+            "max_tokens": self.s.llm_max_tokens,
+            "system": system,
+            "messages": [{"role": "user", "content": user}],
+            "output_config": {
+                "effort": self.s.llm_effort,
+                "format": {"type": "json_schema", "schema": schema},
+            },
+        }
+        if self.s.llm_refusal_fallback:
+            resp = self.client.beta.messages.create(
+                betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kwargs
+            )
+        else:
+            resp = self.client.messages.create(**kwargs)
+        meta.stop_reason = resp.stop_reason or ""
+        usage = getattr(resp, "usage", None)
+        meta.input_tokens = int(getattr(usage, "input_tokens", 0) or 0)
+        meta.output_tokens = int(getattr(usage, "output_tokens", 0) or 0)
+        if resp.stop_reason == "refusal":
+            return None
+        return next((b.text for b in resp.content if getattr(b, "type", "") == "text"), "")
+
+
+class GeminiSelector(_CachedSelector):
+    """Google Gemini via its REST API (generateContent with a response schema). Key: GEMINI_API_KEY.
+
+    `transport(url, headers, body, timeout) -> dict` is injectable so tests need no network.
+    """
+
+    provider = "gemini"
+    RETRY_STATUS = {429, 500, 502, 503, 504}
+    BLOCKED = {"SAFETY", "PROHIBITED_CONTENT", "BLOCKLIST", "SPII", "RECITATION"}
+
+    def __init__(
+        self, settings: RouterSettings, transport=None, api_key: str | None = None, cache_dir: Path = LLM_DIR
+    ):
+        super().__init__(settings, cache_dir)
+        self.api_key = api_key or os.environ.get("GEMINI_API_KEY", "")
+        if not self.api_key:
+            raise ValueError("LLM_PROVIDER=gemini needs GEMINI_API_KEY in the environment or .env")
+        self.transport = transport or _http_post_json
+
+    def _request(self, system: str, user: str, schema: dict, meta: SelectionMeta) -> str | None:
+        body = {
+            "systemInstruction": {"parts": [{"text": system}]},
+            "contents": [{"role": "user", "parts": [{"text": user}]}],
+            "generationConfig": {
+                "responseMimeType": "application/json",
+                "responseSchema": gemini_schema(schema),
+                "maxOutputTokens": self.s.llm_max_tokens,
+                "temperature": 0,
+            },
+        }
+        url = GEMINI_URL.format(model=self.s.llm_model)
+        headers = {"Content-Type": "application/json", "x-goog-api-key": self.api_key}
+        for attempt in range(self.s.llm_max_retries + 1):
+            try:
+                resp = self.transport(url, headers, body, self.s.llm_timeout_s)
+                break
+            except urllib.error.HTTPError as exc:
+                if exc.code not in self.RETRY_STATUS or attempt == self.s.llm_max_retries:
+                    raise RuntimeError(f"Gemini API HTTP {exc.code}") from None  # never echo the request
+                time.sleep(2**attempt)
+        usage = resp.get("usageMetadata", {})
+        meta.input_tokens = int(usage.get("promptTokenCount", 0))
+        # thinking tokens are billed as output
+        meta.output_tokens = int(usage.get("candidatesTokenCount", 0)) + int(
+            usage.get("thoughtsTokenCount", 0)
+        )
+        if resp.get("promptFeedback", {}).get("blockReason"):
+            meta.stop_reason = "refusal"
+            return None
+        cand = (resp.get("candidates") or [{}])[0]
+        meta.stop_reason = cand.get("finishReason", "")
+        if meta.stop_reason in self.BLOCKED:  # FinishReason values that mean the output was withheld
+            meta.stop_reason = "refusal"
+            return None
+        parts = cand.get("content", {}).get("parts", [])
+        return "".join(p.get("text", "") for p in parts if not p.get("thought"))
+
+
+def gemini_schema(schema: dict) -> dict:
+    """JSON Schema -> Gemini's OpenAPI-style response schema: `anyOf [X, null]` becomes X with nullable."""
+    if "anyOf" in schema:
+        options = [o for o in schema["anyOf"] if o.get("type") != "null"]
+        if len(options) == 1 and len(options) < len(schema["anyOf"]):
+            return {**gemini_schema(options[0]), "nullable": True}
+    out = {}
+    for k, v in schema.items():
+        if k == "properties":
+            out[k] = {name: gemini_schema(p) for name, p in v.items()}
+        elif k == "items":
+            out[k] = gemini_schema(v)
+        elif k != "additionalProperties":  # not part of Gemini's schema format
+            out[k] = v
+    if "properties" in out:
+        out["propertyOrdering"] = list(out["properties"])
+    return out
+
+
+def _http_post_json(url: str, headers: dict, body: dict, timeout: float) -> dict:
+    req = urllib.request.Request(url, data=json.dumps(body).encode("utf-8"), headers=headers, method="POST")
+    with urllib.request.urlopen(req, timeout=timeout) as r:  # fixed https URL, not user-controlled
+        return json.loads(r.read().decode("utf-8"))
 
 
 def _strip_nonce(text: str) -> str:
-    import re
-
     return re.sub(r"complaint_[0-9a-f]{8}", "complaint_N", text)
 
 

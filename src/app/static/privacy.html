@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy · Grievance Lens</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body data-page="privacy">
+  <a class="skip" href="#main">Skip to content</a>
+  <div id="site-nav"></div>
+  <main id="main" class="wide">
+    <header class="pagehead">
+      <h1 id="pagetitle">Privacy</h1>
+      <p>What happens to what you type, in plain words.</p>
+    </header>
+    <section class="card">
+      <h2>In short</h2>
+      <ul>
+        <li>This site does <strong>not store</strong> your complaint. It has no database of complaints, no accounts,
+          no cookies, no analytics and no third-party scripts.</li>
+        <li>It <strong>never submits</strong> anything to the government. You copy the draft and submit it yourself
+          on the official <a href="https://pgportal.gov.in/" target="_blank" rel="noopener">CPGRAMS portal</a>.</li>
+        <li>Please do not type your name, address, phone number, Aadhaar or bank details. The draft leaves
+          placeholders for anything personal.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>What you type in the complaint assistant</h2>
+      <ul>
+        <li>Your complaint and the details you add are sent to this site's server to suggest a department and build a
+          draft. They are processed in memory and discarded when the response is sent.</li>
+        <li>The server's logs record only the page or action requested, the result code and the time taken, never the
+          text you typed.</li>
+        <li>To limit abuse, your IP address is kept in memory for about a minute to count requests. The hosting
+          provider also keeps standard access logs (IP address, page and time) under its own policy.</li>
+        <li>The draft exists only in your browser tab until you copy it. Closing the tab removes it.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>AI provider</h2>
+      <p id="ai-status" class="notice">Checking which AI provider is in use…</p>
+      <p>By default no AI service is used: the department is suggested by this site's own search and rules, and
+        nothing leaves the server. If an AI provider is switched on, the complaint is sent to it to choose between
+        the suggested departments, after these steps:</p>
+      <ul>
+        <li>Phone numbers, Aadhaar-like numbers, PAN, e-mail addresses, bank account and card numbers and IFSC codes
+          are replaced with placeholders before sending. Names and addresses written in free text are
+          <strong>not</strong> detected, which is why you should leave them out.</li>
+        <li>Only the complaint and the candidate departments are sent, never your other details.</li>
+        <li>Only paid API plans are used, under which the provider does not use the text to train or improve its
+          models. Providers keep requests for a limited time to detect abuse.</li>
+        <li>To save cost, the AI's answer (the department chosen and a short reason) is kept on the server so that an
+          identical complaint gets the same answer without a second call. The reason can paraphrase your complaint.
+          This cache is deleted whenever the server restarts.</li>
+      </ul>
+    </section>
+    <section class="card">
+      <h2>The statistics pages</h2>
+      <p>They show published, aggregate figures about ministries. They contain no information about any individual
+        complainant.</p>
+    </section>
+  </main>
+  <footer class="wide foot">
+    <p><strong>Grievance Lens is an independent portfolio project, not a government website.</strong> It is not
+      affiliated with DARPG or CPGRAMS and never submits complaints. Data: DARPG monthly CPGRAMS reports for Central
+      Ministries/Departments (#1–#53, May 2022 – Sep 2026), extracted with page-level provenance.
+      <a href="/privacy">Privacy</a> · <a href="/about">About</a></p>
+  </footer>
+  <script src="/static/site.js"></script>
+</body>
+</html>

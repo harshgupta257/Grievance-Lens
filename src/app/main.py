@@ -51,6 +51,7 @@ PAGES = {
     "/demand": "demand.html",
     "/assistant": "assistant.html",
     "/about": "about.html",
+    "/privacy": "privacy.html",
 }
 
 
@@ -79,6 +80,19 @@ def load_app_settings() -> AppSettings:
     if not hops.isdigit() or int(hops) > 5:
         raise ValueError(f"TRUSTED_PROXY_HOPS must be a whole number from 0 to 5, not {hops!r}")
     return AppSettings(production=env == "production", trusted_proxy_hops=int(hops))
+
+
+def check_llm_plan(s: RouterSettings, conf: AppSettings) -> None:
+    """Refuse to start a public site that would send visitors' complaints to Gemini's free tier.
+
+    Google's terms let it use free-tier prompts to improve its products (with human review) and ask users not
+    to submit personal information there; the privacy page promises paid plans only (DESIGN.md D-050).
+    """
+    if conf.production and s.llm_provider == "gemini" and os.environ.get("GEMINI_PAID_TIER", "") != "true":
+        raise RuntimeError(
+            "LLM_PROVIDER=gemini in production needs a billing-enabled (paid) Gemini API project. "
+            "Set GEMINI_PAID_TIER=true once billing is on, or unset LLM_PROVIDER to run offline."
+        )
 
 
 def client_address(peer: str | None, forwarded_for: str | None, hops: int) -> str:
@@ -149,6 +163,7 @@ def create_app(
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         s = settings or load_router_settings()  # validated here: a bad .env fails at startup
+        check_llm_plan(s, conf)
         app.state.settings = s
         app.state.router = router or Router(settings=s)
         app.state.names = app.state.router.names
@@ -163,7 +178,7 @@ def create_app(
         yield
 
     app = FastAPI(
-        title="CPGRAMS grievance routing assistant",
+        title="Grievance Lens (unofficial): CPGRAMS data and complaint assistant",
         version="0.12.0",
         lifespan=lifespan,
         description="Suggests a department and drafts a complaint. Never submits anything.",

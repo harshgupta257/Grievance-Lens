@@ -1,4 +1,6 @@
-# CPGRAMS Grievance Intelligence Platform
+# Grievance Lens: CPGRAMS Grievance Intelligence Platform
+
+_An independent, unofficial portfolio project; not a government website._
 
 > **Status: all 13 phases built (portfolio project).** The 12 sampled report values were checked against the
 > PDFs (12 of 12 match), and the 300 evaluation complaints were labelled. Both were done by the AI assistant at the

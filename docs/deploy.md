@@ -20,7 +20,9 @@ reads the validated, committed files in `data/processed/` and `data/reference/`.
 | `APP_ENV` | `development` | `production` (set in the Dockerfile) | Hides `/docs`, `/redoc` and `/openapi.json`; sends `Strict-Transport-Security` |
 | `TRUSTED_PROXY_HOPS` | `0` | `1` on Render (check it, below) | How many reverse proxies sit in front of the app. The client address for rate limiting is the N-th entry from the right of `X-Forwarded-For` |
 | `PORT` | `8000` | set by the host | Port the server listens on |
-| `LLM_PROVIDER`, `ANTHROPIC_API_KEY`, `LLM_*` | unset (offline) | optional | LLM routing; see `.env.example` and [routing.md](routing.md). Set the key as a secret in the host's dashboard, never in a file |
+| `LLM_PROVIDER` | unset (offline) | optional: `anthropic` or `gemini` | LLM routing; see `.env.example` and [routing.md](routing.md) |
+| `ANTHROPIC_API_KEY` / `GEMINI_API_KEY` | unset | the chosen provider's key | Set as a secret in the host's dashboard, never in a file |
+| `GEMINI_PAID_TIER` | unset | `true`, only once billing is enabled | Required with `gemini` in production: the free tier's terms forbid personal information, and the privacy page promises paid plans only |
 
 An invalid `APP_ENV` or `TRUSTED_PROXY_HOPS` stops the app at startup with a clear message.
 
@@ -34,7 +36,7 @@ An invalid `APP_ENV` or `TRUSTED_PROXY_HOPS` stops the app at startup with a cle
    ```
    The **ci** workflow then runs; check the Actions tab shows green (tests and image build).
 2. **Create the service on Render.** On render.com, go to New → Blueprint, pick the repository and apply.
-   Render builds the `Dockerfile` and gives a URL like `https://cpgrams-insights.onrender.com`.
+   Render builds the `Dockerfile` and gives a URL like `https://grievance-lens.onrender.com`.
 3. **Open the URL and check:**
    - Every page loads.
    - `/health` shows `"submits_complaints": false`.

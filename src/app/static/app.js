@@ -1,4 +1,4 @@
-// Grievance Routing Assistant: page logic. No complaint text is stored in the browser or sent anywhere except
+// Grievance Lens complaint assistant: page logic. No complaint text is stored in the browser or sent anywhere except
 // this application's own API. All text from the API is inserted with textContent (never as HTML).
 "use strict";
 

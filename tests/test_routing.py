@@ -1,12 +1,13 @@
 """Routing: redaction, input handling, rules, offline routing and the LLM path (fake client, no network)."""
 
 import json
+import urllib.error
 from types import SimpleNamespace
 
 import pytest
 
 from src.routing import rules
-from src.routing.llm import AnthropicSelector, CallBudgetExceeded, build_prompt
+from src.routing.llm import AnthropicSelector, CallBudgetExceeded, GeminiSelector, build_prompt, gemini_schema
 from src.routing.privacy import redact
 from src.routing.router import Router, decide_offline
 from src.routing.schemas import RouteResult, llm_json_schema
@@ -237,3 +238,114 @@ def test_prompt_wraps_complaint_with_nonce_and_schema_enums():
     assert ids == ["E1"] and ev["E1"]["ministry_key"] == "k1"
     schema = llm_json_schema(["k1"], ids)
     assert schema["additionalProperties"] is False and set(schema["required"]) == set(schema["properties"])
+
+
+# ---------------------------------------------------------------- Gemini path with a fake transport
+
+
+class FakeGemini:
+    def __init__(self, output=None, finish="STOP", status=None, fail_times=0):
+        self.output, self.finish, self.status, self.fail_times = output, finish, status, fail_times
+        self.requests = []
+
+    def __call__(self, url, headers, body, timeout):
+        self.requests.append({"url": url, "headers": headers, "body": body})
+        if self.status and len(self.requests) <= self.fail_times:
+            raise urllib.error.HTTPError(url, self.status, "error", {}, None)
+        parts = []
+        if self.output:  # a thought part first: it must be skipped
+            parts = [{"text": "thinking...", "thought": True}, {"text": json.dumps(self.output)}]
+        return {
+            "candidates": [{"content": {"parts": parts}, "finishReason": self.finish}],
+            "usageMetadata": {
+                "promptTokenCount": 1000,
+                "candidatesTokenCount": 100,
+                "thoughtsTokenCount": 50,
+            },
+        }
+
+
+@pytest.fixture()
+def gemini_router(tmp_path, offline_router):
+    def make(transport, **settings):
+        s = RouterSettings(llm_provider="gemini", llm_max_retries=1, **settings)
+        sel = GeminiSelector(s, transport=transport, api_key="test-key", cache_dir=tmp_path)
+        return Router(
+            settings=s, selector=sel, records=offline_router.records, thresholds=offline_router.thresholds
+        ), sel
+
+    return make
+
+
+def test_gemini_defaults_and_model_mismatch():
+    s = RouterSettings(llm_provider="gemini")
+    assert s.llm_model == "gemini-3.5-flash-lite" and s.llm_input_price_per_mtok == 0.30
+    assert RouterSettings().llm_model == "claude-opus-5-5"
+    with pytest.raises(ValueError, match="not a Gemini model"):
+        RouterSettings(llm_provider="gemini", llm_model="claude-opus-5-5")
+
+
+def test_gemini_needs_a_key(monkeypatch):
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    with pytest.raises(ValueError, match="GEMINI_API_KEY"):
+        GeminiSelector(RouterSettings(llm_provider="gemini"))
+
+
+def test_gemini_choice_is_validated_redacted_cached_and_logged(gemini_router, tmp_path):
+    fake = FakeGemini(_selection())
+    router, _ = gemini_router(fake)
+    r = router.route(COMPLAINT)
+    assert r.department_key == "department_of_posts" and r.confidence_source == "llm_self_report"
+    req = fake.requests[0]
+    assert req["url"].endswith("/models/gemini-3.5-flash-lite:generateContent")
+    assert req["headers"]["x-goog-api-key"] == "test-key" and "key=" not in req["url"]  # key never in the URL
+    sent = req["body"]["contents"][0]["parts"][0]["text"]
+    assert "9876543210" not in sent and "[REDACTED-PHONE]" in sent
+    schema = req["body"]["generationConfig"]["responseSchema"]
+    dk = schema["properties"]["department_key"]
+    assert dk["nullable"] is True and set(dk["enum"]) == {c.ministry_key for c in r.candidates}
+    router.route(COMPLAINT)
+    assert len(fake.requests) == 1  # cached
+    log = (tmp_path / "usage.jsonl").read_text(encoding="utf-8")
+    assert "speed post" not in log.lower() and '"output_tokens": 150' in log and '"provider": "gemini"' in log
+
+
+def test_gemini_retries_rate_limit_then_succeeds(gemini_router, monkeypatch):
+    monkeypatch.setattr("src.routing.llm.time.sleep", lambda s: None)
+    fake = FakeGemini(_selection(), status=429, fail_times=1)
+    router, _ = gemini_router(fake)
+    assert router.route(COMPLAINT).department_key == "department_of_posts" and len(fake.requests) == 2
+
+
+@pytest.mark.parametrize(
+    "fake",
+    [FakeGemini(finish="SAFETY"), FakeGemini(status=403, fail_times=9), FakeGemini(status=503, fail_times=9)],
+)
+def test_gemini_block_or_error_falls_back_to_offline(gemini_router, fake, monkeypatch):
+    monkeypatch.setattr("src.routing.llm.time.sleep", lambda s: None)
+    router, sel = gemini_router(fake)
+    r = router.route(COMPLAINT)
+    assert r.method.startswith("retrieval_rules (LLM unavailable")
+
+
+def test_gemini_schema_conversion():
+    s = gemini_schema(
+        {
+            "type": "object",
+            "additionalProperties": False,
+            "properties": {"a": {"anyOf": [{"type": "string", "enum": ["x"]}, {"type": "null"}]}},
+            "required": ["a"],
+        }
+    )
+    assert "additionalProperties" not in s and s["propertyOrdering"] == ["a"]
+    assert s["properties"]["a"] == {"type": "string", "enum": ["x"], "nullable": True}
+
+
+def test_unwritable_cache_does_not_break_routing(llm_router, tmp_path):
+    blocker = tmp_path / "file"
+    blocker.write_text("x")
+    s = RouterSettings(llm_provider="anthropic")
+    sel = AnthropicSelector(s, client=FakeClient(_selection()), cache_dir=blocker / "llm")  # cannot mkdir
+    router, _ = llm_router(FakeClient(_selection()))
+    router.selector = sel
+    assert router.route(COMPLAINT).department_key == "department_of_posts"

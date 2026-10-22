@@ -41,7 +41,7 @@
     const active = here === "/ministry" ? "/ministries" : here;
     slot.replaceChildren(h("nav", { class: "sitenav", "aria-label": "Main" },
       h("div", { class: "wrap" },
-        h("a", { class: "brand", href: "/", text: "CPGRAMS Insights" }),
+        h("a", { class: "brand", href: "/", "aria-label": "Grievance Lens, unofficial: home" }, "Grievance Lens ", h("span", { class: "unofficial", text: "Unofficial" })),
         NAV.map(([href, label]) => h("a", { class: "nav", href, "aria-current": href === active ? "page" : null, text: label })),
         h("a", { class: "cta", href: "/assistant", "aria-current": here === "/assistant" ? "page" : null, text: "File a complaint" }))));
   }
@@ -330,7 +330,7 @@
     const d = await getJSON(`/api/ministries/${encodeURIComponent(key)}`);
     const p = d.performance;
     document.getElementById("pagetitle").textContent = p.department;
-    document.title = `${p.department} · CPGRAMS Insights`;
+    document.title = `${p.department} · Grievance Lens`;
     const parts = [];
     parts.push(h("div", { class: "tiles" },
       tile("Latest report listing it", p.latest_reporting_month || "—"),
@@ -434,7 +434,23 @@
 
   const PAGES = { home: pageHome, trends: pageTrends, ministries: pageMinistries, ministry: pageMinistry, scorecard: pageScorecard, lists: pageLists, demand: pageDemand };
 
+  // privacy page: say which AI provider, if any, this server is configured to use right now
+  async function privacyStatus() {
+    const el = document.getElementById("ai-status");
+    if (!el) return;
+    try {
+      const st = await getJSON("/health");
+      const names = { anthropic: "Anthropic (Claude)", gemini: "Google (Gemini)" };
+      el.textContent = st.llm_provider === "none"
+        ? "Right now no AI provider is used. Your complaint does not leave this server."
+        : `Right now the AI provider in use is ${names[st.llm_provider] || st.llm_provider} (model ${st.llm_model}).`;
+    } catch (err) {
+      el.textContent = "Could not check which AI provider is in use. Assume one may be, and follow the advice below.";
+    }
+  }
+
   renderNav();
+  privacyStatus();
   const page = document.body.dataset.page;
   const root = document.getElementById("page-root");
   if (PAGES[page] && root) {

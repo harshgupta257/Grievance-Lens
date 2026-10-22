@@ -5,7 +5,14 @@ import logging
 import pytest
 from fastapi.testclient import TestClient
 
-from src.app.main import AppSettings, RateLimiter, client_address, create_app, load_app_settings
+from src.app.main import (
+    AppSettings,
+    RateLimiter,
+    check_llm_plan,
+    client_address,
+    create_app,
+    load_app_settings,
+)
 from src.routing.router import Router
 from src.routing.settings import RouterSettings
 
@@ -102,6 +109,7 @@ def test_every_site_page_is_served(client):
         "/lists",
         "/demand",
         "/about",
+        "/privacy",
         "/assistant",
     ]:
         r = client.get(path)
@@ -205,3 +213,21 @@ def test_app_settings_reject_bad_values(monkeypatch):
         load_app_settings()
     monkeypatch.setenv("TRUSTED_PROXY_HOPS", "1")
     assert load_app_settings() == AppSettings(production=True, trusted_proxy_hops=1)
+
+
+def test_production_refuses_gemini_free_tier(monkeypatch):
+    s = RouterSettings(llm_provider="gemini")
+    monkeypatch.delenv("GEMINI_PAID_TIER", raising=False)
+    with pytest.raises(RuntimeError, match="GEMINI_PAID_TIER"):
+        check_llm_plan(s, AppSettings(production=True))
+    check_llm_plan(s, AppSettings(production=False))  # local testing on the free tier is allowed
+    monkeypatch.setenv("GEMINI_PAID_TIER", "true")
+    check_llm_plan(s, AppSettings(production=True))
+
+
+def test_privacy_page_and_unofficial_name(client):
+    r = client.get("/privacy")
+    assert r.status_code == 200 and 'id="ai-status"' in r.text and "not store" in r.text
+    for path in ["/", "/assistant", "/about"]:
+        text = client.get(path).text
+        assert "not a government website" in text and "/privacy" in text, path

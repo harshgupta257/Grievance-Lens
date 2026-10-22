@@ -1,7 +1,7 @@
 # Render blueprint (docs/deploy.md). Create with: Render dashboard -> New -> Blueprint -> this repository.
 services:
   - type: web
-    name: cpgrams-insights
+    name: grievance-lens
     runtime: docker
     plan: free
     healthCheckPath: /health

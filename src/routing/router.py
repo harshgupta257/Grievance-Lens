@@ -19,7 +19,7 @@ from pathlib import Path
 
 from src.knowledge.retrieve import Candidate, load_kb, make_retriever
 from src.routing import rules
-from src.routing.llm import AnthropicSelector, Selector
+from src.routing.llm import AnthropicSelector, GeminiSelector, Selector
 from src.routing.privacy import redact
 from src.routing.schemas import CandidateOut, Evidence, RouteResult
 from src.routing.settings import RouterSettings, load_router_settings
@@ -76,6 +76,8 @@ class Router:
         self.thresholds = thresholds or load_thresholds(self.s.retrieval_method)
         if selector is None and self.s.llm_provider == "anthropic":
             selector = AnthropicSelector(self.s)
+        elif selector is None and self.s.llm_provider == "gemini":
+            selector = GeminiSelector(self.s)
         self.selector = selector
 
     def _category(self, key: str, text: str) -> str:

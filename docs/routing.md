@@ -11,9 +11,24 @@ python -m src.routing.tune      # thresholds from development data -> src/routin
 python -m src.routing.verify    # 80 held-out development complaints -> docs/router_verification.md
 ```
 
-To enable the LLM step, set `LLM_PROVIDER=anthropic` in `.env` and provide credentials the Anthropic SDK can
-find, either `ANTHROPIC_API_KEY` or an `ant auth login` profile. The default model is `claude-opus-5-5`
-(`LLM_MODEL`); a cheaper model is the owner's choice. See `.env.example`.
+To enable the LLM step, set `LLM_PROVIDER` in `.env` and provide credentials. See `.env.example`.
+
+| Provider | Credential | Default model (`LLM_MODEL` overrides) | How it is called |
+|---|---|---|---|
+| `anthropic` | `ANTHROPIC_API_KEY` or an `ant auth login` profile | `claude-opus-5-5` | Official SDK, JSON-schema output, server-side refusal fallback |
+| `gemini` | `GEMINI_API_KEY` | `gemini-3.5-flash-lite` (`gemini-3.8-flash` is more capable and costs more) | REST `generateContent` via the standard library, `responseSchema` with enums, `temperature 0` |
+
+Both share the same prompt, redaction, candidate-only schema, cache, call cap and usage log
+(`src/routing/llm.py`). The router re-validates every answer. Gemini's safety blocks are treated as refusals,
+and HTTP 429/5xx are retried with backoff; on any failure the router falls back to the offline answer and says
+so. **The Gemini path is unit-tested with a fake transport but has not been run against the live API**
+(no key was available).
+
+**Gemini free tier:** Google's terms allow it to use free-tier prompts to improve its products, and human
+reviewers may read them; the terms also ask users not to submit personal information. Free tier is fine for
+trying the router locally with synthetic complaints. A public site must use a billing-enabled project, so the
+app refuses to start with `LLM_PROVIDER=gemini` and `APP_ENV=production` unless `GEMINI_PAID_TIER=true`
+(DESIGN.md D-050).
 
 ## 1. Pipeline
 
