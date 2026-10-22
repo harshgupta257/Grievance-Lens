@@ -773,6 +773,22 @@ flowchart LR
 - Consequences: Storage can be blocked (private windows). The toggle still works for that page; it just is
   not remembered.
 
+### D-053: Visitor address on Render comes from CF-Connecting-IP (measured, not assumed)
+- Date / Phase: 2026-10-22 / first deployment
+- Context:
+  - After the first deploy, 62 requests in a minute were never rate-limited, even with no forged header.
+  - Render does not document its proxy headers.
+  - A temporary, opt-in diagnostic (`CLIENT_IP_DEBUG`) echoed the caller's own address headers on `/health`.
+    It showed `X-Forwarded-For = [visitor, Cloudflare edge, Render balancer]`, with the two proxy addresses
+    changing per request, so `TRUSTED_PROXY_HOPS=1` read a near-random balancer address.
+- Decision:
+  - Rate-limit by `CF-Connecting-IP` (`TRUSTED_CLIENT_IP_HEADER`), with `TRUSTED_PROXY_HOPS=3` as the fallback.
+  - Cloudflare rejected a client-supplied `CF-Connecting-IP` with 403 error 1000 and overwrote a forged
+    `True-Client-IP`, so the visitor cannot choose the value.
+  - The diagnostic was turned off again.
+- Consequences: If Render changes its proxy chain, the limiter could again see the wrong address. The check in
+  docs/deploy.md re-tests it in a minute.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a

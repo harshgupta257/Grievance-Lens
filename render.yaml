@@ -9,13 +9,14 @@ services:
     envVars:
       - key: APP_ENV
         value: production
-      # Render's proxy appends the client address to X-Forwarded-For; check this after the first deploy
-      # (docs/deploy.md, "Check the proxy setting").
+      # Visitor address for rate limiting, measured on Render on 2026-10-22 (docs/deploy.md, DESIGN.md D-053):
+      # requests pass Cloudflare then Render's balancer. Cloudflare sets CF-Connecting-IP and blocks visitors who
+      # send it themselves, so it is used first; X-Forwarded-For is [visitor, Cloudflare edge, Render balancer],
+      # so the fallback is the 3rd entry from the right.
+      - key: TRUSTED_CLIENT_IP_HEADER
+        value: cf-connecting-ip
       - key: TRUSTED_PROXY_HOPS
-        value: "1"
-      # TEMPORARY: echoes the caller's own address headers on /health to choose the proxy setting; remove after.
-      - key: CLIENT_IP_DEBUG
-        value: "true"
+        value: "3"
       # Optional LLM routing: leave LLM_PROVIDER unset to run offline (no key needed).
       # To use Gemini, uncomment these. Render then asks for the key's value when you apply the blueprint
       # (sync: false = the value is typed into the dashboard, never stored in this file or in git).

@@ -18,7 +18,8 @@ reads the validated, committed files in `data/processed/` and `data/reference/`.
 | Variable | Default | Production value | Purpose |
 |---|---|---|---|
 | `APP_ENV` | `development` | `production` (set in the Dockerfile) | Hides `/docs`, `/redoc` and `/openapi.json`; sends `Strict-Transport-Security` |
-| `TRUSTED_PROXY_HOPS` | `0` | `1` on Render (check it, below) | How many reverse proxies sit in front of the app. The client address for rate limiting is the N-th entry from the right of `X-Forwarded-For` |
+| `TRUSTED_CLIENT_IP_HEADER` | unset | `cf-connecting-ip` on Render | A header the edge proxy overwrites with the visitor's address; used first when present |
+| `TRUSTED_PROXY_HOPS` | `0` | `3` on Render (measured, below) | How many reverse proxies sit in front of the app. The client address for rate limiting is the N-th entry from the right of `X-Forwarded-For` |
 | `PORT` | `8000` | set by the host | Port the server listens on |
 | `LLM_PROVIDER` | unset (offline) | optional: `anthropic` or `gemini` | LLM routing; see `.env.example` and [routing.md](routing.md) |
 | `ANTHROPIC_API_KEY` / `GEMINI_API_KEY` | unset | the chosen provider's key | Set as a secret in the host's dashboard, never in a file |
@@ -45,6 +46,20 @@ An invalid `APP_ENV` or `TRUSTED_PROXY_HOPS` stops the app at startup with a cle
 5. **Optional: a custom domain** (Render → Settings → Custom Domains). HTTPS is automatic.
 
 ### Check the proxy setting
+
+**Measured on Render (2026-10-22).** Requests to `*.onrender.com` pass through Cloudflare, then Render's
+balancer:
+- `X-Forwarded-For` arrives as `[visitor, Cloudflare edge, Render balancer]`. Anything the visitor sends is
+  added on the left.
+- The two proxy addresses change from request to request, so the first setting, `TRUSTED_PROXY_HOPS=1`, gave
+  every request a new "visitor" and nobody was ever limited.
+- Cloudflare sets `CF-Connecting-IP` to the visitor's address and rejects requests that send it themselves
+  (HTTP 403, error 1000).
+- The settings are therefore `TRUSTED_CLIENT_IP_HEADER=cf-connecting-ip`, with `TRUSTED_PROXY_HOPS=3` as the
+  fallback. They were found with `CLIENT_IP_DEBUG=true`, which makes `/health` echo the caller's own address
+  headers; turn it on only briefly on a new host.
+
+**To check on any host:**
 
 `TRUSTED_PROXY_HOPS` must equal the number of proxies that append to `X-Forwarded-For`:
 
