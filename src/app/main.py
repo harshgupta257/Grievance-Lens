@@ -8,6 +8,10 @@ Deployment settings come from environment variables (docs/deploy.md):
     APP_ENV=production       hides the API docs (/docs, /openapi.json) and sends HSTS
     TRUSTED_PROXY_HOPS=N     number of reverse proxies in front of the app; the client address used for rate
                              limiting is then read from X-Forwarded-For (0, the default, ignores that header)
+    TRUSTED_CLIENT_IP_HEADER a header set by the edge proxy that carries the visitor's address and cannot be
+                             forged by the visitor (e.g. cf-connecting-ip); takes precedence over the hops
+    CLIENT_IP_DEBUG=true     temporary: /health echoes the caller's own address headers, to choose the two
+                             settings above on a new host (docs/deploy.md). Never leave it on.
 
 The application never submits complaints. It does not store complaint text, and its logs contain only
 method, path, status and timing. Settings are validated at startup (src/routing/settings.py); without any
@@ -19,6 +23,7 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import re
 import time
 from collections import deque
 from contextlib import asynccontextmanager
@@ -71,6 +76,8 @@ log = logging.getLogger("cpgrams.app")
 class AppSettings:
     production: bool = False
     trusted_proxy_hops: int = 0
+    client_ip_header: str = ""  # lower-case header name; empty = not used
+    client_ip_debug: bool = False
 
 
 def load_app_settings() -> AppSettings:
@@ -80,7 +87,16 @@ def load_app_settings() -> AppSettings:
     hops = os.environ.get("TRUSTED_PROXY_HOPS", "0").strip()
     if not hops.isdigit() or int(hops) > 5:
         raise ValueError(f"TRUSTED_PROXY_HOPS must be a whole number from 0 to 5, not {hops!r}")
-    return AppSettings(production=env == "production", trusted_proxy_hops=int(hops))
+    header = os.environ.get("TRUSTED_CLIENT_IP_HEADER", "").strip().lower()
+    if header and not re.fullmatch(r"[a-z0-9-]{1,64}", header):
+        raise ValueError(f"TRUSTED_CLIENT_IP_HEADER must be a header name, not {header!r}")
+    debug = os.environ.get("CLIENT_IP_DEBUG", "").strip().lower() == "true"
+    return AppSettings(
+        production=env == "production",
+        trusted_proxy_hops=int(hops),
+        client_ip_header=header,
+        client_ip_debug=debug,
+    )
 
 
 def check_llm_plan(s: RouterSettings, conf: AppSettings) -> None:
@@ -96,13 +112,19 @@ def check_llm_plan(s: RouterSettings, conf: AppSettings) -> None:
         )
 
 
-def client_address(peer: str | None, forwarded_for: str | None, hops: int) -> str:
+def client_address(
+    peer: str | None, forwarded_for: str | None, hops: int, edge_value: str | None = None
+) -> str:
     """The client address for rate limiting.
 
-    Each trusted proxy appends the address it received the request from to X-Forwarded-For, so with N
-    proxies the real client is the N-th entry from the right. Entries further left are set by the client
-    and can be forged, so they are never used. With no trusted proxies the header is ignored.
+    `edge_value` is the value of TRUSTED_CLIENT_IP_HEADER, which the edge proxy overwrites, so it wins when
+    present. Otherwise each trusted proxy appends the address it received the request from to
+    X-Forwarded-For, so with N proxies the real client is the N-th entry from the right. Entries further left
+    are set by the client and can be forged, so they are never used. With no trusted proxies the header is
+    ignored.
     """
+    if edge_value and edge_value.strip():
+        return edge_value.split(",")[0].strip()
     if hops and forwarded_for:
         parts = [p.strip() for p in forwarded_for.split(",") if p.strip()]
         if len(parts) >= hops:
@@ -217,6 +239,7 @@ def create_app(
             request.client.host if request.client else None,
             request.headers.get("x-forwarded-for"),
             conf.trusted_proxy_hops,
+            request.headers.get(conf.client_ip_header) if conf.client_ip_header else None,
         )
         if not request.app.state.limiter.allow(client):
             raise HTTPException(429, "Too many requests. Please wait a minute and try again.")
@@ -232,7 +255,7 @@ def create_app(
     @app.get("/health")
     def health(request: Request) -> dict:
         s = request.app.state.settings
-        return {
+        body = {
             "status": "ok",
             "departments": len(request.app.state.names),
             "llm_provider": s.llm_provider,
@@ -240,6 +263,22 @@ def create_app(
             "retrieval": s.retrieval_method,
             "submits_complaints": False,
         }
+        if conf.client_ip_debug:  # the caller's own request headers only; nothing is logged or stored
+            hd = request.headers
+            body["client_ip_debug"] = {
+                "peer": request.client.host if request.client else None,
+                "x_forwarded_for": [p.strip() for p in hd.get("x-forwarded-for", "").split(",") if p.strip()],
+                "cf_connecting_ip": hd.get("cf-connecting-ip"),
+                "true_client_ip": hd.get("true-client-ip"),
+                "x_real_ip": hd.get("x-real-ip"),
+                "resolved": client_address(
+                    request.client.host if request.client else None,
+                    hd.get("x-forwarded-for"),
+                    conf.trusted_proxy_hops,
+                    hd.get(conf.client_ip_header) if conf.client_ip_header else None,
+                ),
+            }
+        return body
 
     @app.post("/route", response_model=RouteResult)
     async def route(body: RouteIn, request: Request) -> RouteResult:

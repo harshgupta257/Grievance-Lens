@@ -13,6 +13,9 @@ services:
       # (docs/deploy.md, "Check the proxy setting").
       - key: TRUSTED_PROXY_HOPS
         value: "1"
+      # TEMPORARY: echoes the caller's own address headers on /health to choose the proxy setting; remove after.
+      - key: CLIENT_IP_DEBUG
+        value: "true"
       # Optional LLM routing: leave LLM_PROVIDER unset to run offline (no key needed).
       # To use Gemini, uncomment these. Render then asks for the key's value when you apply the blueprint
       # (sync: false = the value is typed into the dashboard, never stored in this file or in git).

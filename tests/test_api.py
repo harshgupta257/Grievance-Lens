@@ -166,6 +166,24 @@ def test_client_address_uses_only_trusted_hops():
     assert client_address(None, None, 0) == "unknown"
 
 
+def test_edge_header_wins_over_forwarded_for():
+    assert client_address("10.0.0.1", "6.6.6.6, 2.2.2.2", 1, "8.8.8.8") == "8.8.8.8"
+    assert client_address("10.0.0.1", "6.6.6.6, 2.2.2.2", 1, "") == "2.2.2.2"  # empty header: fall back
+
+
+def test_client_ip_debug_is_off_by_default_and_echoes_only_when_on(client):
+    assert "client_ip_debug" not in client.get("/health").json()
+    s = RouterSettings()
+    app = create_app(
+        settings=s,
+        router=Router(settings=s, selector=None),
+        app_settings=AppSettings(trusted_proxy_hops=1, client_ip_debug=True),
+    )
+    with TestClient(app) as c:
+        dbg = c.get("/health", headers={"X-Forwarded-For": "9.9.9.9, 3.3.3.3"}).json()["client_ip_debug"]
+    assert dbg["x_forwarded_for"] == ["9.9.9.9", "3.3.3.3"] and dbg["resolved"] == "3.3.3.3"
+
+
 def test_rate_limit_is_per_forwarded_client():
     s = RouterSettings()
     app = create_app(
@@ -214,6 +232,11 @@ def test_app_settings_reject_bad_values(monkeypatch):
         load_app_settings()
     monkeypatch.setenv("TRUSTED_PROXY_HOPS", "1")
     assert load_app_settings() == AppSettings(production=True, trusted_proxy_hops=1)
+    monkeypatch.setenv("TRUSTED_CLIENT_IP_HEADER", "bad header!")
+    with pytest.raises(ValueError, match="TRUSTED_CLIENT_IP_HEADER"):
+        load_app_settings()
+    monkeypatch.setenv("TRUSTED_CLIENT_IP_HEADER", "CF-Connecting-IP")
+    assert load_app_settings().client_ip_header == "cf-connecting-ip"
 
 
 def test_production_refuses_gemini_free_tier(monkeypatch):
