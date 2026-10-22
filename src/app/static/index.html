@@ -3,7 +3,15 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Overview · Grievance Lens</title>
+  <title>Grievance Lens: an independent look at public grievances in India</title>
+  <meta name="description" content="How Central Government ministries handle citizens' grievances, from 53 monthly DARPG reports, plus an assistant that helps you prepare a complaint to submit yourself on CPGRAMS. Unofficial.">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#e9eaec">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Grievance Lens (unofficial)">
+  <meta property="og:title" content="Grievance Lens: an independent look at public grievances in India">
+  <meta property="og:description" content="How Central Government ministries handle citizens' grievances, from 53 monthly DARPG reports, plus an assistant that helps you prepare a complaint to submit yourself on CPGRAMS. Unofficial.">
+  <meta name="twitter:card" content="summary">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/static/styles.css">
 </head>
@@ -11,17 +19,144 @@
   <a class="skip" href="#main">Skip to content</a>
   <div id="site-nav"></div>
   <main id="main" class="wide">
-    <header class="pagehead">
-      <h1 id="pagetitle">Grievance Lens</h1>
-      <p>An independent look at how Central Government ministries handle public grievances, from 53 monthly DARPG reports, plus an assistant that helps you prepare a complaint.</p>
-    </header>
-    <div id="page-root"></div>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="reveal">
+        <span class="eyebrow"><span class="pulse" aria-hidden="true"></span>Data current to <span data-fill="month">Sep 2026</span></span>
+        <h1 id="hero-title">Public grievances, <span class="dim">read like a</span> system status.</h1>
+        <p class="sub">An independent look at how Central Government ministries handle citizens' grievances,
+          built from 53 monthly DARPG reports, plus an assistant that helps you prepare your own complaint.</p>
+        <div class="actions">
+          <a class="btn primary" href="/trends">Explore the data <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+          <a class="btn" href="/assistant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg> File a complaint</a>
+        </div>
+        <div class="meta">
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg> Not a government website</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Nothing you type is stored</span>
+          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.7 4 3 9 3s9-1.3 9-3V5"/><path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"/></svg> Every figure traced to its report page</span>
+        </div>
+      </div>
+      <div class="stage reveal d2" id="stage" aria-hidden="true">
+        <div class="ring"></div><div class="ring r2"></div><div class="floor"></div>
+        <div class="monolith" id="monolith">
+          <div class="face front"><div class="scan"></div></div><div class="face side"></div><div class="face cap"></div>
+        </div>
+        <div class="glass status-chip"><span class="pulse"></span><span>Pending at month end<b data-fill="pending">—</b></span></div>
+        <div class="status-panel">
+          <div class="head"><span>Latest report</span><span class="ok"><span class="pulse"></span><span data-fill="report">#53</span></span></div>
+          <div class="metric"><span>Received</span><b data-fill="receipts">—</b></div>
+          <div class="metric"><span>Disposed of</span><b data-fill="disposals">—</b></div>
+          <div class="metric"><span>Disposed per 100 received</span><b data-fill="ratio">—</b></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="glass statusbar reveal d3" aria-label="Coverage">
+      <div><div class="k"><span class="pulse"></span>Reports analysed</div><div class="v" data-fill="reports">53</div></div>
+      <div><div class="k">Ministries and departments</div><div class="v" data-fill="ministries">92</div></div>
+      <div><div class="k">Months covered</div><div class="v" data-fill="months">57</div></div>
+      <div><div class="k">Complaint assistant</div><div class="v" data-fill="assistant">Online</div></div>
+    </section>
+
+    <section class="section" aria-labelledby="features-title">
+      <div class="section-head">
+        <span class="eyebrow">What you can do</span>
+        <h2 id="features-title">Three instruments, one source of truth.</h2>
+        <p>Every number comes from DARPG's published monthly reports, with the report and page it came from.</p>
+      </div>
+      <div class="cards3">
+        <article class="glass feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 3v18h18"/><path d="m19 9-5 5-4-4-3 3"/></svg></div>
+          <h3>Track national trends</h3>
+          <p>Grievances received, disposed of and pending every month since 2022, with statistical trend tests
+            rather than eyeballed lines.</p>
+          <a class="more" href="/trends">See the trends <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </article>
+        <article class="glass feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 22h18"/><path d="M6 18v-7"/><path d="M10 18v-7"/><path d="M14 18v-7"/><path d="M18 18v-7"/><path d="M12 2 20 7H4z"/></svg></div>
+          <h3>Compare ministries fairly</h3>
+          <p>All 92 bodies with their backlog history, list appearances and a scorecard that always shows its
+            uncertainty.</p>
+          <a class="more" href="/ministries">Browse ministries <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </article>
+        <article class="glass feature">
+          <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg></div>
+          <h3>Prepare your complaint</h3>
+          <p>Describe the problem in English, Hindi or Hinglish. Get the likely department and a draft to submit
+            yourself on CPGRAMS.</p>
+          <a class="more" href="/assistant">Open the assistant <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="pulse-title">
+      <div class="section-head">
+        <span class="eyebrow">Live readout</span>
+        <h2 id="pulse-title">Received vs disposed of, month by month.</h2>
+        <p>Hover the chart for exact values. The table view is below it.</p>
+      </div>
+      <div class="card"><div id="home-chart"><p class="loading">Loading data…</p></div></div>
+    </section>
+
+    <section class="section" aria-labelledby="findings-title">
+      <div class="section-head">
+        <span class="eyebrow">What the data says</span>
+        <h2 id="findings-title">Three findings, with their sources.</h2>
+        <p>Computed from the reports, not opinions. Each card names the test or table behind it.</p>
+      </div>
+      <div class="cards3" id="findings"><p class="loading">Loading findings…</p></div>
+    </section>
+
+    <section class="section" aria-labelledby="ways-title">
+      <div class="section-head">
+        <span class="eyebrow">Ways to use it</span>
+        <h2 id="ways-title">Free, with no account.</h2>
+        <p>Pick the path that fits what you need today.</p>
+      </div>
+      <div class="tiers">
+        <article class="glass tier">
+          <div class="name">Explore</div>
+          <div class="price">Free <small>/ no sign-up</small></div>
+          <p class="desc">For citizens, journalists and students.</p>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>National trends and tests</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>All 92 ministries</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Hover values and table views</span></li></ul>
+          <a class="btn" href="/trends">Explore the data</a>
+        </article>
+        <article class="glass tier featured">
+          <span class="flag">Start here</span>
+          <div class="name">File a complaint</div>
+          <div class="price">Free <small>/ you submit it</small></div>
+          <p class="desc">For anyone with a grievance against a Central ministry.</p>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Likely department, with alternatives</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Draft in English or Hindi</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Never stored, never submitted for you</span></li></ul>
+          <a class="btn" href="/assistant">Prepare a complaint</a>
+        </article>
+        <article class="glass tier">
+          <div class="name">Analyse</div>
+          <div class="price">Open <small>/ methods</small></div>
+          <p class="desc">For researchers who want to check the work.</p>
+          <ul><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Methods and limits explained</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Scorecard with rank intervals</span></li><li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20 6 9 17l-5-5"/></svg><span>Every figure traced to a page</span></li></ul>
+          <a class="btn" href="/about">Read the methods</a>
+        </article>
+      </div>
+    </section>
+
+    <section class="final-cta" aria-labelledby="cta-title">
+      <span class="eyebrow">Ready when you are</span>
+      <h2 id="cta-title">Have a grievance with a Central ministry?</h2>
+      <p>Find the right department and a clear draft in about two minutes. You stay in control: nothing is stored
+        and nothing is submitted for you.</p>
+      <div class="actions">
+        <a class="btn" href="/assistant">Prepare a complaint <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a class="btn ghost" href="https://pgportal.gov.in/" target="_blank" rel="noopener">Official CPGRAMS portal</a>
+      </div>
+    </section>
+
   </main>
-  <footer class="wide foot">
-    <p><strong>Grievance Lens is an independent portfolio project, not a government website.</strong> It is not
-      affiliated with DARPG or CPGRAMS and never submits complaints. Data: DARPG monthly CPGRAMS reports for Central
-      Ministries/Departments (#1–#53, May 2022 – Sep 2026), extracted with page-level provenance.
-      <a href="/privacy">Privacy</a> · <a href="/about">About</a></p>
+  <footer id="site-footer" class="sitefoot">
+    <div class="legal">
+      <p><strong>Grievance Lens is an independent portfolio project, not a government website.</strong> It is not
+        affiliated with DARPG or CPGRAMS and never submits complaints. Data: DARPG monthly CPGRAMS reports for Central
+        Ministries/Departments (#1–#53, May 2022 – Sep 2026). © 2026 Grievance Lens.</p>
+      <nav aria-label="Legal"><a href="/privacy">Privacy policy</a><a href="/terms">Terms of use</a><a href="/about#contact">Contact</a></nav>
+    </div>
   </footer>
   <script src="/static/site.js"></script>
 </body>

@@ -7,6 +7,13 @@
     ["/", "Overview"], ["/trends", "Trends"], ["/ministries", "Ministries"], ["/lists", "Listings"],
     ["/scorecard", "Scorecard"], ["/demand", "Demand vs backlog"], ["/about", "About"],
   ];
+  // Public links shown in the footer and on the About page. Fill these in when the project is published;
+  // empty values are simply not shown (no dead links).
+  const SITE = {
+    github: "",      // e.g. "https://github.com/<you>/<repo>"
+    linkedin: "",    // e.g. "https://www.linkedin.com/in/<you>"
+    email: "",       // e.g. "you@example.com" (shown publicly)
+  };
   const SVGNS = "http://www.w3.org/2000/svg";
   const nf = new Intl.NumberFormat("en-IN");
   const fmt = (v, d = 0) => (v === null || v === undefined || Number.isNaN(v) ? "—" : nf.format(Number(v.toFixed ? v.toFixed(d) : v)));
@@ -33,17 +40,75 @@
   }
   function failed(target, err) { target.replaceChildren(h("p", { class: "error", text: err.message })); }
 
-  // ---------------- navigation ----------------
+  // ---------------- icons (Lucide-style strokes) ----------------
+  const ICONS = {
+    menu: [["path", { d: "M4 6h16" }], ["path", { d: "M4 12h16" }], ["path", { d: "M4 18h16" }]],
+    close: [["path", { d: "M18 6 6 18" }], ["path", { d: "m6 6 12 12" }]],
+    github: [["path", { d: "M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" }], ["path", { d: "M9 18c-4.51 2-5-2-7-2" }]],
+    linkedin: [["path", { d: "M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" }], ["rect", { x: 2, y: 9, width: 4, height: 12 }], ["circle", { cx: 4, cy: 4, r: 2 }]],
+    mail: [["rect", { x: 2, y: 4, width: 20, height: 16, rx: 2 }], ["path", { d: "m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" }]],
+  };
+  function icon(name) {
+    const svg = s("svg", { viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", "stroke-width": 2, "stroke-linecap": "round", "stroke-linejoin": "round", "aria-hidden": "true", focusable: "false" });
+    ICONS[name].forEach(([tag, attrs]) => svg.append(s(tag, attrs)));
+    return svg;
+  }
+
+  // ---------------- navigation and footer ----------------
   function renderNav() {
     const slot = document.getElementById("site-nav");
     if (!slot) return;
     const here = location.pathname.replace(/\/$/, "") || "/";
     const active = here === "/ministry" ? "/ministries" : here;
+    const links = h("div", { class: "links", id: "nav-links" },
+      NAV.map(([href, label]) => h("a", { class: "nav", href, "aria-current": href === active ? "page" : null, text: label })),
+      h("a", { class: "cta", href: "/assistant", "aria-current": here === "/assistant" ? "page" : null, text: "File a complaint" }));
+    const btn = h("button", { class: "menu-btn", type: "button", "aria-expanded": "false", "aria-controls": "nav-links", "aria-label": "Open menu" }, icon("menu"));
+    const setOpen = (open) => {
+      links.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      btn.replaceChildren(icon(open ? "close" : "menu"));
+    };
+    btn.addEventListener("click", () => setOpen(!links.classList.contains("open")));
+    document.addEventListener("keydown", (ev) => { if (ev.key === "Escape" && links.classList.contains("open")) { setOpen(false); btn.focus(); } });
     slot.replaceChildren(h("nav", { class: "sitenav", "aria-label": "Main" },
-      h("div", { class: "wrap" },
-        h("a", { class: "brand", href: "/", "aria-label": "Grievance Lens, unofficial: home" }, "Grievance Lens ", h("span", { class: "unofficial", text: "Unofficial" })),
-        NAV.map(([href, label]) => h("a", { class: "nav", href, "aria-current": href === active ? "page" : null, text: label })),
-        h("a", { class: "cta", href: "/assistant", "aria-current": here === "/assistant" ? "page" : null, text: "File a complaint" }))));
+      h("div", { class: "bar" },
+        h("a", { class: "brand", href: "/", "aria-label": "Grievance Lens, unofficial: home" },
+          h("span", { class: "brand-mark", "aria-hidden": "true" }), "Grievance Lens", h("span", { class: "unofficial", text: "Unofficial" })),
+        btn, links)));
+  }
+
+  function socialLinks() {
+    return [["github", SITE.github, "GitHub"], ["linkedin", SITE.linkedin, "LinkedIn"], ["mail", SITE.email && `mailto:${SITE.email}`, "E-mail"]]
+      .filter(([, url]) => url)
+      .map(([name, url, label]) => h("a", { href: url, "aria-label": label, title: label, rel: "noopener", target: name === "mail" ? null : "_blank" }, icon(name)));
+  }
+
+  function renderFooter() {
+    const foot = document.getElementById("site-footer");
+    if (!foot) return;
+    const col = (title, items) => h("div", {}, h("h4", { text: title }),
+      h("ul", {}, items.map(([href, label, ext]) => h("li", {}, h("a", { href, text: label, target: ext ? "_blank" : null, rel: ext ? "noopener" : null })))));
+    const social = socialLinks();
+    foot.prepend(h("div", { class: "cols" },
+      h("div", { class: "about" },
+        h("a", { class: "brand", href: "/", style: "display:inline-flex;align-items:center;gap:9px;font-weight:750;color:var(--ink);text-decoration:none" },
+          h("span", { class: "brand-mark", "aria-hidden": "true" }), "Grievance Lens"),
+        h("p", { text: "An independent, unofficial look at how Central Government ministries handle public grievances, and a free assistant for preparing your own complaint." }),
+        social.length ? h("div", { class: "social", "aria-label": "Social links" }, social) : null),
+      col("Explore", [["/", "Overview"], ["/trends", "National trends"], ["/ministries", "Ministries"], ["/lists", "Listings"], ["/scorecard", "Scorecard"], ["/demand", "Demand vs backlog"]]),
+      col("Project", [["/assistant", "File a complaint"], ["/about", "About and methods"], ["/privacy", "Privacy policy"], ["/terms", "Terms of use"], ["/about#contact", "Contact"]]),
+      col("Official resources", [["https://pgportal.gov.in/", "CPGRAMS portal", true], ["https://darpg.gov.in/", "DARPG", true], ["https://cabsec.gov.in/", "Cabinet Secretariat", true]])));
+  }
+
+  function contactLine() {
+    const el = document.getElementById("contact-line");
+    if (!el) return;
+    const parts = [];
+    if (SITE.github) parts.push(h("a", { href: `${SITE.github.replace(/\/$/, "")}/issues`, target: "_blank", rel: "noopener", text: "open an issue on GitHub" }));
+    if (SITE.email) parts.push(h("a", { href: `mailto:${SITE.email}`, text: SITE.email }));
+    if (parts.length) el.replaceChildren("Please ", parts[0], parts[1] ? " or write to " : "", parts[1] || "", ".");
   }
 
   // ---------------- charts ----------------
@@ -244,26 +309,16 @@
   const tile = (label, value, sub) => h("div", { class: "tile" }, h("div", { class: "label", text: label }), h("div", { class: "value", text: value }), sub ? h("div", { class: "sub", text: sub }) : null);
 
   // ---------------- pages ----------------
-  async function pageHome(root) {
-    const o = await getJSON("/api/overview");
+  // landing page: the text is static HTML; this fills live figures, the chart and the findings
+  async function pageHome() {
+    const [o, health, dm] = await Promise.all([getJSON("/api/overview"), getJSON("/health").catch(() => null), getJSON("/api/demand-backlog").catch(() => null)]);
     const l = o.latest, c = o.coverage;
-    root.replaceChildren(
-      h("div", { class: "tiles" },
-        tile(`Grievances received (${l.month})`, fmt(l.receipts), "Central Ministries/Departments"),
-        tile(`Disposed of (${l.month})`, fmt(l.disposals), `report #${l.source_report}`),
-        tile("Pending at month end", fmt(l.pending), l.month),
-        tile("Reports analysed", fmt(c.reports), `${c.first_report_month} to ${c.last_report_month} · ${c.ministries} ministries`)),
-      h("section", { class: "card" }, h("h2", { text: "Grievances received and disposed of each month" }), h("div", { id: "home-chart" })),
-      h("section", { class: "card" }, h("h2", { text: "Explore" }),
-        h("div", { class: "linkcards" },
-          [["/trends", "National trends", "Monthly receipts, disposals and backlog, with statistical trend tests."],
-           ["/ministries", "Ministries and departments", "All 92 bodies: listings, backlog trend, scorecard rank and full history."],
-           ["/lists", "Repeated listings", "Who appears again and again in the published pendency and closing-time lists."],
-           ["/scorecard", "Scorecard", "A transparent within-group comparison, always shown with its uncertainty."],
-           ["/demand", "Demand vs backlog", "Is a backlog growing because more grievances arrive?"],
-           ["/assistant", "File a complaint", "Find the right department and prepare a draft to submit yourself on CPGRAMS."]]
-            .map(([href, t, d]) => h("a", { class: "linkcard", href }, h("strong", { text: t }), h("span", { text: d }))))),
-    );
+    const monthName = (ym) => new Date(`${ym}-01T00:00:00`).toLocaleDateString("en-IN", { month: "short", year: "numeric" });
+    const fill = { month: monthName(l.month), report: `#${l.source_report} · ${monthName(l.month)}`, receipts: fmt(l.receipts), disposals: fmt(l.disposals),
+      pending: fmt(l.pending), ratio: fmt((100 * l.disposals) / l.receipts, 0), reports: fmt(c.reports), ministries: fmt(c.ministries), months: fmt(c.months),
+      assistant: health ? (health.llm_provider === "none" ? "Online" : "Online · AI") : "Unavailable" };
+    document.querySelectorAll("[data-fill]").forEach((el) => { if (fill[el.dataset.fill] !== undefined) el.textContent = fill[el.dataset.fill]; });
+
     const m = o.monthly;
     lineChart(document.getElementById("home-chart"), {
       labels: m.map((r) => r.month),
@@ -271,6 +326,42 @@
                { name: "Disposed", color: "var(--series-2)", values: m.map((r) => r.disposals) }],
       note: "Source: DARPG monthly CPGRAMS reports; each month uses the latest report that prints it. The March 2024 peak is one department (Rural Development: 344,265 of 476,498).",
     });
+
+    // findings: every number below is computed from the API response, never typed in
+    const test = (subject) => o.trend_tests.find((r) => r.subject === subject);
+    const rec = test("receipts"), pend = test("pending");
+    const yr = o.by_year[o.by_year.length - 1];
+    const span = (sp) => sp.split("..").map((d) => monthName(d.slice(0, 7))).join(" – ");
+    const finding = (tag, big, unit, text, src) => h("article", { class: "glass finding" },
+      h("span", { class: "tag", text: tag }), h("div", { class: "big" }, big, " ", h("small", { text: unit })), h("p", { text }), h("div", { class: "src", text: src }));
+    const cards = [];
+    if (rec) cards.push(finding("Demand", `${rec.relative_slope_pct >= 0 ? "+" : ""}${rec.relative_slope_pct.toFixed(1)}%`, "a month",
+      `Grievances received are ${rec.conclusion === "increasing" ? "rising" : rec.conclusion} nationally: about ${fmt(rec.sen_slope)} more each month.`,
+      `Mann–Kendall test with Sen's slope, ${span(rec.span)}, q = ${rec.q_value.toFixed(3)}.`));
+    if (yr) cards.push(finding("Capacity", fmt(100 * yr.disposal_to_receipt_ratio, 0), "disposed per 100 received",
+      `In ${yr.year}, ministries disposed of about as many grievances as arrived${pend ? `; the national backlog shows ${pend.conclusion}` : ""}.`,
+      `Average of ${yr.complete_months} complete months in ${yr.year}; backlog trend from the same test as the first card.`));
+    if (dm) {
+      const cls = dm.ministries.filter((r) => r.quadrant);
+      const both = cls.filter((r) => r.quadrant === "demand rising / backlog rising").length;
+      cards.push(finding("Pressure", `${both}`, `of ${cls.length} ministries`,
+        "had both rising demand and a rising backlog: their backlogs are growing even after accounting for more arrivals.",
+        "Ministry monthly panel, Sep 2024 – Jan 2026; changes within ±1% a month treated as stable."));
+    }
+    document.getElementById("findings").replaceChildren(...cards);
+
+    // gentle parallax on the monolith (pointer devices only, respects reduced motion)
+    const stage = document.getElementById("stage"), mono = document.getElementById("monolith");
+    if (stage && mono && matchMedia("(hover: hover) and (prefers-reduced-motion: no-preference)").matches) {
+      const hero = stage.closest(".hero");
+      hero.addEventListener("pointermove", (ev) => {
+        const b = stage.getBoundingClientRect();
+        const x = (ev.clientX - b.left) / b.width - 0.5, y = (ev.clientY - b.top) / b.height - 0.5;
+        mono.style.setProperty("--ry", `${-28 + x * 22}deg`);
+        mono.style.setProperty("--rx", `${-y * 10}deg`);
+      });
+      hero.addEventListener("pointerleave", () => { mono.style.removeProperty("--ry"); mono.style.removeProperty("--rx"); });
+    }
   }
 
   async function pageTrends(root) {
@@ -432,7 +523,7 @@
         tip: [["", m.name], ["Demand", `${m.demand_rel_slope_pct.toFixed(1)}% / month`], ["Backlog", `${m.backlog_rel_slope_pct.toFixed(1)}% / month`], ["Avg received", fmt(m.mean_monthly_receipts)]] })) });
   }
 
-  const PAGES = { home: pageHome, trends: pageTrends, ministries: pageMinistries, ministry: pageMinistry, scorecard: pageScorecard, lists: pageLists, demand: pageDemand };
+  const PAGES = { trends: pageTrends, ministries: pageMinistries, ministry: pageMinistry, scorecard: pageScorecard, lists: pageLists, demand: pageDemand };
 
   // privacy page: say which AI provider, if any, this server is configured to use right now
   async function privacyStatus() {
@@ -450,8 +541,11 @@
   }
 
   renderNav();
+  renderFooter();
   privacyStatus();
+  contactLine();
   const page = document.body.dataset.page;
+  if (page === "home") pageHome().catch((err) => failed(document.getElementById("findings"), err));
   const root = document.getElementById("page-root");
   if (PAGES[page] && root) {
     root.replaceChildren(h("p", { class: "loading", text: "Loading data…" }));

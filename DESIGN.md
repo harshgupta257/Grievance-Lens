@@ -732,6 +732,34 @@ flowchart LR
   - The name is a suggestion that the owner can change. It appears in the page template, `site.js`,
     `assistant.html`, `render.yaml` and the README title.
 
+### D-051: "MONOLITH" visual redesign and a landing page, without invented testimonials or prices
+- Date / Phase: 2026-10-22 / after Phase 13
+- Context: The owner supplied a landing-page style brief ("MONOLITH, system status": light graphite and silver
+  glass, status green, blur, neumorphism, a 3D CSS element). The brief's template asked for testimonials and
+  pricing tiers and suggested the Tailwind CDN.
+- Decision:
+  - **Visual system:** one stylesheet restyles every page with the brief's palette, glass cards, neumorphic
+    controls, a CSS-transform monolith with pointer parallax, and entrance and status animations. All motion
+    stops under `prefers-reduced-motion`.
+  - **Landing page:** the home page follows the brief's structure.
+    - The **testimonials** slot holds three findings. Each is computed live from the API and names its test or
+      table, because quotes from users who do not exist would be fabricated reviews.
+    - The **pricing** slot shows three free ways to use the site, with the complaint assistant highlighted.
+      The site has no prices to show.
+  - **Chart colours:** re-chosen to fit the theme (#3a68b8, #c45a24) and re-validated with the palette checker
+    on the glass surface. Green stays reserved for status.
+  - **No Tailwind CDN:** a third-party script would break the same-origin CSP and the privacy page's "no
+    third-party scripts". The styles are plain CSS.
+  - **Page generator:** moved into the repository (`python -m src.app.pages`). It adds SEO and Open Graph tags,
+    a terms page and a contact section.
+  - **Public links:** GitHub, LinkedIn and e-mail are configured in one `SITE` object in `site.js`. They stay
+    hidden until set, so there are no dead links.
+  - **Navigation:** the nav now sticks via its wrapper, which fixes a bug where the sticky `<nav>` was confined
+    to a wrapper of its own height.
+- Consequences:
+  - Light mode only, as the brief specifies.
+  - Social icons do not appear until the owner fills in `SITE`.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a

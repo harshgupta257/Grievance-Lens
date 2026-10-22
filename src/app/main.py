@@ -52,6 +52,7 @@ PAGES = {
     "/assistant": "assistant.html",
     "/about": "about.html",
     "/privacy": "privacy.html",
+    "/terms": "terms.html",
 }
 
 

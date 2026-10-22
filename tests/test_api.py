@@ -110,6 +110,7 @@ def test_every_site_page_is_served(client):
         "/demand",
         "/about",
         "/privacy",
+        "/terms",
         "/assistant",
     ]:
         r = client.get(path)

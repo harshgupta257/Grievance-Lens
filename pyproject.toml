@@ -30,4 +30,5 @@ select = ["E", "F", "I", "UP", "B"]
 "src/evaluation/run.py" = ["E501"]  # generated report prose
 "src/drafting/examples.py" = ["E501"]  # example inputs and report prose
 "src/app/demo.py" = ["E501"]  # demo inputs and report prose
+"src/app/pages.py" = ["E501"]  # HTML page text, one paragraph per block
 "src/drafting/drafter.py" = ["E501"]  # draft template text (English and Hindi), one sentence per line
