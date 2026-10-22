@@ -1,0 +1,40 @@
+# Lint, test and build the production image on every push and pull request.
+name: ci
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+      - run: pip install -r requirements.txt -r requirements-dev.txt
+      - run: ruff check .
+      - run: ruff format --check .
+      - run: python -m pytest -q   # no database or API key needed; integration tests skip themselves
+
+  docker:
+    runs-on: ubuntu-24.04
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t cpgrams-app .
+      - name: Smoke-test the image
+        run: |
+          docker run -d --name app -p 8000:8000 cpgrams-app
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:8000/health && break; sleep 2; done
+          curl -fsS http://127.0.0.1:8000/ | grep -q "never submits complaints"
+          curl -fsS http://127.0.0.1:8000/api/overview > /dev/null
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:8000/docs)" = "404"
+          docker logs app

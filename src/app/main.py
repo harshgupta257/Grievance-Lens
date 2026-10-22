@@ -4,6 +4,11 @@ Run locally (PowerShell, project root, venv active):
     uvicorn src.app.main:app --host 127.0.0.1 --port 8000
 then open http://127.0.0.1:8000/
 
+Deployment settings come from environment variables (docs/deploy.md):
+    APP_ENV=production       hides the API docs (/docs, /openapi.json) and sends HSTS
+    TRUSTED_PROXY_HOPS=N     number of reverse proxies in front of the app; the client address used for rate
+                             limiting is then read from X-Forwarded-For (0, the default, ignores that header)
+
 The application never submits complaints. It does not store complaint text, and its logs contain only
 method, path, status and timing. Settings are validated at startup (src/routing/settings.py); without any
 LLM settings it runs offline.
@@ -13,9 +18,11 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import time
-from collections import defaultdict, deque
+from collections import deque
 from contextlib import asynccontextmanager
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
@@ -58,16 +65,57 @@ REQUEST_TIMEOUT_S = 90.0
 log = logging.getLogger("cpgrams.app")
 
 
-class RateLimiter:
-    """Sliding-window limit per client for expensive endpoints (in memory; one process)."""
+@dataclass(frozen=True)
+class AppSettings:
+    production: bool = False
+    trusted_proxy_hops: int = 0
 
-    def __init__(self, limit: int, window_s: float = 60.0):
-        self.limit, self.window = limit, window_s
-        self.hits: dict[str, deque[float]] = defaultdict(deque)
+
+def load_app_settings() -> AppSettings:
+    env = os.environ.get("APP_ENV", "development").strip().lower()
+    if env not in ("development", "production"):
+        raise ValueError(f"APP_ENV must be 'development' or 'production', not {env!r}")
+    hops = os.environ.get("TRUSTED_PROXY_HOPS", "0").strip()
+    if not hops.isdigit() or int(hops) > 5:
+        raise ValueError(f"TRUSTED_PROXY_HOPS must be a whole number from 0 to 5, not {hops!r}")
+    return AppSettings(production=env == "production", trusted_proxy_hops=int(hops))
+
+
+def client_address(peer: str | None, forwarded_for: str | None, hops: int) -> str:
+    """The client address for rate limiting.
+
+    Each trusted proxy appends the address it received the request from to X-Forwarded-For, so with N
+    proxies the real client is the N-th entry from the right. Entries further left are set by the client
+    and can be forged, so they are never used. With no trusted proxies the header is ignored.
+    """
+    if hops and forwarded_for:
+        parts = [p.strip() for p in forwarded_for.split(",") if p.strip()]
+        if len(parts) >= hops:
+            return parts[-hops]
+    return peer or "unknown"
+
+
+class RateLimiter:
+    """Sliding-window limit per client for expensive endpoints (in memory; one process).
+
+    Memory is bounded: once more than `max_clients` addresses are tracked, idle ones are dropped.
+    """
+
+    def __init__(self, limit: int, window_s: float = 60.0, max_clients: int = 10_000):
+        self.limit, self.window, self.max_clients = limit, window_s, max_clients
+        self.hits: dict[str, deque[float]] = {}
+
+    def _prune(self, now: float) -> None:
+        for key in [k for k, q in self.hits.items() if not q or now - q[-1] > self.window]:
+            del self.hits[key]
+        while len(self.hits) >= self.max_clients:  # all active: drop the oldest-tracked client
+            del self.hits[next(iter(self.hits))]
 
     def allow(self, key: str, now: float | None = None) -> bool:
         now = time.monotonic() if now is None else now
-        q = self.hits[key]
+        if key not in self.hits and len(self.hits) >= self.max_clients:
+            self._prune(now)
+        q = self.hits.setdefault(key, deque())
         while q and now - q[0] > self.window:
             q.popleft()
         if len(q) >= self.limit:
@@ -94,7 +142,10 @@ def create_app(
     settings: RouterSettings | None = None,
     router: Router | None = None,
     route_limit_per_min: int | None = None,
+    app_settings: AppSettings | None = None,
 ) -> FastAPI:
+    conf = app_settings or load_app_settings()
+
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         s = settings or load_router_settings()  # validated here: a bad .env fails at startup
@@ -116,17 +167,26 @@ def create_app(
         version="0.12.0",
         lifespan=lifespan,
         description="Suggests a department and drafts a complaint. Never submits anything.",
+        docs_url=None if conf.production else "/docs",
+        redoc_url=None if conf.production else "/redoc",
+        openapi_url=None if conf.production else "/openapi.json",
     )
 
     @app.middleware("http")
     async def safe_logging(request: Request, call_next):
         start = time.perf_counter()
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:  # log the error type and path only, never the request body
+            log.error("%s %s 500 unhandled %s", request.method, request.url.path, type(exc).__name__)
+            response = JSONResponse({"error": "Something went wrong. Please try again."}, status_code=500)
         response.headers["X-Content-Type-Options"] = "nosniff"
         response.headers["Referrer-Policy"] = "no-referrer"
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'"
         )
+        if conf.production:  # the host terminates HTTPS; tell browsers never to fall back to HTTP
+            response.headers["Strict-Transport-Security"] = "max-age=31536000"
         log.info(
             "%s %s %d %.0fms",
             request.method,
@@ -137,7 +197,11 @@ def create_app(
         return response
 
     def _limit(request: Request) -> None:
-        client = request.client.host if request.client else "unknown"
+        client = client_address(
+            request.client.host if request.client else None,
+            request.headers.get("x-forwarded-for"),
+            conf.trusted_proxy_hops,
+        )
         if not request.app.state.limiter.allow(client):
             raise HTTPException(429, "Too many requests. Please wait a minute and try again.")
 

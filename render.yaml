@@ -1,0 +1,20 @@
+# Render blueprint (docs/deploy.md). Create with: Render dashboard -> New -> Blueprint -> this repository.
+services:
+  - type: web
+    name: cpgrams-insights
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    autoDeploy: true
+    envVars:
+      - key: APP_ENV
+        value: production
+      # Render's proxy appends the client address to X-Forwarded-For; check this after the first deploy
+      # (docs/deploy.md, "Check the proxy setting").
+      - key: TRUSTED_PROXY_HOPS
+        value: "1"
+      # Optional LLM routing: leave unset to run offline. Set the key in the dashboard, never here.
+      # - key: LLM_PROVIDER
+      #   value: anthropic
+      # - key: ANTHROPIC_API_KEY
+      #   sync: false

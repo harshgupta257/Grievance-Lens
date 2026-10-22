@@ -227,6 +227,9 @@ and the complaint assistant at `/assistant`. Endpoints: `POST /route`, `POST /dr
 `GET /ministry/{key}/performance`, `GET /health`, and read-only `GET /api/*` for the pages. See
 [docs/app.md](docs/app.md).
 
+**Deploying:** `docker build -t cpgrams-app .` then `docker run -p 8000:8000 cpgrams-app`, or the Render
+blueprint in `render.yaml`. No database or API key is needed. See [docs/deploy.md](docs/deploy.md).
+
 ## Screenshots
 
 Captured from the running app with headless Chrome on 22 Oct 2026.

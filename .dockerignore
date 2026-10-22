@@ -1,0 +1,16 @@
+# Keep the image small and free of secrets: only src/ and data/ are copied (see Dockerfile).
+.env
+.env.*
+.git
+.github
+.venv
+**/__pycache__
+**/*.py[cod]
+.pytest_cache
+.ruff_cache
+data/raw
+data/interim
+tests
+docs
+sql
+*.log

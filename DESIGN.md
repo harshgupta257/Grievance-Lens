@@ -681,6 +681,29 @@ flowchart LR
 - Consequences: Charts are simple by design. The pages repeat the caveats from the report (thresholded lists,
   method eras, provisional values) next to the figures they qualify.
 
+### D-049: Deployable as one Docker container with production settings; rate limiting trusts only known proxies
+- Date / Phase: 2026-10-22 / after Phase 13
+- Context: The owner asked to make the site ready to deploy. Behind a host's reverse proxy every request
+  arrives from the proxy's address, so the per-client limiter (D-046) would have put all users under one
+  limit. The interactive API docs were public, and the limiter's memory grew with every new address.
+- Decision:
+  - `APP_ENV=production` hides `/docs`, `/redoc` and `/openapi.json` and sends HSTS.
+  - `TRUSTED_PROXY_HOPS=N` takes the client address from the N-th entry from the right of `X-Forwarded-For`.
+    Entries further left are client-controlled and ignored, and the header is ignored when N is 0.
+  - The limiter drops idle clients past 10,000 tracked addresses.
+  - Unhandled errors return a generic 500 and log only the error type and path.
+  - The deployment is a `Dockerfile` (non-root user, one worker, health check), a Render blueprint and a CI
+    workflow that lints, tests, builds and smoke-tests the image.
+- Alternatives considered:
+  - uvicorn's `--proxy-headers` with `--forwarded-allow-ips='*'`: it trusts any sender, so a client could
+    forge its address.
+  - Redis for the limiter: needed only for more than one instance.
+  - An error-tracking service: needs an account, and a check that it never captures request bodies.
+- Consequences:
+  - Single instance only.
+  - The hop count must be checked once per host (docs/deploy.md).
+  - The image build itself is verified in CI, not on the development machine (no WSL2).
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a

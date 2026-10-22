@@ -5,7 +5,7 @@ import logging
 import pytest
 from fastapi.testclient import TestClient
 
-from src.app.main import RateLimiter, create_app
+from src.app.main import AppSettings, RateLimiter, client_address, create_app, load_app_settings
 from src.routing.router import Router
 from src.routing.settings import RouterSettings
 
@@ -147,3 +147,61 @@ def test_rate_limit_returns_429():
         assert c.post("/route", json=text).status_code == 200
         r = c.post("/route", json=text)
         assert r.status_code == 429 and "Too many requests" in r.json()["error"]
+
+
+def test_client_address_uses_only_trusted_hops():
+    assert client_address("10.0.0.1", "1.1.1.1", 0) == "10.0.0.1"  # no proxies: header ignored
+    assert client_address("10.0.0.1", "6.6.6.6, 2.2.2.2", 1) == "2.2.2.2"  # forged left entry ignored
+    assert client_address("10.0.0.1", "6.6.6.6, 3.3.3.3, 172.16.0.9", 2) == "3.3.3.3"
+    assert client_address("10.0.0.1", None, 1) == "10.0.0.1"
+    assert client_address(None, None, 0) == "unknown"
+
+
+def test_rate_limit_is_per_forwarded_client():
+    s = RouterSettings()
+    app = create_app(
+        settings=s,
+        router=Router(settings=s, selector=None),
+        route_limit_per_min=1,
+        app_settings=AppSettings(trusted_proxy_hops=1),
+    )
+    text = {"text": "My speed post parcel has not been delivered for 12 days."}
+    with TestClient(app) as c:
+        assert c.post("/route", json=text, headers={"X-Forwarded-For": "2.2.2.2"}).status_code == 200
+        assert c.post("/route", json=text, headers={"X-Forwarded-For": "2.2.2.2"}).status_code == 429
+        assert c.post("/route", json=text, headers={"X-Forwarded-For": "9.9.9.9, 3.3.3.3"}).status_code == 200
+
+
+def test_rate_limiter_memory_is_bounded():
+    rl = RateLimiter(limit=5, window_s=60, max_clients=100)
+    for i in range(1000):
+        rl.allow(f"client-{i}", now=float(i))
+    assert len(rl.hits) <= 100
+
+
+def test_production_hides_docs_and_sends_hsts():
+    s = RouterSettings()
+    app = create_app(
+        settings=s, router=Router(settings=s, selector=None), app_settings=AppSettings(production=True)
+    )
+    with TestClient(app) as c:
+        assert c.get("/docs").status_code == 404 and c.get("/openapi.json").status_code == 404
+        r = c.get("/")
+        assert r.status_code == 200 and "max-age" in r.headers["strict-transport-security"]
+
+
+def test_development_keeps_docs(client):
+    assert client.get("/openapi.json").status_code == 200
+    assert "strict-transport-security" not in client.get("/").headers
+
+
+def test_app_settings_reject_bad_values(monkeypatch):
+    monkeypatch.setenv("APP_ENV", "prod")
+    with pytest.raises(ValueError, match="APP_ENV"):
+        load_app_settings()
+    monkeypatch.setenv("APP_ENV", "production")
+    monkeypatch.setenv("TRUSTED_PROXY_HOPS", "-1")
+    with pytest.raises(ValueError, match="TRUSTED_PROXY_HOPS"):
+        load_app_settings()
+    monkeypatch.setenv("TRUSTED_PROXY_HOPS", "1")
+    assert load_app_settings() == AppSettings(production=True, trusted_proxy_hops=1)
