@@ -13,8 +13,13 @@ services:
       # (docs/deploy.md, "Check the proxy setting").
       - key: TRUSTED_PROXY_HOPS
         value: "1"
-      # Optional LLM routing: leave unset to run offline. Set the key in the dashboard, never here.
+      # Optional LLM routing: leave LLM_PROVIDER unset to run offline (no key needed).
+      # To use Gemini, uncomment these. Render then asks for the key's value when you apply the blueprint
+      # (sync: false = the value is typed into the dashboard, never stored in this file or in git).
+      # GEMINI_PAID_TIER=true is required in production: enable billing on the Google project first.
       # - key: LLM_PROVIDER
-      #   value: anthropic
-      # - key: ANTHROPIC_API_KEY
+      #   value: gemini
+      # - key: GEMINI_API_KEY
       #   sync: false
+      # - key: GEMINI_PAID_TIER
+      #   value: "true"

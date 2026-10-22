@@ -30,6 +30,7 @@ TEMPLATE = """<!doctype html>
   <meta name="twitter:card" content="summary">
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="/static/styles.css">
+  <script src="/static/theme.js"></script>
 </head>
 <body data-page="{page}">
   <a class="skip" href="#main">Skip to content</a>

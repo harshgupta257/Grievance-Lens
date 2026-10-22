@@ -226,6 +226,13 @@ def test_production_refuses_gemini_free_tier(monkeypatch):
     check_llm_plan(s, AppSettings(production=True))
 
 
+def test_theme_script_loads_before_paint_on_every_page(client):
+    assert client.get("/static/theme.js").status_code == 200
+    for path in ["/", "/trends", "/privacy", "/terms", "/assistant"]:
+        head = client.get(path).text.split("</head>")[0]
+        assert '<script src="/static/theme.js"></script>' in head, path
+
+
 def test_privacy_page_and_unofficial_name(client):
     r = client.get("/privacy")
     assert r.status_code == 200 and 'id="ai-status"' in r.text and "not store" in r.text

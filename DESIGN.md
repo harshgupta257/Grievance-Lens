@@ -757,8 +757,21 @@ flowchart LR
   - **Navigation:** the nav now sticks via its wrapper, which fixes a bug where the sticky `<nav>` was confined
     to a wrapper of its own height.
 - Consequences:
-  - Light mode only, as the brief specifies.
+  - Light by default. A dark theme was added at the owner's request (D-052).
   - Social icons do not appear until the owner fills in `SITE`.
+
+### D-052: Dark theme with a toggle
+- Date / Phase: 2026-10-22 / after Phase 13
+- Decision:
+  - A sun/moon button in the navigation switches between light and dark. The choice is kept in
+    `localStorage`. Without a saved choice, the site follows the system setting, including later changes.
+  - `theme.js` is a separate file because the CSP forbids inline scripts. It loads in `<head>` and sets
+    `<html data-theme>` before the page paints, so the wrong theme never flashes.
+  - Dark tokens override the light ones. Elements with fixed design colours get explicit dark rules: primary
+    buttons become a light slab, and the featured tier inverts.
+  - The chart series are re-chosen for dark (#5b8de0, #d8682f) and validated on the dark surface #1c1f26.
+- Consequences: Storage can be blocked (private windows). The toggle still works for that page; it just is
+  not remembered.
 
 ## Rejected approaches
 
