@@ -1,0 +1,102 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "ListProjectPrefixes",
+      "Effect": "Allow",
+      "Action": "s3:ListBucket",
+      "Resource": "arn:aws:s3:::${BUCKET}",
+      "Condition": {
+        "StringLike": {
+          "s3:prefix": [
+            "raw/*",
+            "curated/*",
+            "control/*",
+            "scripts/*"
+          ]
+        }
+      }
+    },
+    {
+      "Sid": "ReadRawAndArtifacts",
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": [
+        "arn:aws:s3:::${BUCKET}/raw/*",
+        "arn:aws:s3:::${BUCKET}/scripts/*",
+        "arn:aws:s3:::${BUCKET}/curated/*",
+        "arn:aws:s3:::${BUCKET}/control/*"
+      ]
+    },
+    {
+      "Sid": "WriteCuratedAndControl",
+      "Effect": "Allow",
+      "Action": [
+        "s3:PutObject",
+        "s3:DeleteObject"
+      ],
+      "Resource": [
+        "arn:aws:s3:::${BUCKET}/curated/*",
+        "arn:aws:s3:::${BUCKET}/control/*",
+        "arn:aws:s3:::${BUCKET}/scripts/glue-temp/*"
+      ]
+    },
+    {
+      "Sid": "PublishCatalogTables",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDatabase",
+        "glue:CreateDatabase",
+        "glue:GetTable",
+        "glue:CreateTable",
+        "glue:UpdateTable"
+      ],
+      "Resource": [
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:catalog",
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:database/${GLUE_DATABASE}",
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:table/${GLUE_DATABASE}/*"
+      ]
+    },
+    {
+      "Sid": "CrawlerSchemaAudit",
+      "Effect": "Allow",
+      "Action": [
+        "glue:GetDatabase",
+        "glue:CreateDatabase",
+        "glue:GetTable",
+        "glue:GetTables",
+        "glue:CreateTable",
+        "glue:UpdateTable",
+        "glue:BatchGetPartition",
+        "glue:BatchCreatePartition",
+        "glue:GetPartitions"
+      ],
+      "Resource": [
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:catalog",
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:database/${GLUE_DATABASE}_crawler_audit",
+        "arn:aws:glue:${REGION}:${ACCOUNT_ID}:table/${GLUE_DATABASE}_crawler_audit/*"
+      ]
+    },
+    {
+      "Sid": "JobLogs",
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
+      ],
+      "Resource": "arn:aws:logs:${REGION}:${ACCOUNT_ID}:log-group:/aws-glue/*"
+    },
+    {
+      "Sid": "JobMetrics",
+      "Effect": "Allow",
+      "Action": "cloudwatch:PutMetricData",
+      "Resource": "*",
+      "Condition": {
+        "StringEquals": {
+          "cloudwatch:namespace": "Glue"
+        }
+      }
+    }
+  ]
+}

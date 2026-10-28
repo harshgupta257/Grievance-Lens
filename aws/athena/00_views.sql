@@ -1,0 +1,17 @@
+-- 00_views.sql  (Athena / Trino)  Reusable views, created once per database (re-run safely).
+-- Business rules live here once instead of being repeated in each query.
+
+-- The single-month ministry flow window used by analyses C and G and by backlog_months:
+-- T6 panel reports #29-#45 (Sep 2024 - Jan 2026). #26-#28 are excluded from flow analyses because #28's
+-- flows cover two months (src/analysis/config.py PANEL_FLOW_REPORTS).
+CREATE OR REPLACE VIEW grievance_lens.v_flow_panel AS
+SELECT mm.report_number,
+       mm.ministry_id,
+       mm.receipts,
+       mm.disposals,
+       mm.pending,
+       mm.window_months,
+       dr.report_month
+FROM grievance_lens.ministry_monthly mm
+JOIN grievance_lens.dim_report dr ON dr.report_number = mm.report_number
+WHERE mm.report_number BETWEEN 29 AND 45

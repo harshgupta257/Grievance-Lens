@@ -265,8 +265,33 @@ flowchart LR
 | Web | FastAPI · uvicorn · plain HTML, CSS and JavaScript (no frameworks or third-party scripts) |
 | Delivery | Docker · GitHub Actions CI · Render (with Cloudflare in front) |
 | Quality | pytest · ruff · Pydantic validation |
+| Cloud data pipeline (optional) | S3 · Lambda · Glue (PySpark) · Glue Data Catalog · Athena · Redshift Serverless (see 9.1) |
 
-Every design decision, with the alternatives rejected, is recorded in **[DESIGN.md](DESIGN.md)** (D-001 to D-053).
+Every design decision, with the alternatives rejected, is recorded in **[DESIGN.md](DESIGN.md)** (D-001 to D-062).
+
+### 9.1 Optional AWS data pipeline · वैकल्पिक AWS डेटा पाइपलाइन
+
+The validated exports can also be loaded into AWS ([aws/README.md](aws/README.md)). The pipeline is an
+addition: the website, the analyses and the CSV-based Power BI workflow do not depend on it.
+
+```mermaid
+flowchart LR
+    EXP["Validated exports<br/>15 CSVs"] --> RAW[("S3 raw/<br/>immutable batches")]
+    RAW -- "_manifest.json<br/>uploaded last" --> L["Lambda<br/>checks + lock"]
+    L --> G["Glue PySpark ETL<br/>types · keys · rejects"]
+    G --> CUR[("S3 curated/<br/>Parquet")]
+    G -- "only if valid" --> CAT["Glue Data Catalog"]
+    CAT --> ATH["Athena<br/>5 analyses"]
+    CUR -. "manual refresh" .-> RS["Redshift Serverless<br/>(optional)"]
+    ATH -.-> PBI["Power BI"]
+    RS -.-> PBI
+```
+
+| Status | Detail |
+|---|---|
+| Verified locally, on the real exports | Glue ETL in local Spark: 9,624 rows validated, 0 rejected, 0 value mismatches against the CSVs. The 5 analyses ported to Athena and Redshift SQL reproduce the published figures, run on DuckDB and PostgreSQL as stand-ins. 97 tests |
+| **Pending on AWS** | deployment, the CSV-vs-Parquet Athena benchmark, run times and cost. No AWS figures are claimed until they are measured |
+| Not automatic | the Redshift warehouse is refreshed by an explicit command after a batch is published |
 
 ---
 
@@ -297,6 +322,7 @@ Full statement: [Privacy policy](https://grievance-lens.onrender.com/privacy).
 | 5 | **Abstention is weak on vague complaints** (2 of 12) |
 | 6 | **The LLM path is unit-tested but has not been run live**, so no LLM results are claimed |
 | 7 | **Hosting:** the site runs as a single instance with in-memory rate limiting. The free plan sleeps when idle, so the first visit after a pause is slow |
+| 8 | **The AWS pipeline is verified locally only.** It has not been deployed, so no AWS benchmark, timing or cost figures exist yet |
 
 The complete list is in [DESIGN.md: Known limitations](DESIGN.md#known-limitations).
 
@@ -371,6 +397,7 @@ python -m src.evaluation.run             # router, baseline and drafter evaluati
 python -m pytest                      # 205 unit and API tests; no database or API key needed
 $env:TEST_DATABASE_URL = "postgresql+psycopg2://cpgrams:<password>@127.0.0.1:5432/cpgrams"
 python -m pytest -m "pdf or not pdf"  # adds the database integration and PDF golden-value tests
+python -m pytest aws/tests            # 97 AWS pipeline tests (needs aws/requirements-dev.txt; Spark tests need Java 17)
 ruff check . ; ruff format --check .
 ```
 

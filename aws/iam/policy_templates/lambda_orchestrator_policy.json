@@ -1,0 +1,16 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {"Sid": "ListRawSoMissingFilesReturn404", "Effect": "Allow", "Action": "s3:ListBucket",
+     "Resource": "arn:aws:s3:::${BUCKET}",
+     "Condition": {"StringLike": {"s3:prefix": ["raw/powerbi/*", "control/batches/*"]}}},
+    {"Sid": "ReadManifestFilesAndContract", "Effect": "Allow", "Action": "s3:GetObject",
+     "Resource": ["arn:aws:s3:::${BUCKET}/raw/powerbi/*", "arn:aws:s3:::${BUCKET}/scripts/contract.json"]},
+    {"Sid": "BatchLocks", "Effect": "Allow", "Action": ["s3:PutObject", "s3:DeleteObject"],
+     "Resource": "arn:aws:s3:::${BUCKET}/control/batches/*"},
+    {"Sid": "StartTheEtlJobOnly", "Effect": "Allow", "Action": "glue:StartJobRun",
+     "Resource": "arn:aws:glue:${REGION}:${ACCOUNT_ID}:job/${GLUE_JOB_NAME}"},
+    {"Sid": "OwnLogs", "Effect": "Allow", "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+     "Resource": "arn:aws:logs:${REGION}:${ACCOUNT_ID}:log-group:/aws/lambda/${LAMBDA_FUNCTION_NAME}:*"}
+  ]
+}

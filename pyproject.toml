@@ -32,3 +32,10 @@ select = ["E", "F", "I", "UP", "B"]
 "src/app/demo.py" = ["E501"]  # demo inputs and report prose
 "src/app/pages.py" = ["E501"]  # HTML page text, one paragraph per block
 "src/drafting/drafter.py" = ["E501"]  # draft template text (English and Hindi), one sentence per line
+# AWS pipeline: generated SQL, Data API statements and report tables are kept one statement/row per line
+"aws/contract/render_ddl.py" = ["E501"]
+"aws/redshift/warehouse.py" = ["E501"]
+"aws/scripts/refresh_warehouse.py" = ["E501"]
+"aws/scripts/deploy.py" = ["E501"]  # resource descriptions printed in the plan
+"aws/benchmarks/benchmark_runner.py" = ["E501"]
+"aws/local/verify_local.py" = ["E501"]

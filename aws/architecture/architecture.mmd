@@ -1,0 +1,66 @@
+%% Grievance Lens AWS pipeline, as implemented. Solid arrows run automatically; dashed arrows are manual
+%% or optional steps (labelled). Region: ap-south-1 (Mumbai).
+flowchart LR
+    subgraph LOCAL["Existing project (unchanged)"]
+        EXP["src/export/powerbi.py<br/>15 validated star-schema CSVs<br/>+ export_manifest.csv"]
+        PBI_LOCAL["Power BI Desktop<br/>(CSV workflow)"]
+        EXP --> PBI_LOCAL
+    end
+
+    subgraph INGEST["Ingestion (operator)"]
+        BB["build_batch.py<br/>checks SHA-256 + rows vs export_manifest<br/>writes _manifest.json"]
+        UP["upload_exports.sh / .ps1<br/>aws s3 sync (no --delete)<br/>manifest uploaded LAST"]
+    end
+    EXP --> BB --> UP
+
+    subgraph S3["Amazon S3 bucket (private, SSE-S3, TLS-only, versioned)"]
+        RAW[("raw/powerbi/run_date=.../batch=.../<br/>&lt;table&gt;/&lt;table&gt;.csv  (immutable)")]
+        MAN[("raw/.../_manifest.json<br/>batch-completion marker")]
+        CUR[("curated/ingestion_id=.../&lt;table&gt;/<br/>Snappy Parquet<br/>ministry_monthly: period_year=YYYY/")]
+        CTRL[("control/<br/>batches/*/lock.json · quality/ · rejects/<br/>redshift_manifests/ · published/latest.json")]
+        RES[("athena-results/<br/>expires after 30 days")]
+        SCR[("scripts/<br/>etl_job.py · contract.json")]
+    end
+    UP --> RAW
+    UP --> MAN
+
+    MAN -- "S3 event: ObjectCreated<br/>prefix raw/powerbi/, suffix _manifest.json" --> LAMBDA
+    LAMBDA["AWS Lambda (python3.12)<br/>validate manifest + contract hash<br/>HEAD every file (incomplete -> retry)<br/>lock: PUT If-None-Match (duplicates ignored)<br/>glue:StartJobRun"]
+    LAMBDA -- "lock + job run id" --> CTRL
+    LAMBDA -- "StartJobRun<br/>(MaxConcurrentRuns 1)" --> GLUE
+
+    GLUE["AWS Glue 5.0 PySpark job<br/>G.1X x 2, FLEX<br/>checksums · schema drift · typing<br/>PK / FK / reject checks"]
+    SCR --> GLUE
+    RAW --> GLUE
+    GLUE -- "Parquet" --> CUR
+    GLUE -- "quality report, rejects,<br/>COPY manifests" --> CTRL
+    GLUE -- "only if every check passed:<br/>UpdateTable (atomic repoint)<br/>then latest.json" --> CAT
+
+    CAT["AWS Glue Data Catalog<br/>database grievance_lens<br/>15 tables from the contract<br/>partition projection on period_year"]
+    CRAWL["Glue crawler (optional)<br/>LOG-only, audit database<br/>crawler_audit.py diff vs contract"]
+    CUR -.->|"on demand"| CRAWL
+
+    CAT --> ATH["Amazon Athena (engine v3)<br/>workgroup grievance-lens<br/>views + 5 analyses<br/>1 GB scan cutoff"]
+    CUR --> ATH
+    ATH --> RES
+    BENCH["benchmark_runner.py<br/>raw CSV vs Parquet<br/>(manual)"]
+    RAW -.-> BENCH
+    BENCH -.-> ATH
+
+    REFRESH["refresh_warehouse.py (MANUAL)<br/>Redshift Data API, S3 refresh lock<br/>txn 1: COPY to stg + count guard<br/>txn 2: guard + swap gl.* + audit"]
+    CTRL -.->|"reads latest.json"| REFRESH
+    REFRESH -.-> RS
+    CUR -.->|"COPY FORMAT AS PARQUET MANIFEST"| RS
+    RS["Amazon Redshift Serverless (optional)<br/>8 RPU base, private<br/>usage limit -> deactivate<br/>gl.* star schema, stg.*, load_audit"]
+
+    ATH -.->|"ODBC / Power BI Athena connector"| PBI_CLOUD["Power BI (cloud data)<br/>Import recommended"]
+    RS -.->|"Power BI Redshift connector"| PBI_CLOUD
+
+    subgraph OPS["Logging and failure handling"]
+        CW["CloudWatch Logs<br/>/aws/lambda/... (30 days)<br/>/aws-glue/... job logs"]
+        FAIL["Lambda async retries (2)<br/>then event is dropped and logged<br/>failed batch: not published,<br/>report in control/quality/"]
+        BUDGET["AWS Budget alert (optional)<br/>alert only, not a limit"]
+    end
+    LAMBDA -.-> CW
+    GLUE -.-> CW
+    LAMBDA -.-> FAIL

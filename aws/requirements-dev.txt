@@ -1,0 +1,9 @@
+# Extra tools for the AWS pipeline's local tests and scripts (on top of requirements-dev.txt).
+#   python -m pip install -r requirements-dev.txt -r aws/requirements-dev.txt
+# pyspark matches AWS Glue 5.0 (Spark 3.5.4); Spark also needs Java 17 (JAVA_HOME). AWS Glue itself
+# provides Spark and boto3, so none of these are installed into the Glue job.
+pyspark==3.5.4       # run aws/glue/etl_job.py and its tests in local Spark
+boto3==1.43.118      # AWS SDK for deploy.py, the Lambda handler, the benchmark and refresh scripts
+pyarrow==26.0.0      # local Parquet I/O (Windows writer fallback, test fixtures)
+duckdb==2.0.0        # stands in for Athena when testing the Trino SQL locally
+sqlglot==30.25.0     # parses SQL as Trino / Redshift and transpiles it for local engines

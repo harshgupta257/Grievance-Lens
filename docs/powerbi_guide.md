@@ -584,3 +584,56 @@ not show the same figure, the model is wrong (or the data have been re-exported)
 - **No single "worst ministry" headline,** and no ranking across GRAI groups or method eras.
 - **No figures for individual complaints.** Nothing here predicts how a particular grievance will be
   handled.
+
+## 6. Optional: the same tables from AWS (Athena or Redshift)
+
+The CSV workflow above stays the primary, supported path. The AWS pipeline (`aws/README.md`) publishes the
+**same 15 tables, with the same names, columns and keys**. A report built on the CSVs can therefore be
+pointed at Athena or Redshift without changing its model, relationships or DAX. Nothing here has been
+tested in Power BI Desktop yet, and the AWS pipeline itself is not yet deployed (D-054).
+
+### Which source
+
+| | CSV files (default) | Amazon Athena | Amazon Redshift Serverless |
+|---|---|---|---|
+| Connector | Text/CSV or Folder | **Amazon Athena** (needs the Simba Athena ODBC driver and a DSN) | **Amazon Redshift** (built in) |
+| Sign-in | none | DSN using an AWS profile from IAM Identity Center (temporary credentials) | Microsoft Entra ID / IAM identity federation, or a database user created for reporting |
+| Data freshness | when you re-export | each published batch | each `refresh_warehouse.py` run |
+| Cost of a refresh | none | one scan per table (a few MB; the minimum per-query charge) | RPU time while queries run |
+| Storage mode | Import | **Import** | Import, or DirectQuery if live data is needed |
+
+**Use Import.** All 15 tables together hold about 9,600 rows, so the model is tiny and a scheduled refresh
+reads everything in seconds.
+- **DirectQuery** sends queries to the source on every visual interaction. On Athena, each one is a billed
+  query that takes seconds to start. On Redshift, each one consumes RPU time and can wake an idle
+  workgroup. It is worth it only on Redshift, and only if the dashboard must show a batch the moment it is
+  refreshed.
+- **Composite models** (mixing Import and DirectQuery) add complexity with no benefit at this size.
+
+### Athena
+1. Install the Amazon Athena ODBC driver and create a DSN:
+   - region `ap-south-1`;
+   - workgroup `grievance-lens`, which enforces the S3 output location;
+   - authentication through an AWS profile (IAM Identity Center). Do not use stored access keys.
+2. In Power BI, use **Get data → Amazon Athena**. Choose the DSN and the **Import** mode, and select the 15
+   tables of the `grievance_lens` database.
+3. If you change the source of an existing CSV-based report: in Power Query, use **Advanced Editor** to
+   replace each query's `Csv.Document(...)` source step with the Athena navigation step, and keep the
+   type-change steps. Column names are identical.
+4. Athena returns typed columns (int, double, date, boolean), so the type checks in §2 should already hold.
+   Check them anyway.
+
+### Redshift
+1. **Get data → Amazon Redshift.** The server is the workgroup endpoint (Redshift console → Workgroup →
+   Endpoint), the database is `dev`, and the schema is `gl`. Never use `stg`: it is the load area.
+2. Choose **Import**, unless DirectQuery is genuinely needed (see the cost note above).
+3. The workgroup is private (`publiclyAccessible = false`). Power BI Desktop must reach it through the VPC,
+   for example a VPN or an on-premises data gateway inside the VPC for the Power BI service. Do not make the
+   workgroup public to work around this.
+4. The `gl.load_audit` table shows which ingestion the warehouse holds. A card showing its latest
+   `ingestion_id` and `recorded_at` tells readers how fresh the data are.
+
+### After switching sources
+Re-run the reconciliation checks in §4. The AWS tables must reproduce the same values, and the pipeline's
+local verification already shows that the curated data match the CSVs value for value
+(`aws/benchmarks/local_verification.md`).

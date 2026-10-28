@@ -14,3 +14,5 @@ tests
 docs
 sql
 *.log
+# AWS pipeline code and docs are not part of the website image
+aws

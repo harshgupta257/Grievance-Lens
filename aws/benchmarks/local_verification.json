@@ -1,0 +1,250 @@
+{
+  "generated_at": "2026-10-26T19:23:19+00:00",
+  "ingestion_id": "2026-10-27_20261027T101500Z",
+  "etl": {
+    "status": "VALIDATED",
+    "rows_processed": 9624,
+    "rows_rejected": 0,
+    "duration_seconds": 31.98,
+    "parquet_writer": "pyarrow",
+    "spark_version": "3.5.4",
+    "critical_issues": []
+  },
+  "raw_vs_curated": {
+    "demand_backlog_sensitivity": {
+      "raw_rows": 27,
+      "curated_rows": 27,
+      "value_mismatches": 0,
+      "csv_bytes": 1005,
+      "parquet_bytes": 2354
+    },
+    "dim_list": {
+      "raw_rows": 6,
+      "curated_rows": 6,
+      "value_mismatches": 0,
+      "csv_bytes": 1403,
+      "parquet_bytes": 3840
+    },
+    "dim_ministry": {
+      "raw_rows": 92,
+      "curated_rows": 92,
+      "value_mismatches": 0,
+      "csv_bytes": 6892,
+      "parquet_bytes": 5091
+    },
+    "dim_month": {
+      "raw_rows": 57,
+      "curated_rows": 57,
+      "value_mismatches": 0,
+      "csv_bytes": 2839,
+      "parquet_bytes": 3339
+    },
+    "scorecard_sensitivity": {
+      "raw_rows": 10,
+      "curated_rows": 10,
+      "value_mismatches": 0,
+      "csv_bytes": 542,
+      "parquet_bytes": 2460
+    },
+    "backlog_growth": {
+      "raw_rows": 90,
+      "curated_rows": 90,
+      "value_mismatches": 0,
+      "csv_bytes": 15762,
+      "parquet_bytes": 11363
+    },
+    "demand_backlog_quadrants": {
+      "raw_rows": 90,
+      "curated_rows": 90,
+      "value_mismatches": 0,
+      "csv_bytes": 16202,
+      "parquet_bytes": 9585
+    },
+    "dim_report": {
+      "raw_rows": 53,
+      "curated_rows": 53,
+      "value_mismatches": 0,
+      "csv_bytes": 8275,
+      "parquet_bytes": 5769
+    },
+    "overall_trend": {
+      "raw_rows": 57,
+      "curated_rows": 57,
+      "value_mismatches": 0,
+      "csv_bytes": 8735,
+      "parquet_bytes": 8433
+    },
+    "repeated_listings": {
+      "raw_rows": 181,
+      "curated_rows": 181,
+      "value_mismatches": 0,
+      "csv_bytes": 11532,
+      "parquet_bytes": 8147
+    },
+    "scorecard": {
+      "raw_rows": 91,
+      "curated_rows": 91,
+      "value_mismatches": 0,
+      "csv_bytes": 21638,
+      "parquet_bytes": 14264
+    },
+    "trend_tests": {
+      "raw_rows": 99,
+      "curated_rows": 99,
+      "value_mismatches": 0,
+      "csv_bytes": 23421,
+      "parquet_bytes": 12911
+    },
+    "grai_ranks": {
+      "raw_rows": 4490,
+      "curated_rows": 4490,
+      "value_mismatches": 0,
+      "csv_bytes": 396389,
+      "parquet_bytes": 38429
+    },
+    "list_appearances": {
+      "raw_rows": 2481,
+      "curated_rows": 2481,
+      "value_mismatches": 0,
+      "csv_bytes": 109089,
+      "parquet_bytes": 22942
+    },
+    "ministry_monthly": {
+      "raw_rows": 1800,
+      "curated_rows": 1800,
+      "value_mismatches": 0,
+      "csv_bytes": 116786,
+      "parquet_bytes": 47917
+    }
+  },
+  "athena": {
+    "00_views": {
+      "trino_parse": "ok",
+      "created": "view"
+    },
+    "01_month_over_month": {
+      "trino_parse": "ok",
+      "rows": 57,
+      "mismatches_vs_published": 0,
+      "duckdb_ms": 11.5
+    },
+    "02_ministry_backlog": {
+      "trino_parse": "ok",
+      "rows": 90,
+      "mismatches_vs_published": 0,
+      "duckdb_ms": 21.6
+    },
+    "03_rolling_average": {
+      "trino_parse": "ok",
+      "rows": 57,
+      "mismatches_vs_published": 0,
+      "duckdb_ms": 8.2
+    },
+    "04_first_last_appearance": {
+      "trino_parse": "ok",
+      "rows": 181,
+      "mismatches_vs_published": 0,
+      "duckdb_ms": 48.6
+    },
+    "05_demand_vs_backlog": {
+      "trino_parse": "ok",
+      "rows": 90,
+      "mismatches_vs_published": 0,
+      "duckdb_ms": 38.1
+    }
+  },
+  "redshift": {
+    "schema_statements": 32,
+    "publish_statements": 32,
+    "reconciliation": {
+      "demand_backlog_sensitivity": {
+        "warehouse_rows": 27,
+        "curated_rows": 27
+      },
+      "dim_list": {
+        "warehouse_rows": 6,
+        "curated_rows": 6
+      },
+      "dim_ministry": {
+        "warehouse_rows": 92,
+        "curated_rows": 92
+      },
+      "dim_month": {
+        "warehouse_rows": 57,
+        "curated_rows": 57
+      },
+      "scorecard_sensitivity": {
+        "warehouse_rows": 10,
+        "curated_rows": 10
+      },
+      "backlog_growth": {
+        "warehouse_rows": 90,
+        "curated_rows": 90
+      },
+      "demand_backlog_quadrants": {
+        "warehouse_rows": 90,
+        "curated_rows": 90
+      },
+      "dim_report": {
+        "warehouse_rows": 53,
+        "curated_rows": 53
+      },
+      "overall_trend": {
+        "warehouse_rows": 57,
+        "curated_rows": 57
+      },
+      "repeated_listings": {
+        "warehouse_rows": 181,
+        "curated_rows": 181
+      },
+      "scorecard": {
+        "warehouse_rows": 91,
+        "curated_rows": 91
+      },
+      "trend_tests": {
+        "warehouse_rows": 99,
+        "curated_rows": 99
+      },
+      "grai_ranks": {
+        "warehouse_rows": 4490,
+        "curated_rows": 4490
+      },
+      "list_appearances": {
+        "warehouse_rows": 2481,
+        "curated_rows": 2481
+      },
+      "ministry_monthly": {
+        "warehouse_rows": 1800,
+        "curated_rows": 1800
+      }
+    },
+    "guard_refuses_other_ingestion": true
+  },
+  "athena_vs_redshift": {
+    "01_month_over_month": {
+      "athena_rows": 57,
+      "redshift_rows": 57,
+      "differing_rows": 0
+    },
+    "02_ministry_backlog": {
+      "athena_rows": 90,
+      "redshift_rows": 90,
+      "differing_rows": 0
+    },
+    "03_rolling_average": {
+      "athena_rows": 57,
+      "redshift_rows": 57,
+      "differing_rows": 0
+    },
+    "04_first_last_appearance": {
+      "athena_rows": 181,
+      "redshift_rows": 181,
+      "differing_rows": 0
+    },
+    "05_demand_vs_backlog": {
+      "athena_rows": 90,
+      "redshift_rows": 90,
+      "differing_rows": 0
+    }
+  }
+}
