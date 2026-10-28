@@ -4,11 +4,28 @@ re-runs are idempotent. Needs Java (skipped otherwise). The Glue catalog is a re
 from __future__ import annotations
 
 import json
+import re
 import shutil
 
 import etl_job as etl
+import pyarrow.parquet as pq
 import pytest
 from conftest import AWS
+
+# Spark names each output file part-<n>-<random uuid>-c<n>; the uuid changes on every write.
+_SPARK_UUID = re.compile(r"-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+
+
+def curated_snapshot(root):
+    """Parquet layout (file names without Spark's per-write uuid) and the rows of every table folder."""
+    files = sorted(p for p in (root / "curated").rglob("*.parquet"))
+    layout = sorted(_SPARK_UUID.sub("", p.relative_to(root).as_posix()) for p in files)
+    rows = {}
+    for p in files:
+        rows.setdefault(p.parent.relative_to(root).as_posix(), []).extend(
+            sorted(map(repr, pq.read_table(p).to_pylist()))
+        )
+    return layout, {k: sorted(v) for k, v in rows.items()}
 
 
 class FakeGlueCatalog:
@@ -102,10 +119,13 @@ def test_rerun_is_idempotent(spark, staged_batch, tmp_path):
     glue = FakeGlueCatalog()
     cfg = config(staged_batch, tmp_path)
     first = etl.run(spark, cfg, etl.Storage(), glue=glue)
-    files_1 = sorted(p.relative_to(tmp_path) for p in (tmp_path / "curated").rglob("*.parquet"))
+    layout_1, rows_1 = curated_snapshot(tmp_path)
     second = etl.run(spark, cfg, etl.Storage(), glue=glue)
-    files_2 = sorted(p.relative_to(tmp_path) for p in (tmp_path / "curated").rglob("*.parquet"))
-    assert files_1 == files_2  # overwritten in place, never duplicated
+    layout_2, rows_2 = curated_snapshot(tmp_path)
+    # Same folders and file count (old files replaced, never left beside new ones) and identical data.
+    # Exact file names may differ: Spark puts a random uuid in each name.
+    assert layout_1 == layout_2
+    assert rows_1 == rows_2
     assert {t: v["rows_written"] for t, v in first["tables"].items()} == {
         t: v["rows_written"] for t, v in second["tables"].items()
     }
