@@ -789,6 +789,122 @@ flowchart LR
 - Consequences: If Render changes its proxy chain, the limiter could again see the wrong address. The check in
   docs/deploy.md re-tests it in a minute.
 
+### D-054: An AWS pipeline built on the existing Power BI exports, verified locally before any deployment
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Context: The owner asked for an S3 → Lambda → Glue → Athena → Redshift pipeline inside this repository. The
+  15 validated star-schema CSVs from `src/export/powerbi.py` are already the project's analytical interface.
+- Decision:
+  - The pipeline ingests those exports unchanged. It does not re-extract PDFs.
+  - All AWS code lives in `aws/`. Nothing outside it imports it, and the Docker image excludes it.
+  - Each component is verified locally on the real exports before any AWS run: local Spark for Glue,
+    DuckDB for Athena SQL, PostgreSQL for Redshift SQL, fakes for S3, Lambda and Glue.
+  - AWS results are published only once measured; until then they are marked "pending".
+- Consequences: The CSV-based Power BI workflow and the website are untouched. "Verified locally" is a
+  weaker claim than "runs on AWS", and the docs say which one applies to each component.
+
+### D-055: A generated schema contract is the single source of types
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Decision:
+  - `aws/contract/build_contract.py` derives `contract.json` from the exporter's table and key definitions,
+    with types inferred from the exported values: 15 tables, 179 columns.
+  - Overrides are explicit and justified (`reports_missing_in_span` is a string, per the data dictionary).
+  - Athena DDL, raw-CSV DDL and Redshift DDL are rendered from it. CI fails if any of them is stale.
+  - Batches carry the contract hash; the Lambda refuses a mismatch.
+- Consequences: Types cannot drift between Glue, Athena and Redshift. A change to the exporter is a
+  deliberate, reviewed change to three generated files.
+
+### D-056: Immutable raw batches, triggered by a manifest uploaded last; idempotent through an S3 conditional write
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Context: S3 notifications are at-least-once and unordered, and a batch is 15 files.
+- Decision:
+  - Every upload goes to a new `raw/powerbi/run_date=…/batch=…/` prefix, one folder per table. It is never
+    edited, and `sync --delete` is never used.
+  - `_manifest.json` (rows, bytes, SHA-256 per file) is uploaded last and is the only object the
+    notification matches.
+  - The Lambda HEADs every file, and raises on an incomplete batch so that Lambda's retries re-check it.
+  - It takes a lock with `PutObject If-None-Match: *` before starting Glue, so a duplicate event finds the
+    lock and does nothing.
+  - Glue runs at most one batch at a time; when refused, the Lambda releases the lock and retries.
+- Rejected:
+  - Triggering on each CSV: 15 runs on partial data.
+  - A DynamoDB lock table: one more service, where S3 conditional writes are enough.
+  - Step Functions: more machinery than one job needs.
+- Consequences: An event dropped after the retries needs a manual `run_etl` (documented). Conditional
+  writes need botocore ≥ 1.35 (pinned).
+
+### D-057: The ETL validates everything before publishing, and publishing is an atomic catalog repoint
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Decision:
+  - The Glue job reads CSVs as strings with malformed-line capture, then types them with explicit guards.
+    A bad value rejects its row with a reason; it is never silently converted to NULL or zero.
+  - It checks checksums, header drift, manifest row counts, the reject ratio (default 0), primary keys and
+    all 15 foreign keys.
+  - It writes to `curated/ingestion_id=<id>/` and reads the Parquet back.
+  - Only then does it `UpdateTable` the 15 catalog tables and write `control/published/latest.json`.
+- Consequences: A failed batch leaves Athena and Redshift on the previous batch. Re-running an ingestion
+  overwrites its own folder with the same output. Old ingestions accumulate in S3 (about 200 KB each)
+  until removed by hand.
+
+### D-058: Explicit catalog tables with partition projection; the crawler only audits
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Decision:
+  - The job defines the tables from the contract.
+  - `ministry_monthly` is the only partitioned table (`period_year`), using partition projection.
+  - The optional crawler writes to a separate audit database with LOG-only policies, and
+    `crawler_audit.py` diffs its result against the contract.
+- Rejected: A crawler as the source of the schema: types inferred per run, every ingestion folder seen as
+  a partition, and DPU cost for no gain (aws/catalog/crawler_config.md).
+- Consequences: No `MSCK REPAIR` and no crawler runs on the critical path.
+
+### D-059: Athena is the default query layer; Redshift Serverless is optional and refreshed manually
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Context:
+  - About 9,600 rows and occasional use, which Athena serves at the minimum per-query charge.
+  - Redshift Serverless bills for compute while active and for storage while idle.
+- Decision:
+  - Redshift is opt-in (`--with-redshift`): 8 RPU base, private, and a daily usage limit that deactivates it.
+  - It is refreshed by an explicit `refresh_warehouse.py` after a publish, never by an upload, and the docs
+    say so.
+- Consequences: The warehouse can lag the lake. That is acceptable, and visible in `gl.load_audit`.
+
+### D-060: The Redshift refresh is two guarded transactions with reconciliation
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Context: A Data API `BatchExecuteStatement` call is one transaction of at most 40 statements. A 15-table
+  copy, verify and swap needs more than that.
+- Decision:
+  - **Stage:** `DELETE`, then `COPY … FORMAT AS PARQUET MANIFEST` into `stg.*`. A guard that divides by zero
+    on any count mismatch rolls back the whole transaction. Then the batch marker.
+  - **Publish:** a guard checks the marker and the counts, then `DELETE` and `INSERT … SELECT` into `gl.*`,
+    and an audit row.
+  - An S3 lock prevents overlapping refreshes.
+  - Afterwards, row counts are reconciled and the result is written to `control/warehouse/`.
+  - COPY uses the job's exact file manifests, never prefix listings.
+- Consequences: `gl.*` is never half-loaded. A failed refresh changes nothing users see.
+
+### D-061: Analysis SQL is written once in a portable subset and rendered for Redshift
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Decision:
+  - The 5 Athena queries avoid engine-specific features: named `WINDOW`, `FILTER`, `IS DISTINCT FROM`, and
+    implicit integer division.
+  - The Redshift versions are rendered by two textual rewrites (schema name, `DOUBLE PRECISION`).
+  - Sen's slope is an exact median of pairwise slopes, computed with `ROW_NUMBER`.
+  - Every identifier in the Redshift DDL is quoted, because one export column is named `group`.
+  - Each query carries a `matches_published` column.
+- Consequences: Both dialects are verified to give identical results (DuckDB and PostgreSQL stand-ins).
+  Engine differences that the stand-ins do not model are covered only once the queries run on AWS.
+
+### D-062: Windows local runs write Parquet with pyarrow; Glue and CI use Spark's writer
+- Date / Phase: 2026-10-27 / AWS data engineering
+- Context: Local Spark on Windows cannot write files without Hadoop's `winutils.exe` native binaries.
+- Decision:
+  - An opt-in `GL_LOCAL_PARQUET_WRITER=pyarrow` writes and reads back the Parquet files only; reading,
+    typing and validation stay in Spark.
+  - It refuses `s3://` paths, and the quality report records which writer was used.
+  - The Linux CI job runs the real Spark writer.
+- Rejected: Downloading unofficial `winutils` binaries.
+- Consequences: Windows local results exercise a different writer from Glue's. The CI job and the Glue run
+  are the authoritative checks of the Spark writer.
+
 ## Rejected approaches
 
 - **Guessed listing URL** `darpg.gov.in/en/cpgrams-monthly-reports`. It returned HTTP 403. The URL was a guess, not a
@@ -880,6 +996,12 @@ flowchart LR
 - The Docker Compose setup has **not been executed**. Docker Desktop is now installed, but its engine cannot
   start: its log reports "WSL update required" (WSL2 is not installed). The schema, load and tests were verified
   on PostgreSQL 16.2 outside Docker (D-013).
+- The AWS pipeline (D-054 to D-062) has been verified only locally: Spark local mode, DuckDB for Athena,
+  PostgreSQL for Redshift, fakes for S3, Lambda and Glue. Nothing has been deployed. The CSV-vs-Parquet
+  benchmark, Glue durations, latency and cost are pending. Redshift `COPY` and `DISTSTYLE`/`SORTKEY` have
+  never run (the Postgres harness strips them).
+- An S3 event dropped after the Lambda's 2 retries is not sent to a dead-letter queue; it is recovered by
+  hand (`run_etl`). Old curated ingestions are not deleted automatically.
 
 ## Open questions
 
@@ -895,6 +1017,8 @@ flowchart LR
 9. ~~Labelling the 300 evaluation complaints~~: done by the assistant, not independent (D-047).
 10. Whether to enable the LLM router (cost, key) and which model; the default is `claude-opus-5-5`.
 11. ~~Knowledge-base review~~: done by the assistant (docs/kb_review.md). Expert review still recommended.
+12. Whether, and into which AWS account, to deploy the AWS pipeline (D-054); Redshift only if a Power BI
+    DirectQuery need appears (D-059).
 
 ## If I had two more weeks
 

@@ -1,0 +1,4 @@
+# Packaged into the Lambda zip by aws/scripts/deploy.py. The managed python3.12 runtime also ships boto3,
+# but S3 conditional writes (put_object IfNoneMatch, used for the batch lock) need botocore >= 1.35.x,
+# so the version is pinned here instead of depending on whatever the runtime currently bundles.
+boto3==1.43.118

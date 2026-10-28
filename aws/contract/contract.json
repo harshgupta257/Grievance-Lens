@@ -1,0 +1,1431 @@
+{
+  "contract_version": 1,
+  "dataset": "grievance_lens_powerbi",
+  "source": "data/processed/powerbi (python -m src.export.powerbi)",
+  "load_order": [
+    "demand_backlog_sensitivity",
+    "dim_list",
+    "dim_ministry",
+    "dim_month",
+    "scorecard_sensitivity",
+    "backlog_growth",
+    "demand_backlog_quadrants",
+    "dim_report",
+    "overall_trend",
+    "repeated_listings",
+    "scorecard",
+    "trend_tests",
+    "grai_ranks",
+    "list_appearances",
+    "ministry_monthly"
+  ],
+  "tables": [
+    {
+      "name": "demand_backlog_sensitivity",
+      "file": "demand_backlog_sensitivity.csv",
+      "kind": "fact",
+      "grain": "one row per stable band per demand/backlog combination",
+      "primary_key": [
+        "stable_band_pct_per_month",
+        "demand_trend",
+        "backlog_trend"
+      ],
+      "columns": [
+        {
+          "name": "stable_band_pct_per_month",
+          "type": "double",
+          "nullable": false,
+          "description": "Band used to call a slope stable (% of mean per month)"
+        },
+        {
+          "name": "is_default_band",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True for the band used in demand_backlog_quadrants"
+        },
+        {
+          "name": "demand_trend",
+          "type": "string",
+          "nullable": false,
+          "description": "rising / stable / falling",
+          "max_length": 16
+        },
+        {
+          "name": "backlog_trend",
+          "type": "string",
+          "nullable": false,
+          "description": "rising / stable / falling",
+          "max_length": 16
+        },
+        {
+          "name": "ministries",
+          "type": "int",
+          "nullable": true,
+          "description": "Classified ministries in this combination (0 = none)"
+        },
+        {
+          "name": "classified_ministries",
+          "type": "int",
+          "nullable": true,
+          "description": "Classified ministries in total"
+        },
+        {
+          "name": "same_quadrant_as_default",
+          "type": "int",
+          "nullable": true,
+          "description": "Ministries whose label equals the default band's label"
+        }
+      ],
+      "foreign_keys": [],
+      "partition": null
+    },
+    {
+      "name": "dim_list",
+      "file": "dim_list.csv",
+      "kind": "dimension",
+      "grain": "one row per published ministry list type",
+      "primary_key": [
+        "list_code"
+      ],
+      "columns": [
+        {
+          "name": "list_code",
+          "type": "string",
+          "nullable": false,
+          "description": "List type code (key for list_appearances and repeated_listings)",
+          "max_length": 64
+        },
+        {
+          "name": "list_name",
+          "type": "string",
+          "nullable": true,
+          "description": "What the list contains",
+          "max_length": 256
+        },
+        {
+          "name": "value_measure",
+          "type": "string",
+          "nullable": true,
+          "description": "Column of list_appearances holding the printed value for this list",
+          "max_length": 64
+        },
+        {
+          "name": "reports_with_list",
+          "type": "int",
+          "nullable": true,
+          "description": "Reports in which this list was published with at least one row"
+        },
+        {
+          "name": "first_report",
+          "type": "int",
+          "nullable": true,
+          "description": "First report with this list"
+        },
+        {
+          "name": "last_report",
+          "type": "int",
+          "nullable": true,
+          "description": "Latest report with this list"
+        },
+        {
+          "name": "reports_missing_in_span",
+          "type": "string",
+          "nullable": true,
+          "description": "Reports between first and last without this list (semicolon-separated)",
+          "max_length": 16,
+          "type_override_reason": "semicolon-separated report numbers per the data dictionary; today's values happen to be single numbers"
+        },
+        {
+          "name": "caveat",
+          "type": "string",
+          "nullable": true,
+          "description": "What the list cannot show",
+          "max_length": 512
+        }
+      ],
+      "foreign_keys": [],
+      "partition": null
+    },
+    {
+      "name": "dim_ministry",
+      "file": "dim_ministry.csv",
+      "kind": "dimension",
+      "grain": "one row per canonical ministry or department",
+      "primary_key": [
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry ID (stable within this project)"
+        },
+        {
+          "name": "canonical_name",
+          "type": "string",
+          "nullable": true,
+          "description": "Canonical name (most recent printed form, cleaned)",
+          "max_length": 256
+        },
+        {
+          "name": "entity_type",
+          "type": "string",
+          "nullable": true,
+          "description": "ministry, department or other body, as recorded in Phase 3",
+          "max_length": 32
+        },
+        {
+          "name": "first_report_month",
+          "type": "date",
+          "nullable": true,
+          "description": "Month of the first report that prints this entity"
+        },
+        {
+          "name": "last_report_month",
+          "type": "date",
+          "nullable": true,
+          "description": "Month of the latest report that prints this entity"
+        },
+        {
+          "name": "grai_group_2026",
+          "type": "string",
+          "nullable": true,
+          "description": "GRAI volume group (A >= 500 grievances, B fewer) used by the scorecard; blank if not ranked in #46-#53",
+          "max_length": 16
+        },
+        {
+          "name": "reorganisation_note",
+          "type": "string",
+          "nullable": true,
+          "description": "Recorded reorganisation (D-025), e.g. split into a successor; blank if none",
+          "max_length": 128
+        }
+      ],
+      "foreign_keys": [],
+      "partition": null
+    },
+    {
+      "name": "dim_month",
+      "file": "dim_month.csv",
+      "kind": "dimension",
+      "grain": "one row per calendar month from the first printed month to the latest report month",
+      "primary_key": [
+        "month"
+      ],
+      "columns": [
+        {
+          "name": "month",
+          "type": "date",
+          "nullable": false,
+          "description": "First day of the calendar month (date); key for overall_trend and dim_report"
+        },
+        {
+          "name": "month_index",
+          "type": "int",
+          "nullable": true,
+          "description": "Months since the first month (0, 1, 2, ...); use for previous-month/year DAX"
+        },
+        {
+          "name": "year",
+          "type": "int",
+          "nullable": true,
+          "description": "Calendar year"
+        },
+        {
+          "name": "month_number",
+          "type": "int",
+          "nullable": true,
+          "description": "Calendar month 1-12"
+        },
+        {
+          "name": "month_name",
+          "type": "string",
+          "nullable": true,
+          "description": "Short month name (Jan-Dec); sort by month_number",
+          "max_length": 16
+        },
+        {
+          "name": "month_label",
+          "type": "string",
+          "nullable": true,
+          "description": "Month as YYYY-MM text, for axis labels",
+          "max_length": 16
+        },
+        {
+          "name": "fiscal_year",
+          "type": "string",
+          "nullable": true,
+          "description": "Indian financial year (April-March), e.g. FY2024-25",
+          "max_length": 32
+        },
+        {
+          "name": "in_core_window",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True from April 2023: month-end cut-offs, used for trend tests (D-006)"
+        }
+      ],
+      "foreign_keys": [],
+      "partition": null
+    },
+    {
+      "name": "scorecard_sensitivity",
+      "file": "scorecard_sensitivity.csv",
+      "kind": "fact",
+      "grain": "one row per weight variant per group",
+      "primary_key": [
+        "variant",
+        "group"
+      ],
+      "columns": [
+        {
+          "name": "variant",
+          "type": "string",
+          "nullable": false,
+          "description": "Named weighting (src/analysis/config.py SCORECARD_VARIANTS)",
+          "max_length": 64
+        },
+        {
+          "name": "group",
+          "type": "string",
+          "nullable": false,
+          "description": "GRAI group",
+          "max_length": 16
+        },
+        {
+          "name": "ministries",
+          "type": "int",
+          "nullable": true,
+          "description": "Ministries scored under both the default and this variant"
+        },
+        {
+          "name": "spearman_vs_default",
+          "type": "double",
+          "nullable": true,
+          "description": "Spearman correlation of ranks with the default weighting"
+        },
+        {
+          "name": "max_rank_shift",
+          "type": "int",
+          "nullable": true,
+          "description": "Largest rank change of any ministry"
+        },
+        {
+          "name": "median_rank_shift",
+          "type": "double",
+          "nullable": true,
+          "description": "Median rank change"
+        },
+        {
+          "name": "top_quartile_changes",
+          "type": "int",
+          "nullable": true,
+          "description": "Ministries entering or leaving the top quarter of the group"
+        }
+      ],
+      "foreign_keys": [],
+      "partition": null
+    },
+    {
+      "name": "backlog_growth",
+      "file": "backlog_growth.csv",
+      "kind": "fact",
+      "grain": "one row per ministry in the T6 panel",
+      "primary_key": [
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "months",
+          "type": "int",
+          "nullable": true,
+          "description": "Reports in the panel for this ministry"
+        },
+        {
+          "name": "complete_panel",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if present in all 20 panel reports"
+        },
+        {
+          "name": "start_month",
+          "type": "date",
+          "nullable": true,
+          "description": "First panel month"
+        },
+        {
+          "name": "end_month",
+          "type": "date",
+          "nullable": true,
+          "description": "Last panel month"
+        },
+        {
+          "name": "pending_start",
+          "type": "int",
+          "nullable": true,
+          "description": "Pending at the end of the first panel month"
+        },
+        {
+          "name": "pending_end",
+          "type": "int",
+          "nullable": true,
+          "description": "Pending at the end of the last panel month"
+        },
+        {
+          "name": "pending_change",
+          "type": "int",
+          "nullable": true,
+          "description": "pending_end - pending_start"
+        },
+        {
+          "name": "pending_change_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "pending_change as % of pending_start (only if pending_start >= 100)"
+        },
+        {
+          "name": "months_pending_rose",
+          "type": "int",
+          "nullable": true,
+          "description": "Months in which pending rose"
+        },
+        {
+          "name": "months_pending_fell",
+          "type": "int",
+          "nullable": true,
+          "description": "Months in which pending fell"
+        },
+        {
+          "name": "pending_sen_slope",
+          "type": "double",
+          "nullable": true,
+          "description": "Sen's slope of month-end pending (grievances per month)"
+        },
+        {
+          "name": "pending_relative_slope_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Sen's slope as % of the median pending level, per month"
+        },
+        {
+          "name": "trend_p_modified",
+          "type": "double",
+          "nullable": true,
+          "description": "Autocorrelation-corrected Mann-Kendall p-value"
+        },
+        {
+          "name": "trend_q_value",
+          "type": "double",
+          "nullable": true,
+          "description": "Benjamini-Hochberg q-value within family F3"
+        },
+        {
+          "name": "trend_conclusion",
+          "type": "string",
+          "nullable": true,
+          "description": "increasing / decreasing (q < 0.05) or no significant trend",
+          "max_length": 64
+        },
+        {
+          "name": "backlog_months",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean pending / mean monthly receipts, #29-#45 (months of intake waiting)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "demand_backlog_quadrants",
+      "file": "demand_backlog_quadrants.csv",
+      "kind": "fact",
+      "grain": "one row per ministry in the T6 panel",
+      "primary_key": [
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "months",
+          "type": "int",
+          "nullable": true,
+          "description": "Single-month flow reports used"
+        },
+        {
+          "name": "mean_monthly_receipts",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean receipts per month"
+        },
+        {
+          "name": "mean_pending",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean month-end pending"
+        },
+        {
+          "name": "status",
+          "type": "string",
+          "nullable": true,
+          "description": "classified, insufficient months or insufficient volume (< 100 receipts or < 50 pending)",
+          "max_length": 64
+        },
+        {
+          "name": "demand_rel_slope_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Relative Sen slope of receipts, % of mean per month"
+        },
+        {
+          "name": "demand_p_modified",
+          "type": "double",
+          "nullable": true,
+          "description": "Corrected Mann-Kendall p-value for receipts"
+        },
+        {
+          "name": "backlog_rel_slope_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Relative Sen slope of pending, % of mean per month"
+        },
+        {
+          "name": "backlog_p_modified",
+          "type": "double",
+          "nullable": true,
+          "description": "Corrected Mann-Kendall p-value for pending"
+        },
+        {
+          "name": "demand_q",
+          "type": "double",
+          "nullable": true,
+          "description": "Benjamini-Hochberg q-value for receipts (classified ministries)"
+        },
+        {
+          "name": "backlog_q",
+          "type": "double",
+          "nullable": true,
+          "description": "Benjamini-Hochberg q-value for pending (classified ministries)"
+        },
+        {
+          "name": "demand_trend",
+          "type": "string",
+          "nullable": true,
+          "description": "rising / stable / falling at +/-1.0% per month",
+          "max_length": 16
+        },
+        {
+          "name": "backlog_trend",
+          "type": "string",
+          "nullable": true,
+          "description": "rising / stable / falling at +/-1.0% per month",
+          "max_length": 16
+        },
+        {
+          "name": "quadrant",
+          "type": "string",
+          "nullable": true,
+          "description": "demand_trend / backlog_trend label; blank unless classified",
+          "max_length": 64
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "dim_report",
+      "file": "dim_report.csv",
+      "kind": "dimension",
+      "grain": "one row per English monthly report",
+      "primary_key": [
+        "report_number"
+      ],
+      "columns": [
+        {
+          "name": "report_number",
+          "type": "int",
+          "nullable": false,
+          "description": "Report number as printed (1 = May 2022)"
+        },
+        {
+          "name": "report_month",
+          "type": "date",
+          "nullable": true,
+          "description": "Month the report covers (first day; dim_month)"
+        },
+        {
+          "name": "data_cutoff_date",
+          "type": "date",
+          "nullable": true,
+          "description": "Date up to which the report's data were drawn"
+        },
+        {
+          "name": "cutoff_is_month_end",
+          "type": "boolean",
+          "nullable": true,
+          "description": "False for reports cut off on the 25th (before April 2023) or early (#35)"
+        },
+        {
+          "name": "in_core_window",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True from April 2023 (D-006)"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "nullable": true,
+          "description": "Downloaded PDF file name (data/raw/; SHA-256 in data/manifest.csv)",
+          "max_length": 128
+        },
+        {
+          "name": "source_url",
+          "type": "string",
+          "nullable": true,
+          "description": "Official DARPG download URL",
+          "max_length": 256
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "report_month",
+          "ref_table": "dim_month",
+          "ref_column": "month"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "overall_trend",
+      "file": "overall_trend.csv",
+      "kind": "fact",
+      "grain": "one row per calendar month (Central Secretariat aggregate)",
+      "primary_key": [
+        "month"
+      ],
+      "columns": [
+        {
+          "name": "month",
+          "type": "date",
+          "nullable": false,
+          "description": "Calendar month (dim_month)"
+        },
+        {
+          "name": "receipts",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances received in the month"
+        },
+        {
+          "name": "disposals",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances disposed of in the month"
+        },
+        {
+          "name": "pending",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances pending at month end (a stock: do not sum across months)"
+        },
+        {
+          "name": "disposal_to_receipt_ratio",
+          "type": "double",
+          "nullable": true,
+          "description": "disposals / receipts; blank for partial months"
+        },
+        {
+          "name": "pending_change",
+          "type": "int",
+          "nullable": true,
+          "description": "Change in pending from the previous month; blank next to a partial month"
+        },
+        {
+          "name": "pending_change_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "pending_change as % of the previous month (only if that month >= 100)"
+        },
+        {
+          "name": "receipts_roll3",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean receipts over this and the two previous months (complete months only)"
+        },
+        {
+          "name": "disposals_roll3",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean disposals over this and the two previous months (complete months only)"
+        },
+        {
+          "name": "pending_roll3",
+          "type": "double",
+          "nullable": true,
+          "description": "Mean pending over this and the two previous months (complete months only)"
+        },
+        {
+          "name": "receipts_yoy_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Receipts vs the same month a year earlier, %"
+        },
+        {
+          "name": "has_partial_value",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if the only value available is from a report cut off before month end"
+        },
+        {
+          "name": "in_core_window",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True from April 2023 (D-006)"
+        },
+        {
+          "name": "source_report",
+          "type": "int",
+          "nullable": true,
+          "description": "Report number the value was read from (dim_report) (the latest report that prints the month)"
+        },
+        {
+          "name": "max_revision_spread",
+          "type": "int",
+          "nullable": true,
+          "description": "Largest difference between reports printing the same month (revisions)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "month",
+          "ref_table": "dim_month",
+          "ref_column": "month"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "repeated_listings",
+      "file": "repeated_listings.csv",
+      "kind": "fact",
+      "grain": "one row per ministry per list type (ministries listed at least once)",
+      "primary_key": [
+        "list_code",
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "list_code",
+          "type": "string",
+          "nullable": false,
+          "description": "List type (dim_list)",
+          "max_length": 64
+        },
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "appearances",
+          "type": "int",
+          "nullable": true,
+          "description": "Reports in which the ministry is listed"
+        },
+        {
+          "name": "reports_with_list",
+          "type": "int",
+          "nullable": true,
+          "description": "Reports in which this list was published"
+        },
+        {
+          "name": "share_of_reports",
+          "type": "double",
+          "nullable": true,
+          "description": "appearances / reports_with_list"
+        },
+        {
+          "name": "first_listed_report",
+          "type": "int",
+          "nullable": true,
+          "description": "First report listing the ministry"
+        },
+        {
+          "name": "last_listed_report",
+          "type": "int",
+          "nullable": true,
+          "description": "Latest report listing the ministry"
+        },
+        {
+          "name": "longest_consecutive_run",
+          "type": "int",
+          "nullable": true,
+          "description": "Longest run of consecutive published lists that include the ministry"
+        },
+        {
+          "name": "run_to_last_list",
+          "type": "int",
+          "nullable": true,
+          "description": "Run of consecutive listings ending at the latest published list (0 if not in it)"
+        },
+        {
+          "name": "median_value",
+          "type": "double",
+          "nullable": true,
+          "description": "Median printed value when listed (see dim_list.value_measure)"
+        },
+        {
+          "name": "max_value",
+          "type": "int",
+          "nullable": true,
+          "description": "Largest printed value when listed"
+        },
+        {
+          "name": "reorganisation_note",
+          "type": "string",
+          "nullable": true,
+          "description": "Recorded reorganisation; a run can end because the body was reorganised",
+          "max_length": 128
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        },
+        {
+          "column": "list_code",
+          "ref_table": "dim_list",
+          "ref_column": "list_code"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "scorecard",
+      "file": "scorecard.csv",
+      "kind": "fact",
+      "grain": "one row per ministry ranked in GRAI #46-#53",
+      "primary_key": [
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "grai_group",
+          "type": "string",
+          "nullable": true,
+          "description": "Group the ministry is compared within (most frequent in #46-#53)",
+          "max_length": 16
+        },
+        {
+          "name": "months_ranked",
+          "type": "int",
+          "nullable": true,
+          "description": "Reports in #46-#53 that rank the ministry in that group"
+        },
+        {
+          "name": "switched_group",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if the ministry appeared in both groups during #46-#53"
+        },
+        {
+          "name": "grai_percentile",
+          "type": "double",
+          "nullable": true,
+          "description": "Component: mean within-group GRAI percentile (higher = better)"
+        },
+        {
+          "name": "backlog_trend_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Component: relative Sen slope of pending, % per month (lower = better)"
+        },
+        {
+          "name": "backlog_months",
+          "type": "double",
+          "nullable": true,
+          "description": "Component: mean pending / mean monthly receipts (lower = better)"
+        },
+        {
+          "name": "slow_closing_share",
+          "type": "double",
+          "nullable": true,
+          "description": "Component: share of #46-#53 on the high closing-time list (lower = better; Group A only)"
+        },
+        {
+          "name": "over_1000_share",
+          "type": "double",
+          "nullable": true,
+          "description": "Information only (weight 0): share of #46-#53 on the >1000-pending list"
+        },
+        {
+          "name": "grai_percentile_pctl",
+          "type": "double",
+          "nullable": true,
+          "description": "Within-group percentile of grai_percentile (100 = best in group)"
+        },
+        {
+          "name": "backlog_trend_pct_pctl",
+          "type": "double",
+          "nullable": true,
+          "description": "Within-group percentile of backlog_trend_pct (100 = best in group)"
+        },
+        {
+          "name": "backlog_months_pctl",
+          "type": "double",
+          "nullable": true,
+          "description": "Within-group percentile of backlog_months (100 = best in group)"
+        },
+        {
+          "name": "slow_closing_share_pctl",
+          "type": "double",
+          "nullable": true,
+          "description": "Within-group percentile of slow_closing_share (100 = best in group)"
+        },
+        {
+          "name": "over_1000_share_pctl",
+          "type": "double",
+          "nullable": true,
+          "description": "Within-group percentile of over_1000_share (information only)"
+        },
+        {
+          "name": "components_used",
+          "type": "int",
+          "nullable": true,
+          "description": "Applicable components with data"
+        },
+        {
+          "name": "score",
+          "type": "double",
+          "nullable": true,
+          "description": "Weighted mean of the available component percentiles (0-100); blank = not scored"
+        },
+        {
+          "name": "rank_in_group",
+          "type": "int",
+          "nullable": true,
+          "description": "Rank of score within the group (1 = highest)"
+        },
+        {
+          "name": "rank_random_median",
+          "type": "double",
+          "nullable": true,
+          "description": "Median rank over 1,000 random weightings"
+        },
+        {
+          "name": "rank_random_p05",
+          "type": "double",
+          "nullable": true,
+          "description": "5th percentile rank over random weightings (lower end of the 90% interval)"
+        },
+        {
+          "name": "rank_random_p95",
+          "type": "double",
+          "nullable": true,
+          "description": "95th percentile rank over random weightings (upper end of the 90% interval)"
+        },
+        {
+          "name": "group_size",
+          "type": "int",
+          "nullable": true,
+          "description": "Scored ministries in the group"
+        },
+        {
+          "name": "not_scored_reason",
+          "type": "string",
+          "nullable": true,
+          "description": "Why no score was given; blank if scored",
+          "max_length": 256
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "nullable": true,
+          "description": "Always 'project construct, not an official rating'",
+          "max_length": 128
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "trend_tests",
+      "file": "trend_tests.csv",
+      "kind": "fact",
+      "grain": "one row per trend test",
+      "primary_key": [
+        "test_id"
+      ],
+      "columns": [
+        {
+          "name": "test_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Row identifier"
+        },
+        {
+          "name": "family",
+          "type": "string",
+          "nullable": true,
+          "description": "Test family; q-values are adjusted within a family",
+          "max_length": 128
+        },
+        {
+          "name": "subject",
+          "type": "string",
+          "nullable": true,
+          "description": "Aggregate metric, or ministry name for ministry-level families",
+          "max_length": 256
+        },
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": true,
+          "description": "Canonical ministry or department (dim_ministry); blank for aggregate series"
+        },
+        {
+          "name": "span",
+          "type": "string",
+          "nullable": true,
+          "description": "Months or reports covered",
+          "max_length": 64
+        },
+        {
+          "name": "n",
+          "type": "int",
+          "nullable": true,
+          "description": "Number of points in the series"
+        },
+        {
+          "name": "tau",
+          "type": "double",
+          "nullable": true,
+          "description": "Kendall's tau (direction and strength of the monotonic trend)"
+        },
+        {
+          "name": "sen_slope",
+          "type": "double",
+          "nullable": true,
+          "description": "Sen's slope (units per month)"
+        },
+        {
+          "name": "relative_slope_pct",
+          "type": "double",
+          "nullable": true,
+          "description": "Sen's slope as % of the median level, per month"
+        },
+        {
+          "name": "median_level",
+          "type": "double",
+          "nullable": true,
+          "description": "Median of the series"
+        },
+        {
+          "name": "p_modified",
+          "type": "double",
+          "nullable": true,
+          "description": "Autocorrelation-corrected p-value (method in p_method)"
+        },
+        {
+          "name": "p_method",
+          "type": "string",
+          "nullable": true,
+          "description": "hamed_rao, or tfpw (trend-free pre-whitening) where Hamed-Rao is undefined",
+          "max_length": 32
+        },
+        {
+          "name": "p_original",
+          "type": "double",
+          "nullable": true,
+          "description": "Uncorrected Mann-Kendall p-value (for comparison only; not used)"
+        },
+        {
+          "name": "q_value",
+          "type": "double",
+          "nullable": true,
+          "description": "Benjamini-Hochberg q-value within the family"
+        },
+        {
+          "name": "conclusion",
+          "type": "string",
+          "nullable": true,
+          "description": "increasing / decreasing (q < 0.05) or no significant trend",
+          "max_length": 64
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "grai_ranks",
+      "file": "grai_ranks.csv",
+      "kind": "fact",
+      "grain": "one row per ministry per GRI/GRAI ranking table (#4-#53)",
+      "primary_key": [
+        "report_number",
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "report_number",
+          "type": "int",
+          "nullable": false,
+          "description": "Report number the value was read from (dim_report)"
+        },
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "grai_group",
+          "type": "string",
+          "nullable": true,
+          "description": "Volume group of the ranking table (A or B)",
+          "max_length": 16
+        },
+        {
+          "name": "grai_methodology",
+          "type": "string",
+          "nullable": true,
+          "description": "Layout/method era; ranks are comparable only within one era and group",
+          "max_length": 64
+        },
+        {
+          "name": "group_threshold",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievance-count threshold separating the groups in that report"
+        },
+        {
+          "name": "period_start",
+          "type": "date",
+          "nullable": true,
+          "description": "First day of the ranking's data window"
+        },
+        {
+          "name": "period_end",
+          "type": "date",
+          "nullable": true,
+          "description": "Last day of the ranking's data window"
+        },
+        {
+          "name": "window_months",
+          "type": "int",
+          "nullable": true,
+          "description": "Length of the data window in months"
+        },
+        {
+          "name": "grai_rank",
+          "type": "int",
+          "nullable": true,
+          "description": "Published rank within the group (1 = best)"
+        },
+        {
+          "name": "group_size",
+          "type": "int",
+          "nullable": true,
+          "description": "Ministries ranked in the group in that report"
+        },
+        {
+          "name": "rank_percentile",
+          "type": "double",
+          "nullable": true,
+          "description": "100 * (group_size - rank) / (group_size - 1): 100 = first in its group"
+        },
+        {
+          "name": "grai_score",
+          "type": "double",
+          "nullable": true,
+          "description": "Published GRAI score (eras that print one)"
+        },
+        {
+          "name": "gri_percentage",
+          "type": "double",
+          "nullable": true,
+          "description": "Published GRI percentage (#4-#12 era)"
+        },
+        {
+          "name": "pdf_page",
+          "type": "int",
+          "nullable": true,
+          "description": "PDF page of the source table (1-based), for checking against the published report"
+        },
+        {
+          "name": "has_warning",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "report_number",
+          "ref_table": "dim_report",
+          "ref_column": "report_number"
+        },
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "list_appearances",
+      "file": "list_appearances.csv",
+      "kind": "fact",
+      "grain": "one row per ministry per published list per report",
+      "primary_key": [
+        "report_number",
+        "list_code",
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "report_number",
+          "type": "int",
+          "nullable": false,
+          "description": "Report number the value was read from (dim_report)"
+        },
+        {
+          "name": "list_code",
+          "type": "string",
+          "nullable": false,
+          "description": "List type (dim_list)",
+          "max_length": 64
+        },
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "serial_printed",
+          "type": "int",
+          "nullable": true,
+          "description": "Serial number as printed in the list"
+        },
+        {
+          "name": "pending",
+          "type": "int",
+          "nullable": true,
+          "description": "Pending grievances as printed (pending and long-pending lists)"
+        },
+        {
+          "name": "pending_over_threshold",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances pending longer than the list threshold (long-pending lists)"
+        },
+        {
+          "name": "cases_disposed",
+          "type": "int",
+          "nullable": true,
+          "description": "Cases disposed of, year-to-date (closing-time lists)"
+        },
+        {
+          "name": "avg_closing_time_days",
+          "type": "int",
+          "nullable": true,
+          "description": "Published average closing time in days, year-to-date (closing-time lists)"
+        },
+        {
+          "name": "pdf_page",
+          "type": "int",
+          "nullable": true,
+          "description": "PDF page of the source table (1-based), for checking against the published report"
+        },
+        {
+          "name": "has_warning",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "report_number",
+          "ref_table": "dim_report",
+          "ref_column": "report_number"
+        },
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        },
+        {
+          "column": "list_code",
+          "ref_table": "dim_list",
+          "ref_column": "list_code"
+        }
+      ],
+      "partition": null
+    },
+    {
+      "name": "ministry_monthly",
+      "file": "ministry_monthly.csv",
+      "kind": "fact",
+      "grain": "one row per ministry per report in the T6 monthly panel (#26-#45, Jun 2024 - Jan 2026)",
+      "primary_key": [
+        "report_number",
+        "ministry_id"
+      ],
+      "columns": [
+        {
+          "name": "report_number",
+          "type": "int",
+          "nullable": false,
+          "description": "Report number the value was read from (dim_report)"
+        },
+        {
+          "name": "ministry_id",
+          "type": "int",
+          "nullable": false,
+          "description": "Canonical ministry or department (dim_ministry)"
+        },
+        {
+          "name": "grai_group",
+          "type": "string",
+          "nullable": true,
+          "description": "GRAI volume group printed in that report",
+          "max_length": 16
+        },
+        {
+          "name": "period_start",
+          "type": "date",
+          "nullable": true,
+          "description": "First day of the period the flows cover"
+        },
+        {
+          "name": "period_end",
+          "type": "date",
+          "nullable": true,
+          "description": "Last day of the period the flows cover"
+        },
+        {
+          "name": "window_months",
+          "type": "int",
+          "nullable": true,
+          "description": "Length of the flow period in months (2 for #28: July-August 2024)"
+        },
+        {
+          "name": "single_month_flows",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if receipts/disposals cover one month; filter on it for monthly flows"
+        },
+        {
+          "name": "brought_forward",
+          "type": "int",
+          "nullable": true,
+          "description": "Pending at the start of the period"
+        },
+        {
+          "name": "receipts",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances received in the period"
+        },
+        {
+          "name": "disposals",
+          "type": "int",
+          "nullable": true,
+          "description": "Grievances disposed of in the period"
+        },
+        {
+          "name": "pending",
+          "type": "int",
+          "nullable": true,
+          "description": "Pending at the end of the period (a stock)"
+        },
+        {
+          "name": "pending_change",
+          "type": "int",
+          "nullable": true,
+          "description": "Change in pending from the previous report (consecutive reports only)"
+        },
+        {
+          "name": "pdf_page",
+          "type": "int",
+          "nullable": true,
+          "description": "PDF page of the source table (1-based), for checking against the published report"
+        },
+        {
+          "name": "has_warning",
+          "type": "boolean",
+          "nullable": true,
+          "description": "True if any value in this row has validation_status = warning (e.g. a row identity off by 1-3)"
+        }
+      ],
+      "foreign_keys": [
+        {
+          "column": "report_number",
+          "ref_table": "dim_report",
+          "ref_column": "report_number"
+        },
+        {
+          "column": "ministry_id",
+          "ref_table": "dim_ministry",
+          "ref_column": "ministry_id"
+        }
+      ],
+      "partition": {
+        "column": "period_year",
+        "type": "int",
+        "derived_from": "period_start",
+        "expression": "year(period_start)",
+        "reason": "the only multi-year ministry-level fact queried by period; 3 partitions (2024-2026)"
+      }
+    }
+  ],
+  "contract_hash": "5a6a18eefb0f6ecb"
+}

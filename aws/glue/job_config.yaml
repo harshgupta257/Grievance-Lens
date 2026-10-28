@@ -1,0 +1,37 @@
+# AWS Glue job definition for aws/glue/etl_job.py (applied by aws/scripts/deploy.py; documented here).
+# <bucket> and <account-id> are placeholders.
+name: grievance-lens-etl
+glue_version: "5.0"                # Spark 3.5, Python 3.11 (matches local tests: pyspark 3.5.4)
+command:
+  name: glueetl                     # Spark ETL job
+  script_location: s3://<bucket>/scripts/etl_job.py
+  python_version: "3"
+role: arn:aws:iam::<account-id>:role/grievance-lens-glue-etl
+worker_type: G.1X                   # 1 DPU per worker (4 vCPU, 16 GB): the smallest Spark worker type
+number_of_workers: 2                # the minimum for a Glue Spark job; ~750 KB of CSV needs no more
+execution_class: FLEX               # cheaper per DPU-hour than STANDARD; may wait for spare capacity. Use
+                                    # STANDARD (deploy.py --glue-execution-class STANDARD) for predictable starts
+timeout_minutes: 15                 # a run takes a few minutes; anything longer is a fault, so stop billing
+max_retries: 0                      # a failed batch is investigated, not blindly retried (it is not published)
+max_concurrent_runs: 1              # one batch at a time; Lambda retries later if a run is already active
+job_bookmarks: disabled             # batches are explicit (manifest-driven), not incremental file discovery
+
+# Fixed for every run (job DefaultArguments):
+default_arguments:
+  --contract_uri: s3://<bucket>/scripts/contract.json
+  --curated_root: s3://<bucket>/curated/
+  --control_root: s3://<bucket>/control/
+  --glue_database: grievance_lens
+  --aws_region: ap-south-1
+  --TempDir: s3://<bucket>/scripts/glue-temp/
+  --enable-continuous-cloudwatch-log: "true"
+  --enable-metrics: "true"
+  --job-bookmark-option: job-bookmark-disable
+
+# Per run (set by the Lambda function or aws/scripts/run_etl.*):
+run_arguments:
+  --run_date: YYYY-MM-DD            # from the manifest key
+  --batch_id: "<id>"                # from the manifest key; ingestion_id = <run_date>_<batch_id>
+  --raw_prefix: s3://<bucket>/raw/powerbi/run_date=YYYY-MM-DD/batch=<id>/
+  --publish: "true"                 # "false" validates and writes curated data but does not repoint the catalog
+  --max_reject_ratio: "0"           # share of rejected rows tolerated per table (0 = any rejected row fails)

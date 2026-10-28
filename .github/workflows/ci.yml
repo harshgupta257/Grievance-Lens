@@ -24,6 +24,28 @@ jobs:
       - run: ruff format --check .
       - run: python -m pytest -q   # no database or API key needed; integration tests skip themselves
 
+  aws-pipeline:
+    # Glue ETL (real Spark writer on Linux), Lambda, SQL ports and refresh logic; no AWS account needed.
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements-dev.txt
+            aws/requirements-dev.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - run: pip install -r requirements.txt -r requirements-dev.txt -r aws/requirements-dev.txt
+      - run: python -m aws.contract.build_contract --check
+      - run: python -m aws.contract.render_ddl --check
+      - run: python -m pytest aws/tests -q
+
   docker:
     runs-on: ubuntu-24.04
     needs: test
